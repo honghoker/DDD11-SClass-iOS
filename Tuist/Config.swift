@@ -1,7 +1,10 @@
 import ProjectDescription
 
 let config = Config(
-    plugins: [
-        .local(path: .relativeToManifest("../../Plugins/DDD11SClassIOS")),
-    ]
+  swiftVersion: "5.10.0",
+  plugins: [
+    .local(path: .relativeToRoot("Plugins/ProjectTemplatePlugin")),
+    .local(path: .relativeToRoot("Plugins/DependencyPackagePlugin")),
+  ],
+  generationOptions: .options()
 )
