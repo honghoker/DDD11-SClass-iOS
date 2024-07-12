@@ -9,8 +9,6 @@ import DependencyPackagePlugin
 import ProjectDescription
 import ProjectTemplatePlugin
 
-let infoPlist: [String: Plist.Value] = InfoPlistValues.generateInfoPlist()
-
 let project = Project.makeAppModule(
     name: Project.Environment.appName,
     bundleId: .mainBundleID,
@@ -20,6 +18,6 @@ let project = Project.makeAppModule(
     dependencies: [],
     sources: ["Sources/**"],
     resources: ["Resources/**"],
-    infoPlist: .extendingDefault(with: infoPlist),
+    infoPlist: .appInfoPlist,
     entitlements: nil
 )
