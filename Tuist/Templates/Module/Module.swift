@@ -41,7 +41,6 @@ fileprivate enum ModuleTemplate: CaseIterable {
       
     case .testProject:
       return .file(path: .testBasePath + "/Sources/Test.swift", templatePath: "test.stencil")
-      
     }
   }
 }
