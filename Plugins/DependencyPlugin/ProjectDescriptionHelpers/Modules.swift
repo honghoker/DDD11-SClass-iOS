@@ -19,7 +19,7 @@ public enum ModulePath {
 // MARK: AppModule
 
 public extension ModulePath {
-  enum App: String, CaseIterable {
+  enum App: CapitalizedStringCaseIterable {
     case iOS
     case iPadOS
     
@@ -30,8 +30,8 @@ public extension ModulePath {
 // MARK: PresentationModule
 
 public extension ModulePath {
-  enum Presentation: String, CaseIterable {
-    case scene
+  enum Presentation: CapitalizedStringCaseIterable {
+    case home
     
     public static let name: String = "Presentation"
   }
@@ -40,7 +40,7 @@ public extension ModulePath {
 // MARK: DomainModule
 
 public extension ModulePath {
-  enum Domain: String, CaseIterable {
+  enum Domain: CapitalizedStringCaseIterable {
     case user
     
     public static let name: String = "Domain"
@@ -50,7 +50,7 @@ public extension ModulePath {
 // MARK: CoreModule
 
 public extension ModulePath {
-  enum Core: String, CaseIterable {
+  enum Core: CapitalizedStringCaseIterable {
     case network
     
     public static let name: String = "Core"
@@ -60,7 +60,8 @@ public extension ModulePath {
 // MARK: SharedModule
 
 public extension ModulePath {
-  enum Shared: String, CaseIterable {
+  enum Shared: CapitalizedStringCaseIterable {
+    case shareds
     case util
     case thirdPartyLib
     
@@ -71,10 +72,25 @@ public extension ModulePath {
 // MARK: DesignSystemModule
 
 public extension ModulePath {
-  enum DesignSystem: String, CaseIterable {
+  enum DesignSystem: CapitalizedStringCaseIterable {
     case font
     
     public static let name: String = "DesignSystem"
   }
 }
 
+// MARK: - CapitalizedString
+
+fileprivate protocol CapitalizedStringCaseIterable: RawRepresentable, CaseIterable where RawValue == String {
+  init?(rawValue: String)
+}
+
+extension CapitalizedStringCaseIterable {
+  public var rawValue: String {
+    String(describing: self).capitalized
+  }
+  
+  public init?(rawValue: String) {
+    fatalError("This initializer must be overridden by concrete types")
+  }
+}
