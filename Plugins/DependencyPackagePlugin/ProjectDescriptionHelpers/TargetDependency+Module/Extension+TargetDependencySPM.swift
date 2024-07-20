@@ -8,5 +8,8 @@
 import ProjectDescription
 
 public extension TargetDependency.SPM {
-  
+  static let composableArchitecture: TargetDependency = .external(
+    name: "ComposableArchitecture",
+    condition: .none
+  )
 }
