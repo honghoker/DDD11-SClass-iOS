@@ -51,7 +51,7 @@ fileprivate extension String {
   }
   
   static var testBasePath: Self {
-    return "Projects/\(layer)/\(name)/\(name)Tests"
+    return "Projects/\(layer)/\(name)/\(layer)\(name)Tests"
   }
 }
 

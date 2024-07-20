@@ -8,6 +8,7 @@
 import DependencyPackagePlugin
 import ProjectDescription
 import ProjectTemplatePlugin
+import DependencyPlugin
 
 let project = Project.makeAppModule(
     name: Project.Environment.appName,
@@ -15,7 +16,9 @@ let project = Project.makeAppModule(
     product: .app,
     settings: .appMainSetting,
     scripts: [],
-    dependencies: [],
+    dependencies: [
+      .feature(implements: .home)
+    ],
     sources: ["Sources/**"],
     resources: ["Resources/**"],
     infoPlist: .appInfoPlist,

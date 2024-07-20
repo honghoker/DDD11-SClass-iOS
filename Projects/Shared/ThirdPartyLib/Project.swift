@@ -4,8 +4,8 @@ import DependencyPlugin
 import ProjectTemplatePlugin
 
 let project = Project.makeAppModule(
-  name: "{{ layer }}{{ name }}",
-  bundleId: .appBundleID(name: "{{ layer }}.{{ name }}"),
+  name: "SharedThirdPartyLib",
+  bundleId: .appBundleID(name: "Shared.ThirdPartyLib"),
   product: .staticFramework,
   settings: .settings(),
   dependencies: [

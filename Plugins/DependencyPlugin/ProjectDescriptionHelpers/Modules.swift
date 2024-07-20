@@ -9,19 +9,18 @@ import Foundation
 import ProjectDescription
 
 public enum ModulePath {
-  case presentation(Presentation)
+  case feature(Feature)
   case domain(Domain)
   case core(Core)
   case shared(Shared)
-  case designSystem(DesignSystem)
 }
 
 // MARK: AppModule
 
 public extension ModulePath {
-  enum App: CapitalizedStringCaseIterable {
-    case iOS
-    case iPadOS
+  enum App: String, CaseIterable {
+    case iOS = "iOS"
+    case iPadOS = "iPadOS"
     
     public static let name: String = "App"
   }
@@ -30,18 +29,18 @@ public extension ModulePath {
 // MARK: PresentationModule
 
 public extension ModulePath {
-  enum Presentation: CapitalizedStringCaseIterable {
-    case home
+  enum Feature: String, CaseIterable {
+    case home = "Home"
     
-    public static let name: String = "Presentation"
+    public static let name: String = "Feature"
   }
 }
 
 // MARK: DomainModule
 
 public extension ModulePath {
-  enum Domain: CapitalizedStringCaseIterable {
-    case user
+  enum Domain: String, CaseIterable {
+    case user = "User"
     
     public static let name: String = "Domain"
   }
@@ -50,8 +49,8 @@ public extension ModulePath {
 // MARK: CoreModule
 
 public extension ModulePath {
-  enum Core: CapitalizedStringCaseIterable {
-    case network
+  enum Core: String, CaseIterable {
+    case network = "Network"
     
     public static let name: String = "Core"
   }
@@ -60,37 +59,11 @@ public extension ModulePath {
 // MARK: SharedModule
 
 public extension ModulePath {
-  enum Shared: CapitalizedStringCaseIterable {
-    case shareds
-    case util
-    case thirdPartyLib
+  enum Shared: String, CaseIterable {
+    case util = "Util"
+    case thirdPartyLib = "ThirdPartyLib"
+    case designSystem = "DesignSystem"
     
     public static let name: String = "Shared"
-  }
-}
-
-// MARK: DesignSystemModule
-
-public extension ModulePath {
-  enum DesignSystem: CapitalizedStringCaseIterable {
-    case font
-    
-    public static let name: String = "DesignSystem"
-  }
-}
-
-// MARK: - CapitalizedString
-
-fileprivate protocol CapitalizedStringCaseIterable: RawRepresentable, CaseIterable where RawValue == String {
-  init?(rawValue: String)
-}
-
-extension CapitalizedStringCaseIterable {
-  public var rawValue: String {
-    String(describing: self).capitalized
-  }
-  
-  public init?(rawValue: String) {
-    fatalError("This initializer must be overridden by concrete types")
   }
 }

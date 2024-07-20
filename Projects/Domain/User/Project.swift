@@ -4,8 +4,8 @@ import DependencyPlugin
 import ProjectTemplatePlugin
 
 let project = Project.makeAppModule(
-  name: "{{ layer }}{{ name }}",
-  bundleId: .appBundleID(name: "{{ layer }}.{{ name }}"),
+  name: "DomainUser",
+  bundleId: .appBundleID(name: "Domain.User"),
   product: .staticFramework,
   settings: .settings(),
   dependencies: [

@@ -4,8 +4,8 @@ import DependencyPlugin
 import ProjectTemplatePlugin
 
 let project = Project.makeAppModule(
-  name: "{{ layer }}{{ name }}",
-  bundleId: .appBundleID(name: "{{ layer }}.{{ name }}"),
+  name: "SharedDesignSystem",
+  bundleId: .appBundleID(name: "Shared.DesignSystem"),
   product: .staticFramework,
   settings: .settings(),
   dependencies: [

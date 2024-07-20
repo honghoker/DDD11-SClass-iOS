@@ -20,13 +20,13 @@ public extension TargetDependency {
   }
 }
 
-// MARK: TargetDependency + Presentation
+// MARK: TargetDependency + Feature
 
 public extension TargetDependency {
-  static func presentation(implements module: ModulePath.Presentation) -> Self {
+  static func feature(implements module: ModulePath.Feature) -> Self {
     return .project(
-      target: module.rawValue,
-      path: .presentation(implementation: module)
+      target: ModulePath.Feature.name + module.rawValue,
+      path: .feature(implementation: module)
     )
   }
 }
@@ -36,7 +36,7 @@ public extension TargetDependency {
 public extension TargetDependency {
   static func domain(implements module: ModulePath.Domain) -> Self {
     return .project(
-      target: module.rawValue,
+      target: ModulePath.Domain.name + module.rawValue,
       path: .domain(implementation: module)
     )
   }
@@ -47,7 +47,7 @@ public extension TargetDependency {
 public extension TargetDependency {
   static func core(implements module: ModulePath.Core) -> Self {
     return .project(
-      target: module.rawValue,
+      target: ModulePath.Core.name + module.rawValue,
       path: .core(implementation: module)
     )
   }
@@ -58,19 +58,8 @@ public extension TargetDependency {
 public extension TargetDependency {
   static func shared(implements module: ModulePath.Shared) -> Self {
     return .project(
-      target: module.rawValue,
+      target: ModulePath.Shared.name + module.rawValue,
       path: .shared(implementation: module)
-    )
-  }
-}
-
-// MARK: TargetDependency + DesignSystem
-
-public extension TargetDependency {
-  static func designSystem(implements module: ModulePath.DesignSystem) -> Self {
-    return .project(
-      target: module.rawValue,
-      path: .designSystem(implementation: module)
     )
   }
 }

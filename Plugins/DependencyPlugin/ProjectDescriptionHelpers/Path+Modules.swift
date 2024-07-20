@@ -16,15 +16,15 @@ public extension ProjectDescription.Path {
   }
 }
 
-// MARK: ProjectDescription.Path + Presentation
+// MARK: ProjectDescription.Path + Feature
 
 public extension ProjectDescription.Path {
-  static var presentation: Self {
-    return .relativeToRoot("Projects/\(ModulePath.Presentation.name)")
+  static var feature: Self {
+    return .relativeToRoot("Projects/\(ModulePath.Feature.name)")
   }
   
-  static func presentation(implementation module: ModulePath.Presentation) -> Self {
-    return .relativeToRoot("Projects/\(ModulePath.Presentation.name)/\(module.rawValue)")
+  static func feature(implementation module: ModulePath.Feature) -> Self {
+    return .relativeToRoot("Projects/\(ModulePath.Feature.name)/\(module.rawValue)")
   }
 }
 
@@ -61,17 +61,5 @@ public extension ProjectDescription.Path {
   
   static func shared(implementation module: ModulePath.Shared) -> Self {
     return .relativeToRoot("Projects/\(ModulePath.Shared.name)/\(module.rawValue)")
-  }
-}
-
-// MARK: ProjectDescription.Path + DesignSystem
-
-public extension ProjectDescription.Path {
-  static var designSystem: Self {
-    return .relativeToRoot("Projects/\(ModulePath.DesignSystem.name)")
-  }
-  
-  static func designSystem(implementation module: ModulePath.DesignSystem) -> Self {
-    return .relativeToRoot("Projects/\(ModulePath.DesignSystem.name)/\(module.rawValue)")
   }
 }
