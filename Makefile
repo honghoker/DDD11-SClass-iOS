@@ -19,6 +19,10 @@ build: $(CLEAN) $(FETCH) $(FETCH) TUIST_ROOT_DIR=${PWD} $(GENERATE)
 .PHONY: clean
 clean:
 	$(CLEAN)
+	rm -rf **/**/*.xcodeproj
+	rm -rf **/*.xcodeproj
+	rm -rf *.xcworkspace
+
 
 .PHONY: fetch
 install:
