@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import Moya
 
 struct BaseView: View {
   var body: some View {

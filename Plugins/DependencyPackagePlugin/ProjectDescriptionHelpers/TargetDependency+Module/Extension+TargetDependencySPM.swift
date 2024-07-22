@@ -12,4 +12,9 @@ public extension TargetDependency.SPM {
     name: "ComposableArchitecture",
     condition: .none
   )
+    
+  static let moya: TargetDependency = .external(
+    name: "Moya",
+    condition: .none
+  )
 }

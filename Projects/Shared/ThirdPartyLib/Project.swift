@@ -10,7 +10,8 @@ let project = Project.makeModule(
   product: .staticFramework,
   settings: .settings(),
   dependencies: [
-    .SPM.composableArchitecture
+    .SPM.composableArchitecture,
+    .SPM.moya
   ],
   sources: ["Sources/**"]
 )
