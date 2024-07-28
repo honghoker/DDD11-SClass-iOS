@@ -17,4 +17,9 @@ public extension TargetDependency.SPM {
     name: "Moya",
     condition: .none
   )
+  
+  static let combineMoya: TargetDependency = .external(
+    name: "CombineMoya",
+    condition: .none
+  )
 }

@@ -18,6 +18,11 @@ let package = Package(
     .package(
       url: "https://github.com/Moya/Moya",
       revision: "c263811c1f3dbf002be9bd83107f7cdc38992b26" // 15.0.3
-    ),
+    )
+  ],
+  targets: [
+    .target(
+      name: "OnboardingKit",
+      dependencies: ["CombineMoya"])
   ]
 )
