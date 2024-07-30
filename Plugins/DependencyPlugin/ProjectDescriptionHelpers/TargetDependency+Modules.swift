@@ -23,6 +23,10 @@ public extension TargetDependency {
 // MARK: TargetDependency + Feature
 
 public extension TargetDependency {
+  static var feature: Self {
+    return .project(target: ModulePath.Feature.name, path: .feature)
+  }
+  
   static func feature(implements module: ModulePath.Feature) -> Self {
     return .project(
       target: ModulePath.Feature.name + module.rawValue,
@@ -34,6 +38,10 @@ public extension TargetDependency {
 // MARK: TargetDependency + Domain
 
 public extension TargetDependency {
+  static var domain: Self {
+    return .project(target: ModulePath.Domain.name, path: .domain)
+  }
+  
   static func domain(implements module: ModulePath.Domain) -> Self {
     return .project(
       target: ModulePath.Domain.name + module.rawValue,
@@ -45,6 +53,10 @@ public extension TargetDependency {
 // MARK: TargetDependency + Core
 
 public extension TargetDependency {
+  static var core: Self {
+    return .project(target: ModulePath.Core.name, path: .core)
+  }
+  
   static func core(implements module: ModulePath.Core) -> Self {
     return .project(
       target: ModulePath.Core.name + module.rawValue,
@@ -56,6 +68,10 @@ public extension TargetDependency {
 // MARK: TargetDependency + Shared
 
 public extension TargetDependency {
+  static var shared: Self {
+    return .project(target: ModulePath.Shared.name, path: .shared)
+  }
+  
   static func shared(implements module: ModulePath.Shared) -> Self {
     return .project(
       target: ModulePath.Shared.name + module.rawValue,

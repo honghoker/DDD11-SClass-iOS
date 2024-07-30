@@ -2,15 +2,16 @@ import Foundation
 import ProjectDescription
 import DependencyPlugin
 import ProjectTemplatePlugin
-import DependencyPackagePlugin
 
 let project = Project.makeModule(
-  name: "SharedThirdPartyLib",
-  bundleId: .appBundleID(name: "Shared.ThirdPartyLib"),
+  name: "Domain",
+  bundleId: .appBundleID(name: "Domain"),
   product: .staticFramework,
   settings: .settings(),
   dependencies: [
-    .SPM.composableArchitecture
+    .core,
+    .domain(implements: .user)
   ],
   sources: ["Sources/**"]
 )
+

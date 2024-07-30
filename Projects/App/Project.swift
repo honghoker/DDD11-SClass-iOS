@@ -10,14 +10,14 @@ import ProjectDescription
 import ProjectTemplatePlugin
 import DependencyPlugin
 
-let project = Project.makeAppModule(
+let project = Project.makeModule(
     name: Project.Environment.appName,
     bundleId: .mainBundleID,
     product: .app,
     settings: .appMainSetting,
     scripts: [],
     dependencies: [
-      .feature(implements: .home)
+      .feature
     ],
     sources: ["Sources/**"],
     resources: ["Resources/**"],
