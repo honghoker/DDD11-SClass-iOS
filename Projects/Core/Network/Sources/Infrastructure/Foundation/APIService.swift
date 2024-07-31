@@ -24,7 +24,7 @@ class APIService<API: BaseAPI>: Requestable {
         if let data = commonResponse.data {
           return data
         } else {
-          throw commonResponse.error
+          throw commonResponse.error ?? ErrorResponse.defaultError
         }
       }
       .mapError { error in
