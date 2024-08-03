@@ -9,7 +9,8 @@ let project = Project.makeModule(
   product: .staticFramework,
   settings: .settings(),
   dependencies: [
-
+    
   ],
-  sources: ["Sources/**"]
+  sources: ["Sources/**"],
+  resources: ["Resources/**"]
 )
