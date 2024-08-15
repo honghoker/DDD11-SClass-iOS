@@ -10,6 +10,10 @@ let project = Project.makeModule(
   settings: .settings(),
   dependencies: [
     .feature(implements: .home),
+    .feature(implements: .history),
+    .feature(implements: .chat),
+    .feature(implements: .article),
+    .feature(implements: .myPage),
     .domain
   ],
   sources: ["Sources/**"]
