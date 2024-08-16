@@ -11,7 +11,7 @@ fileprivate typealias ImageAsset = SharedDesignSystemAsset.Image
 
 public extension Image {
   static let home: Self = ImageAsset.home.swiftUIImage
-  static let artcle: Self = ImageAsset.article.swiftUIImage
+  static let article: Self = ImageAsset.article.swiftUIImage
   static let chat: Self = ImageAsset.chat.swiftUIImage
   static let history: Self = ImageAsset.history.swiftUIImage
   static let myPage: Self = ImageAsset.myPage.swiftUIImage
