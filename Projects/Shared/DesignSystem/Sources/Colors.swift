@@ -45,7 +45,7 @@ public extension ShapeStyle where Self == Color {
   static var greyScale950: Color { .init(asset: SharedDesignSystemAsset.Colors.greyScale950) }
 }
 
-public enum Colors {
+fileprivate enum Colors {
   case primary050
   case primary100
   case primary200
