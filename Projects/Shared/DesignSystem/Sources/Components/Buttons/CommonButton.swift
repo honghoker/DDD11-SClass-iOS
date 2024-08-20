@@ -8,12 +8,12 @@
 import SwiftUI
 
 public struct CommonButton: View {
-    let title: String
-    let style: ButtonStyle
-    var isActive: Bool
-    let action: () -> Void
+    private let title: String
+    private let style: CommonButtonStyle
+    private let isActive: Bool
+    private let action: () -> Void
     
-  public init(title: String, style: ButtonStyle, isActive: Bool, action: @escaping () -> Void) {
+  public init(title: String, style: CommonButtonStyle, isActive: Bool, action: @escaping () -> Void) {
     self.title = title
     self.style = style
     self.isActive = isActive
@@ -27,7 +27,7 @@ public struct CommonButton: View {
         }, label: {
             HStack(spacing: 4) {
                 Text(title)
-                .font(.notoSans(.subhead_03))
+                .notoSans(.subhead_3)
                 .foregroundStyle(style.textColor)
             }
             .padding(.horizontal, 16)
@@ -49,7 +49,7 @@ public struct CommonButton: View {
     }
 }
 
-public enum ButtonStyle {
+public enum CommonButtonStyle {
   case line
   case `default`
   case contrast
@@ -75,7 +75,7 @@ public enum ButtonStyle {
       return .white
     }
   }
-  // TODO: 
+  // TODO: line, contrast는 없는 상황
   var disableBackgroundColor: Color {
     switch self {
     case .line:

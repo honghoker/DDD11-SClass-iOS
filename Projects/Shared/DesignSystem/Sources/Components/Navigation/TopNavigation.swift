@@ -47,7 +47,7 @@ public struct TopNavigation: View {
           trailingButton.1()
         }, label: {
           Text(trailingButton.0)
-            .font(.notoSans(.body_01))
+            .notoSans(.body_1)
             .foregroundStyle(Color.primary700)
             .padding(.horizontal, 20)
         })
@@ -64,7 +64,7 @@ public struct TopNavigation: View {
     .overlay(alignment: .center) {
       HStack(spacing: 4) {
         Text(centerTitle)
-          .font(.notoSans(.subhead_04))
+          .notoSans(.subhead_4)
           .foregroundStyle(Color.greyScale950)
       }
     }

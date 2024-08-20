@@ -1,5 +1,5 @@
 //
-//  CustomProgressBar.swift
+//  CommonProgressBar.swift
 //  SharedDesignSystem
 //
 //  Created by 현수빈 on 8/16/24.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct CustomProgressBar: View {
+public struct CommonProgressBar: View {
   
   private let progress : Double
   
