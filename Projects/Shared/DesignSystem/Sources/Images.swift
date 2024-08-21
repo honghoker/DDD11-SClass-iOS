@@ -19,4 +19,6 @@ public extension Image {
   static let closeCross: Self = ImageAsset.closeCross.swiftUIImage
   static let externalLink: Self = ImageAsset.externalLink.swiftUIImage
   static let lock: Self = ImageAsset.lock.swiftUIImage
+  static let articleEmptyView: Self = ImageAsset.articleEmptyView.swiftUIImage
+  static let historyEmptyView: Self = ImageAsset.historyEmptyView.swiftUIImage
 }
