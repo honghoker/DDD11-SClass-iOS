@@ -9,8 +9,8 @@ import SwiftUI
 
 public struct InputField<T: Hashable>: View {
   
-  @Binding var errorMessage: String?
-  @Binding var text: String
+  @Binding private var errorMessage: String?
+  @Binding private var text: String
   
   private let placeHolder: String
   private let isFocused: FocusState<T>.Binding
@@ -33,25 +33,24 @@ public struct InputField<T: Hashable>: View {
   public var body: some View {
     VStack {
       HStack {
-        
         ZStack(alignment: .leading) {
           TextField(
             placeHolder,
             text: $text
           )
-            .notoSans(.body_2)
-            .foregroundStyle(Color.greyScale950)
-            .focused(isFocused, equals: focusValue)
+          .notoSans(.body_2)
+          .foregroundStyle(.greyScale950)
+          .focused(isFocused, equals: focusValue)
           
           
-            if isFocused.wrappedValue != focusValue {
-              Text(placeHolder)
-                .foregroundStyle(Color.black)
-                .frame(maxWidth: .infinity, alignment: .center)
-                .onTapGesture {
-                  isFocused.wrappedValue = focusValue
-                }
-            }
+          if isFocused.wrappedValue != focusValue {
+            Text(placeHolder)
+              .foregroundStyle(.black)
+              .frame(maxWidth: .infinity, alignment: .center)
+              .onTapGesture {
+                isFocused.wrappedValue = focusValue
+              }
+          }
         }
         
         
@@ -60,11 +59,10 @@ public struct InputField<T: Hashable>: View {
           Button(action: {
             text.removeAll()
           }) {
-            SharedDesignSystemAsset.Image.closeCross
-              .swiftUIImage
+            Image.closeCross
               .resizable()
               .scaledToFit()
-              .foregroundStyle(Color.white)
+              .foregroundStyle(.white)
               .frame(width: 16)
               .background(Color.init(hex: "DFDFDF"))
               .clipShape(Circle())
@@ -76,16 +74,16 @@ public struct InputField<T: Hashable>: View {
       .frame(height: 56)
       .background(
         isFocused.wrappedValue == focusValue || errorMessage != nil
-        ? Color.white
-        : Color.greyScale050
+        ? .white
+        : .greyScale050
       )
       .clipShape(RoundedRectangle(cornerRadius: 10))
       .overlay {
         RoundedRectangle(cornerRadius: 10)
           .stroke(
             errorMessage == nil
-            ? (isFocused.wrappedValue == focusValue ? Color.greyScale700: Color.clear)
-            : Color.init(hex: "F05C2E"),
+            ? (isFocused.wrappedValue == focusValue ? .greyScale700: .clear)
+            : .init(hex: "F05C2E"),
             lineWidth: 1
           )
       }
@@ -100,7 +98,6 @@ public struct InputField<T: Hashable>: View {
           Spacer()
         }
       }
-      
     }
   }
 }

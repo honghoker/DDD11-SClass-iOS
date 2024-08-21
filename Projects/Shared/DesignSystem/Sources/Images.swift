@@ -15,4 +15,8 @@ public extension Image {
   static let chat: Self = ImageAsset.chat.swiftUIImage
   static let history: Self = ImageAsset.history.swiftUIImage
   static let myPage: Self = ImageAsset.myPage.swiftUIImage
+  static let rotateLeft: Self = ImageAsset.rotateLeft.swiftUIImage
+  static let closeCross: Self = ImageAsset.closeCross.swiftUIImage
+  static let externalLink: Self = ImageAsset.externalLink.swiftUIImage
+  static let lock: Self = ImageAsset.lock.swiftUIImage
 }

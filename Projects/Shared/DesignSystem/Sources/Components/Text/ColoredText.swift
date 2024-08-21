@@ -8,7 +8,7 @@
 import SwiftUI
 
 public struct ColoredText: View {
-  @Binding var isPressed: Bool
+  @Binding private var isPressed: Bool
   
   private let fullText: String
   private let highLightText: String

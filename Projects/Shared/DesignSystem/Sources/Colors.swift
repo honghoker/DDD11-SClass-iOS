@@ -87,7 +87,6 @@ fileprivate enum Colors {
 }
 
 public extension Color {
-  
   init(hex: String) {
     let scanner = Scanner(string: hex)
     _ = scanner.scanString("#")

@@ -12,12 +12,11 @@ public struct TopNavigation: View {
   public typealias NavigationItem = (SharedDesignSystemImages, () -> Void)
   
   private let leadingItem: NavigationItem?
-
+  
   private let centerTitle: String
   
   private let trailingItem: NavigationItem?
   private let trailingButton: (String, () -> Void)?
-  
   
   public init(
     leadingItem: NavigationItem? = .none,
@@ -31,13 +30,11 @@ public struct TopNavigation: View {
     self.trailingButton = trailingButton
   }
   
-  
   public var body: some View {
     HStack(spacing: 0) {
       if let leadingItem {
         navigationItem(leadingItem)
           .padding(.leading, 20)
-
       }
       
       Spacer()
@@ -48,7 +45,7 @@ public struct TopNavigation: View {
         }, label: {
           Text(trailingButton.0)
             .notoSans(.body_1)
-            .foregroundStyle(Color.primary700)
+            .foregroundStyle(.primary700)
             .padding(.horizontal, 20)
         })
       }
@@ -65,13 +62,13 @@ public struct TopNavigation: View {
       HStack(spacing: 4) {
         Text(centerTitle)
           .notoSans(.subhead_4)
-          .foregroundStyle(Color.greyScale950)
+          .foregroundStyle(.greyScale950)
       }
     }
   }
   
-  @ViewBuilder 
-  func navigationItem(_ item: NavigationItem) -> some View {
+  @ViewBuilder
+  private func navigationItem(_ item: NavigationItem) -> some View {
     Button(action: {
       item.1()
     }, label: {
@@ -79,7 +76,7 @@ public struct TopNavigation: View {
         .resizable()
         .scaledToFit()
         .frame(width: 24, height: 24)
-        .foregroundStyle(Color.greyScale950)
+        .foregroundStyle(.greyScale950)
     })
   }
 }
