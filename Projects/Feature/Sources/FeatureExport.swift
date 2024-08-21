@@ -6,3 +6,7 @@
 //
 
 @_exported import FeatureHome
+@_exported import FeatureHistory
+@_exported import FeatureChat
+@_exported import FeatureArticle
+@_exported import FeatureMyPage

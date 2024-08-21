@@ -1,24 +1,26 @@
 //
-//  HomeView.swift
+//  base.swift
 //  OnboardingKit.
 //
-//  Created by SClass on 2024/07/20
+//  Created by SClass on 2024/08/13
 //  Copyright © 2024 DDD , Ltd., All rights reserved.
 //
 
 import SwiftUI
 import ComposableArchitecture
 
-public struct HomeView: View {
-  public let store: StoreOf<HomeStore>
+public struct ChatView: View {
+  @Bindable var store: StoreOf<ChatStore>
   
-  public init(store: StoreOf<HomeStore>) {
+  public init(store: StoreOf<ChatStore>) {
     self.store = store
   }
   
   public var body: some View {
     NavigationStack {
-      Text("홈")
+      VStack {
+        Text("채팅")
+      }
     }
   }
 }

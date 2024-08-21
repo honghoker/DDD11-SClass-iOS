@@ -11,7 +11,7 @@ import ProjectDescription
 extension InfoPlist {
   public static let appInfoPlist: Self = .extendingDefault(
     with: InfoPlistDictionary()
-      .setUIUserInterfaceStyle("Dark")
+      .setUIUserInterfaceStyle("Light")
       .setCFBundleDevelopmentRegion("$(DEVELOPMENT_LANGUAGE)")
       .setCFBundleExecutable("$(EXECUTABLE_NAME)")
       .setCFBundleIdentifier("$(PRODUCT_BUNDLE_IDENTIFIER)")
@@ -27,8 +27,7 @@ extension InfoPlist {
         "UISceneConfigurations": [
           "UIWindowSceneSessionRoleApplication": [
             [
-              "UISceneConfigurationName": "Default Configuration",
-              "UISceneDelegateClassName": "$(PRODUCT_MODULE_NAME).SceneDelegate"
+              "UISceneConfigurationName": "Default Configuration"
             ]
           ]
         ]
