@@ -21,4 +21,6 @@ public extension Image {
   static let lock: Self = ImageAsset.lock.swiftUIImage
   static let articleEmptyView: Self = ImageAsset.articleEmptyView.swiftUIImage
   static let historyEmptyView: Self = ImageAsset.historyEmptyView.swiftUIImage
+  static let right: Self = ImageAsset.right.swiftUIImage
+  static let check: Self = ImageAsset.check.swiftUIImage
 }
