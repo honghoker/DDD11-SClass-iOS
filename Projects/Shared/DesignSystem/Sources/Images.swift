@@ -27,4 +27,5 @@ public extension Image {
   
   static let sendDeactive: Self = ImageAsset.sendDeactive.swiftUIImage
   static let sendActive: Self = ImageAsset.sendActive.swiftUIImage
+  static let chatbot: Self = ImageAsset.chatbot.swiftUIImage
 }

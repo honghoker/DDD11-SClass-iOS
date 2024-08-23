@@ -14,7 +14,7 @@ public struct PromptExampleView: View {
   
   private let action: () -> ()
   
-  @State var isPressed: Bool = false
+  @State private var isPressed: Bool = false
   
   public init(title: String, content: String, action: @escaping () -> ()) {
     self.title = title
@@ -44,10 +44,12 @@ public struct PromptExampleView: View {
   }
 }
 
-
-
 private struct PromptExampleButtonStyle: ButtonStyle {
-  @Binding var isPressed: Bool
+  @Binding private var isPressed: Bool
+  
+  fileprivate init(isPressed: Binding<Bool>) {
+    self._isPressed = isPressed
+  }
   
   public func makeBody(configuration: Configuration) -> some View {
     configuration.label
