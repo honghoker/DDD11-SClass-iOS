@@ -9,8 +9,8 @@ import SwiftUI
 
 public struct Chip: View {
   
-  let title: String
-  let style: Style
+  private let title: String
+  private let style: Style
   
   public init(
     title: String,
@@ -30,11 +30,11 @@ public struct Chip: View {
         RoundedRectangle(cornerRadius: 20)
           .stroke(style.borderColor, lineWidth: 1)
       }
-    
   }
   
   public enum Style {
-    case `default`, blue
+    case `default`
+    case blue
     
     var color: Color {
       switch self {
@@ -54,5 +54,4 @@ public struct Chip: View {
       }
     }
   }
-  
 }

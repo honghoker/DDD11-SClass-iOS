@@ -18,9 +18,9 @@ public struct CommonProgressBar: View {
   public var body: some View {
     ProgressView(value: progress)
       .progressViewStyle(
-        LinearProgressViewStyle(tint: Color.primary500)
+        LinearProgressViewStyle(tint: .primary500)
       )
-      .background(Color.greyScale300)
+      .background(.greyScale300)
       .frame(height: 2.5)
   }
 }

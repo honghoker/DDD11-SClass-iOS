@@ -9,7 +9,7 @@ import SwiftUI
 
 public struct ButtonSmall: View {
   
-  @State var isPressed: Bool = false
+  @State private var isPressed: Bool = false
   
   private let title: String
   private let highLightTitle: String
@@ -31,7 +31,7 @@ public struct ButtonSmall: View {
     },
            label: {
       HStack(spacing: 4) {
-        SharedDesignSystemAsset.Image.rotateLeft.swiftUIImage
+        Image.rotateLeft
           .resizable()
           .scaledToFit()
           .frame(width: 20)
@@ -50,7 +50,7 @@ public struct ButtonSmall: View {
       .frame(maxWidth: .infinity)
       .frame(height: 48)
     })
-    .background(isPressed ? Color.primary600 : Color.white)
+    .background(isPressed ? .primary600 : .white)
     .clipShape(RoundedRectangle(cornerRadius: 10))
     .overlay {
       RoundedRectangle(cornerRadius: 10)
@@ -59,7 +59,6 @@ public struct ButtonSmall: View {
     .buttonStyle(SmallButtonStyle(isPressed: $isPressed))
   }
 }
-
 
 struct SmallButtonStyle: ButtonStyle {
   @Binding var isPressed: Bool

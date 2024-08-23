@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import SharedDesignSystem
 import ComposableArchitecture
 
 public struct HistoryView: View {
@@ -18,9 +19,10 @@ public struct HistoryView: View {
   
   public var body: some View {
     NavigationStack {
-      VStack {
-        Text("기록")
-      }
+      Image.historyEmptyView
+        .resizable()
+        .scaledToFit()
+        .frame(width: 192, height: 186)
     }
   }
 }

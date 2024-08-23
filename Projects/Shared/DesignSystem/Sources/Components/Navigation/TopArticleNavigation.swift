@@ -9,7 +9,7 @@ import SwiftUI
 
 public struct TopArticleNavigation: View {
   
-  @State var title: String = ""
+  @State private var title: String = ""
   private let leftAction: () -> Void
   private let rightAction: () -> Void
   
@@ -26,32 +26,29 @@ public struct TopArticleNavigation: View {
   public var body: some View {
     HStack {
       navigationItem(
-        image: SharedDesignSystemAsset.Image.closeCross,
+        image: .closeCross,
         leftAction
       )
       
       titleContect()
       
       navigationItem(
-        image: SharedDesignSystemAsset.Image.externalLink,
+        image: .externalLink,
         rightAction
       )
-      
     }
   }
   
-  
   @ViewBuilder
-  func titleContect() -> some View {
+  private func titleContect() -> some View {
     HStack(spacing: 8) {
-      SharedDesignSystemAsset.Image.lock
-        .swiftUIImage
+      Image.lock
         .resizable()
         .scaledToFit()
         .frame(width: 14)
         .foregroundStyle(Color.init(hex: "66625F"))
         .padding(5)
-        .background(Color.white)
+        .background(.white)
         .clipShape(Circle())
       
       TextField(
@@ -70,18 +67,18 @@ public struct TopArticleNavigation: View {
   }
   
   @ViewBuilder
-  func navigationItem(
-    image: SharedDesignSystemImages,
+  private func navigationItem(
+    image: Image,
     _ action: @escaping () -> Void
   ) -> some View {
     Button(action: {
       action()
     }, label: {
-      image.swiftUIImage
+      image
         .resizable()
         .scaledToFit()
         .frame(width: 24, height: 24)
-        .foregroundStyle(Color.greyScale950)
+        .foregroundStyle(.greyScale950)
     })
   }
 }

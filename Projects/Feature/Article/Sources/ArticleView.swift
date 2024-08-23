@@ -7,10 +7,11 @@
 //
 
 import SwiftUI
+import SharedDesignSystem
 import ComposableArchitecture
 
 public struct ArticleView: View {
-  @Bindable var store: StoreOf<ArticleStore>
+  private let store: StoreOf<ArticleStore>
   
   public init(store: StoreOf<ArticleStore>) {
     self.store = store
@@ -18,9 +19,10 @@ public struct ArticleView: View {
   
   public var body: some View {
     NavigationStack {
-      VStack {
-        Text("아티클")
-      }
+      Image.articleEmptyView
+        .resizable()
+        .scaledToFit()
+        .frame(width: 234, height: 292)
     }
   }
 }

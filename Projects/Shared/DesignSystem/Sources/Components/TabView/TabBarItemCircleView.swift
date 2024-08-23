@@ -24,7 +24,7 @@ public struct TabBarItemCircleView: View {
         .padding(.top, 10)
         .padding(.bottom, 12)
         .padding(.horizontal, 11)
-        .background(Color.primary700)
+        .background(.primary700)
     }
     .cornerRadius(23)
   }
