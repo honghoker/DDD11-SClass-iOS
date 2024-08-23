@@ -24,6 +24,12 @@ public struct HomeView: View {
     NavigationStack {
       Text("홈")
       
+      PromptExampleView(
+        title: "웹 페이지 구성 체크리스트",
+        content: "웹페이지를 위한 체크리스트",
+        action: { }
+      )
+      
       ChatInputView(
         text: $text,
         action: {},
