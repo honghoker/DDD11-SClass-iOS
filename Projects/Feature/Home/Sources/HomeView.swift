@@ -8,9 +8,13 @@
 
 import SwiftUI
 import ComposableArchitecture
+import SharedDesignSystem
 
 public struct HomeView: View {
   public let store: StoreOf<HomeStore>
+  
+  @State var text: String = ""
+  @FocusState var isFocused: Bool
   
   public init(store: StoreOf<HomeStore>) {
     self.store = store
@@ -19,6 +23,14 @@ public struct HomeView: View {
   public var body: some View {
     NavigationStack {
       Text("홈")
+      
+      ChatInputView(
+        text: $text,
+        action: {},
+        isFocused: $isFocused
+      )
+      .focused($isFocused)
+      .padding()
     }
   }
 }
