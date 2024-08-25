@@ -38,23 +38,8 @@ public struct PromptExampleView: View {
       .clipShape(RoundedRectangle(cornerRadius: 14))
     }
     .buttonStyle(
-      PromptExampleButtonStyle(isPressed: $isPressed)
+      PressedButtonStyle(isPressed: $isPressed)
     )
     .frame(width: 192)
-  }
-}
-
-private struct PromptExampleButtonStyle: ButtonStyle {
-  @Binding private var isPressed: Bool
-  
-  fileprivate init(isPressed: Binding<Bool>) {
-    self._isPressed = isPressed
-  }
-  
-  public func makeBody(configuration: Configuration) -> some View {
-    configuration.label
-      .onChange(of: configuration.isPressed) {
-        isPressed = configuration.isPressed
-      }
   }
 }

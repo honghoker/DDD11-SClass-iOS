@@ -14,7 +14,7 @@ public extension Image {
   static let article: Self = ImageAsset.article.swiftUIImage
   static let chat: Self = ImageAsset.chat.swiftUIImage
   static let history: Self = ImageAsset.history.swiftUIImage
-  static let myPage: Self = ImageAsset.myPage.swiftUIImage=
+  static let myPage: Self = ImageAsset.myPage.swiftUIImage
   
   static let rotateLeft: Self = ImageAsset.rotateLeft.swiftUIImage
   static let closeCross: Self = ImageAsset.closeCross.swiftUIImage
