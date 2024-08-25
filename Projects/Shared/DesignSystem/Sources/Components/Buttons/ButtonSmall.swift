@@ -56,17 +56,6 @@ public struct ButtonSmall: View {
       RoundedRectangle(cornerRadius: 10)
         .stroke(.greyScale100, lineWidth: 1)
     }
-    .buttonStyle(SmallButtonStyle(isPressed: $isPressed))
-  }
-}
-
-struct SmallButtonStyle: ButtonStyle {
-  @Binding var isPressed: Bool
-  
-  public func makeBody(configuration: Configuration) -> some View {
-    configuration.label
-      .onChange(of: configuration.isPressed) {
-        isPressed = configuration.isPressed
-      }
+    .buttonStyle(PressedButtonStyle(isPressed: $isPressed))
   }
 }
