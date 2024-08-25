@@ -98,6 +98,7 @@ struct HistoryAlertView: View {
   private var cancelButton: some View {
     Button(action: {
       dismiss()
+      onCancel?()
     }) {
       Text(cancelText)
         .notoSans(.subhead_3)
@@ -116,6 +117,7 @@ struct HistoryAlertView: View {
   private var submitButton: some View {
     Button(action: {
       dismiss()
+      onSubmit?()
     }) {
       Text(submitText)
         .notoSans(.subhead_3)

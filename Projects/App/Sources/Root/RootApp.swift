@@ -8,6 +8,7 @@
 import SwiftUI
 import SharedDesignSystem
 import ComposableArchitecture
+import Feature
 
 @main
 struct RootApp: App {
@@ -19,15 +20,24 @@ struct RootApp: App {
   
   var body: some Scene {
     WindowGroup {
-      RootView(
-        store: .init(
-          initialState: RootStore.State(),
-          reducer: {
-            RootStore()
-              ._printChanges()
-          }
+//      RootView(
+//        store: .init(
+//          initialState: RootStore.State(),
+//          reducer: {
+//            RootStore()
+//              ._printChanges()
+//          }
+//        )
+//      )
+        MainTabView(
+            store: .init(
+                initialState: MainTabStore.State(.article),
+                reducer: {
+                    MainTabStore()
+                        ._printChanges()
+                }
+            )
         )
-      )
     }
   }
 }

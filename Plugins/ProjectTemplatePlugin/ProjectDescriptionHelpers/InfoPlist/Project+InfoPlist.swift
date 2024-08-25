@@ -12,6 +12,7 @@ extension InfoPlist {
   public static let appInfoPlist: Self = .extendingDefault(
     with: InfoPlistDictionary()
       .setUIUserInterfaceStyle("Light")
+      .setAppTransportSecurity(arbitaryLoad: true)
       .setCFBundleDevelopmentRegion("$(DEVELOPMENT_LANGUAGE)")
       .setCFBundleExecutable("$(EXECUTABLE_NAME)")
       .setCFBundleIdentifier("$(PRODUCT_BUNDLE_IDENTIFIER)")

@@ -35,6 +35,14 @@ public extension InfoPlistDictionary {
     return self.merging(["CFBundleName": .string(value)]) { (_, new) in new }
   }
   
+  func setAppTransportSecurity(arbitaryLoad: Bool) -> [String: Plist.Value] {
+       return [
+           "NSAppTransportSecurity": .dictionary([
+               "NSAllowsArbitraryLoads": .boolean(arbitaryLoad)
+           ])
+       ]
+   }
+  
   func setCFBundlePackageType(_ value: String) -> InfoPlistDictionary {
     return self.merging(["CFBundlePackageType": .string(value)]) { (_, new) in new }
   }

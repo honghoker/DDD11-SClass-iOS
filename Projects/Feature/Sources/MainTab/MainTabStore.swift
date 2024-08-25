@@ -18,9 +18,11 @@ public struct MainTabStore {
     
     public var home: HomeStore.State = .init()
     public var history: HistoryStore.State = .init()
-    public var chat: ChatStore.State = .init()
+    public var chat: ChatNavigationStore.State = .init()
     public var article: ArticleStore.State = .init()
     public var myPage: MyPageRootStore.State = .init()
+    
+    public var isSelectedChat = false
     
     public init(_ selectedTab: MainTabItem) {
       self.selectedTab = selectedTab
@@ -32,30 +34,15 @@ public struct MainTabStore {
     case selectTab(MainTabItem)
     case home(HomeStore.Action)
     case history(HistoryStore.Action)
-    case chat(ChatStore.Action)
+    case chat(ChatNavigationStore.Action)
     case article(ArticleStore.Action)
     case myPage(MyPageRootStore.Action)
   }
   
   public var body: some ReducerOf<Self> {
-    Reduce { state, action in
-      switch action {
-      case .binding:
-        return .none
-      case .selectTab(let tab):
-        state.selectedTab = tab
-        return .none
-      case .home:
-        return .none
-      case .history:
-        return .none
-      case .chat:
-        return .none
-      case .article:
-        return .none
-      case .myPage:
-        return .none
-      }
+    
+    Scope(state: \.chat, action: \.chat) {
+      ChatNavigationStore()
     }
     
     Scope(state: \.home, action: \.home) {
@@ -66,9 +53,6 @@ public struct MainTabStore {
       HistoryStore()
     }
     
-    Scope(state: \.chat, action: \.chat) {
-      ChatStore()
-    }
     
     Scope(state: \.article, action: \.article) {
       ArticleStore()
@@ -76,6 +60,33 @@ public struct MainTabStore {
     
     Scope(state: \.myPage, action: \.myPage) {
       MyPageRootStore()
+    }
+    
+    Reduce { state, action in
+      switch action {
+      case .binding:
+        return .none
+      case .selectTab(let tab):
+        if tab == .chat {
+          state.isSelectedChat = true
+          return .none
+        }
+        state.selectedTab = tab
+        return .none
+      case .home:
+        return .none
+      case .history:
+        return .none
+      case .article:
+        return .none
+      case .myPage:
+        return .none
+      case .chat(.chat(.onCloseView)):
+        state.isSelectedChat = false
+        return .none
+      case .chat:
+        return .none
+      }
     }
   }
 }
