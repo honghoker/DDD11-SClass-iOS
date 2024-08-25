@@ -15,6 +15,10 @@ struct RootView: View {
   var body: some View {
     SwitchStore(self.store) { state in
       switch state {
+      case .onboarding:
+        if let store = store.scope(state: \.onboarding, action: \.onboarding) {
+          OnboardingRootView(store: store)
+        }
       case .mainTab:
         if let store = store.scope(state: \.mainTab, action: \.mainTab) {
           MainTabView(store: store)

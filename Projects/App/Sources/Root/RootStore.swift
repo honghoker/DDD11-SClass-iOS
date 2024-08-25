@@ -13,23 +13,31 @@ import ComposableArchitecture
 public struct RootStore {
   @ObservableState
   public enum State {
+    case onboarding(OnboardingRootStore.State)
     case mainTab(MainTabStore.State)
     
     public init() {
-      self = .mainTab(MainTabStore.State(.home))
+      self = .onboarding(OnboardingRootStore.State())
+//      self = .mainTab(MainTabStore.State(.home))
     }
   }
   
   public enum Action {
+    case onboarding(OnboardingRootStore.Action)
     case mainTab(MainTabStore.Action)
   }
   
   public var body: some ReducerOf<Self> {
     Reduce { state, action in
       switch action {
+      case .onboarding:
+        return .none
       case .mainTab:
         return .none
       }
+    }
+    .ifCaseLet(\.onboarding, action: \.onboarding) {
+      OnboardingRootStore()
     }
     .ifCaseLet(\.mainTab, action: \.mainTab) {
       MainTabStore()

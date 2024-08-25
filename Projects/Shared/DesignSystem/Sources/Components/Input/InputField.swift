@@ -34,26 +34,22 @@ public struct InputField<T: Hashable>: View {
     VStack {
       HStack {
         ZStack(alignment: .leading) {
-          TextField(
-            placeHolder,
-            text: $text
-          )
-          .notoSans(.body_2)
-          .foregroundStyle(.greyScale950)
-          .focused(isFocused, equals: focusValue)
-          
+          TextField("", text: $text)
+            .notoSans(.body_2)
+            .foregroundStyle(.greyScale950)
+            .focused(isFocused, equals: focusValue)
           
           if isFocused.wrappedValue != focusValue {
             Text(placeHolder)
-              .foregroundStyle(.black)
+              .notoSans(.body_2)
+              .foregroundStyle(.greyScale300)
               .frame(maxWidth: .infinity, alignment: .center)
               .onTapGesture {
                 isFocused.wrappedValue = focusValue
               }
           }
         }
-        
-        
+      
         if isFocused.wrappedValue == focusValue {
           Spacer()
           Button(action: {

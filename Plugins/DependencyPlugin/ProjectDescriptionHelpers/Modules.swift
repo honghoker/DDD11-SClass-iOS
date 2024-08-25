@@ -30,6 +30,7 @@ public extension ModulePath {
 
 public extension ModulePath {
   enum Feature: String, CaseIterable {
+    case onboarding = "Onboarding"
     case home = "Home"
     case history = "History"
     case chat = "Chat"
