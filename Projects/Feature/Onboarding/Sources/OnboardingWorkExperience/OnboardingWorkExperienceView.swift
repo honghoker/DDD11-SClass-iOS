@@ -10,14 +10,13 @@ import SharedDesignSystem
 import ComposableArchitecture
 
 public struct OnboardingWorkExperienceView: View {
-  @State private var workExperience: String = ""
-  @State private var errorText: String?
-  @State private var isValid: Bool = false
+  @Bindable private var store: StoreOf<OnboardingWorkExperienceStore>
   
   @FocusState private var focusState
   
-  var options = (0..<10).map { "\($0) 년차" }
-  @State private var selectionOption = 0
+  init(store: StoreOf<OnboardingWorkExperienceStore>) {
+    self.store = store
+  }
   
   public var body: some View {
     VStack(spacing: .zero) {
@@ -37,36 +36,23 @@ public struct OnboardingWorkExperienceView: View {
       .foregroundStyle(.black)
       .multilineTextAlignment(.center)
       .padding(.top, 81)
-      
-//      InputField(
-//        errorMessage: $errorText,
-//        text: $workExperience,
-//        placeHolder: "0 년차",
-//        isFocused: $focusState
-//      )
-//      .frame(width: 289)
-//      .padding(.top, 86)
-//      .onChange(of: workExperience) { _, newValue in
-//        isValid = !newValue.isEmpty
-//        newValue
-//      }
-      
-      
-      Picker("Select Choice", selection: $selectionOption) {
-        ForEach(0 ..< options.count) {
-          Text(options[$0])
+ 
+      Picker("Select Choice", selection: $store.workExperience) {
+        ForEach(store.workExperienceList, id: \.self) {
+          Text("\($0) 년차")
         }
       }
       .pickerStyle(.wheel)
+      .padding(.top, 86)
       
       Spacer()
       
       CommonButton(
         title: "다음",
         style: .default,
-        isActive: isValid,
+        isActive: true,
         action: {
-          
+          store.send(.didTapNextButton)
         }
       )
       .padding(.horizontal, 15)

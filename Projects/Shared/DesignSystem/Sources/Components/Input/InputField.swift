@@ -39,7 +39,7 @@ public struct InputField<T: Hashable>: View {
             .foregroundStyle(.greyScale950)
             .focused(isFocused, equals: focusValue)
           
-          if isFocused.wrappedValue != focusValue {
+          if text.isEmpty && isFocused.wrappedValue != focusValue {
             Text(placeHolder)
               .notoSans(.body_2)
               .foregroundStyle(.greyScale300)

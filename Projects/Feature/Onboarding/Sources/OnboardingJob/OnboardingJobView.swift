@@ -10,29 +10,12 @@ import SharedDesignSystem
 import ComposableArchitecture
 
 public struct OnboardingJobView: View {
-  enum JobType: CaseIterable, Identifiable {
-    case designer
-    case developer
-    case planner
-    
-    var id: Self {
-      return self
-    }
-    
-    var name: String {
-      switch self {
-      case .designer:
-        return "디자이너"
-      case .developer:
-        return "개발자"
-      case .planner:
-        return "기획자"
-      }
-    }
-  }
   
-  @State private var selectedJob: JobType?
-  @State private var isValid: Bool = false
+  @Bindable private var store: StoreOf<OnboardingJobStore>
+  
+  init(store: StoreOf<OnboardingJobStore>) {
+    self.store = store
+  }
   
   public var body: some View {
     VStack(spacing: .zero) {
@@ -57,10 +40,9 @@ public struct OnboardingJobView: View {
         ForEach(JobType.allCases) { job in
           Chip(
             title: job.name,
-            style: job == selectedJob ? .blue : .default,
+            style: job == store.selectedJob ? .blue : .default,
             onTap: {
-              if !isValid { isValid = true }
-              selectedJob = job
+              store.send(.didTapJobButton(job))
             }
           )
         }
@@ -72,9 +54,9 @@ public struct OnboardingJobView: View {
       CommonButton(
         title: "다음",
         style: .default,
-        isActive: isValid,
+        isActive: store.isValid,
         action: {
-          
+          store.send(.didTapNextButton)
         }
       )
       .padding(.horizontal, 15)

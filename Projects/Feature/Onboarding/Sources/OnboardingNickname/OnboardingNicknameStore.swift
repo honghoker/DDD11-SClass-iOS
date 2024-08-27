@@ -11,6 +11,8 @@ import ComposableArchitecture
 @Reducer
 public struct OnboardingNicknameStore {
   
+  public init() { }
+  
   @ObservableState
   public struct State {
     var nickname: String = ""
@@ -20,7 +22,9 @@ public struct OnboardingNicknameStore {
   
   public enum Action: BindableAction {
     case binding(BindingAction<State>)
+    case onChangeNickname
     case didTapNextButton
+    case navigateNextPage(nickname: String)
   }
   
   public var body: some ReducerOf<Self> {
@@ -30,25 +34,31 @@ public struct OnboardingNicknameStore {
       switch action {
       case .binding:
         return .none
+      case .onChangeNickname:
+        state.isValid = !state.nickname.isEmpty
+        state.errorText = nil
+        return .none
       case .didTapNextButton:
-        isValidName(<#T##text: String##String#>)
-        // 다음 화면 navigation
+        let isValid = isValid(nickName: state.nickname)
+        state.isValid = isValid
+        
+        if !isValid {
+          state.errorText = "닉네임은 8자 이하로 알파벳과 한글만 조합할 수 있어요."
+          return .none
+        }
+        state.errorText = nil
+        return .send(.navigateNextPage(nickname: state.nickname))
+      default:
         return .none
       }
     }
   }
   
-  // TODO: - usecase로 분리
+  // TODO: - 아래 usecase로 분리
   
-  private func isValidName(_ text: String) -> Bool {
+  private func isValid(nickName text: String) -> Bool {
     guard !text.isEmpty else { return false }
-    let isValid = regEx(text: text)
-    if isValid {
-//      errorText = nil
-    } else {
-//      errorText = "닉네임은 8자 이하로 알파벳과 한글만 조합할 수 있어요."
-    }
-    return isValid
+    return regEx(text: text)
   }
   
   private func regEx(text str: String) -> Bool {

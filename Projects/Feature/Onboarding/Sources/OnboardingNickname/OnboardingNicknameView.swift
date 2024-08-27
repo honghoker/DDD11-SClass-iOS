@@ -13,7 +13,7 @@ public struct OnboardingNicknameView: View {
   @Bindable private var store: StoreOf<OnboardingNicknameStore>
   @FocusState private var focusState
   
-  init(store: StoreOf<OnboardingNicknameStore>) {
+  public init(store: StoreOf<OnboardingNicknameStore>) {
     self.store = store
   }
   
@@ -45,7 +45,7 @@ public struct OnboardingNicknameView: View {
       .frame(width: 289)
       .padding(.top, 86)
       .onChange(of: store.nickname) { _, newValue in
-//        store.isValid = isValidName(newValue)
+        store.send(.onChangeNickname)
       }
       
       Spacer()
