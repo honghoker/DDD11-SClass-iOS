@@ -18,21 +18,24 @@ public struct RootStore {
     
     public init() {
       self = .onboarding(OnboardingRootStore.State())
-//      self = .mainTab(MainTabStore.State(.home))
     }
   }
   
   public enum Action {
     case onboarding(OnboardingRootStore.Action)
     case mainTab(MainTabStore.Action)
+    case onSuccessSignUp
   }
   
   public var body: some ReducerOf<Self> {
     Reduce { state, action in
       switch action {
-      case .onboarding:
+      case .onboarding(.onSuccessSignUp):
+        state = .mainTab(MainTabStore.State(.home))
         return .none
       case .mainTab:
+        return .none
+      default:
         return .none
       }
     }

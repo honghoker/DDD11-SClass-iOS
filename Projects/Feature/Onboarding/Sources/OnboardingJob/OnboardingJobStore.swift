@@ -6,28 +6,10 @@
 //
 
 import Foundation
-import ComposableArchitecture
 
-public enum JobType: CaseIterable, Identifiable {
-  case designer
-  case developer
-  case planner
-  
-  public var id: Self {
-    return self
-  }
-  
-  public var name: String {
-    switch self {
-    case .designer:
-      return "디자이너"
-    case .developer:
-      return "개발자"
-    case .planner:
-      return "기획자"
-    }
-  }
-}
+import Domain
+
+import ComposableArchitecture
 
 @Reducer
 public struct OnboardingJobStore {
@@ -42,8 +24,10 @@ public struct OnboardingJobStore {
   
   public enum Action {
     case didTapJobButton(JobType)
+    case didTapBackButton
     case didTapNextButton
-    case navigateNextPage(selectedJob: JobType)
+    case navigateToNextPage(selectedJob: JobType)
+    case navigateToPreviousPage
   }
   
   public var body: some ReducerOf<Self> {
@@ -57,7 +41,9 @@ public struct OnboardingJobStore {
         guard let selectedJob = state.selectedJob else {
           return .none
         }
-        return .send(.navigateNextPage(selectedJob: selectedJob))
+        return .send(.navigateToNextPage(selectedJob: selectedJob))
+      case .didTapBackButton:
+        return .send(.navigateToPreviousPage)
       default:
         return .none
       }

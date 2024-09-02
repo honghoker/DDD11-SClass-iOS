@@ -6,7 +6,9 @@
 //
 
 import SwiftUI
+
 import SharedDesignSystem
+
 import ComposableArchitecture
 
 public struct OnboardingWorkExperienceView: View {
@@ -21,6 +23,12 @@ public struct OnboardingWorkExperienceView: View {
   public var body: some View {
     VStack(spacing: .zero) {
       TopNavigation(
+        leadingItem: (
+          .left,
+          {
+            store.send(.didTapBackButton)
+          }
+        ),
         centerTitle: "나만의 AI 만들기"
       )
       
@@ -36,7 +44,7 @@ public struct OnboardingWorkExperienceView: View {
       .foregroundStyle(.black)
       .multilineTextAlignment(.center)
       .padding(.top, 81)
- 
+      
       Picker("Select Choice", selection: $store.workExperience) {
         ForEach(store.workExperienceList, id: \.self) {
           Text("\($0) 년차")
@@ -58,5 +66,6 @@ public struct OnboardingWorkExperienceView: View {
       .padding(.horizontal, 15)
       .padding(.bottom, 50)
     }
+    .navigationBarBackButtonHidden()
   }
 }

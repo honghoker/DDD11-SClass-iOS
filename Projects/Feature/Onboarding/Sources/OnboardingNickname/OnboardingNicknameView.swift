@@ -6,7 +6,9 @@
 //
 
 import SwiftUI
+
 import SharedDesignSystem
+
 import ComposableArchitecture
 
 public struct OnboardingNicknameView: View {
@@ -20,6 +22,12 @@ public struct OnboardingNicknameView: View {
   public var body: some View {
     VStack(spacing: .zero) {
       TopNavigation(
+        leadingItem: (
+          .left,
+          {
+            store.send(.didTapBackButton)
+          }
+        ),
         centerTitle: "나만의 AI 만들기"
       )
       
@@ -61,5 +69,6 @@ public struct OnboardingNicknameView: View {
       .padding(.horizontal, 15)
       .padding(.bottom, 50)
     }
+    .navigationBarBackButtonHidden()
   }
 }

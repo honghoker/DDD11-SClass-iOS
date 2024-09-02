@@ -7,6 +7,6 @@
 
 import Foundation
 
-enum NetworkError: Int {
+enum NetworkError: Int, Error {
   case unknown = 500
 }

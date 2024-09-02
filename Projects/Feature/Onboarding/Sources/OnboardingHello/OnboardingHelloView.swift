@@ -6,7 +6,9 @@
 //
 
 import SwiftUI
+
 import SharedDesignSystem
+
 import ComposableArchitecture
 
 public struct OnboardingHelloView: View {
@@ -19,10 +21,10 @@ public struct OnboardingHelloView: View {
   public var body: some View {
     VStack(spacing: .zero) {
       Text(
-     """
-     반가워요!
-     저는 당신을 위한 AI에요.
-     """
+       """
+       반가워요!
+       저는 당신을 위한 AI에요.
+       """
       )
       .notoSans(.display_1)
       .foregroundStyle(.black)
@@ -48,5 +50,6 @@ public struct OnboardingHelloView: View {
       .padding(.horizontal, 15)
       .padding(.bottom, 50)
     }
+    .navigationBarBackButtonHidden()
   }
 }

@@ -7,7 +7,9 @@
 //
 
 import SwiftUI
+
 import SharedDesignSystem
+
 import ComposableArchitecture
 
 public struct OnboardingRootView: View {
@@ -24,12 +26,12 @@ public struct OnboardingRootView: View {
       switch store.case {
       case .nickName(let store):
         OnboardingNicknameView(store: store)
-//          .navigationBarBackButtonHidden()
       case .job(let store):
         OnboardingJobView(store: store)
-//          .navigationBarBackButtonHidden()
       case .workExperience(let store):
         OnboardingWorkExperienceView(store: store)
+      case .complete:
+        OnboardingCompleteView(store: self.store)
       }
     }
   }

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+
 import ComposableArchitecture
 
 @Reducer
@@ -21,8 +22,10 @@ public struct OnboardingWorkExperienceStore {
   
   public enum Action: BindableAction {
     case binding(BindingAction<State>)
+    case didTapBackButton
     case didTapNextButton
-    case navigateNextPage(workExperience: Int)
+    case navigateToNextPage(workExperience: Int)
+    case navigateToPreviousPage
   }
   
   public var body: some ReducerOf<Self> {
@@ -31,7 +34,9 @@ public struct OnboardingWorkExperienceStore {
     Reduce { state, action in
       switch action {
       case .didTapNextButton:
-        return .send(.navigateNextPage(workExperience: state.workExperience))
+        return .send(.navigateToNextPage(workExperience: state.workExperience))
+      case .didTapBackButton:
+        return .send(.navigateToPreviousPage)
       default:
         return .none
       }

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+
 import ComposableArchitecture
 
 @Reducer
@@ -23,8 +24,10 @@ public struct OnboardingNicknameStore {
   public enum Action: BindableAction {
     case binding(BindingAction<State>)
     case onChangeNickname
+    case didTapBackButton
     case didTapNextButton
-    case navigateNextPage(nickname: String)
+    case navigateToNextPage(nickname: String)
+    case navigateToPreviousPage
   }
   
   public var body: some ReducerOf<Self> {
@@ -47,7 +50,9 @@ public struct OnboardingNicknameStore {
           return .none
         }
         state.errorText = nil
-        return .send(.navigateNextPage(nickname: state.nickname))
+        return .send(.navigateToNextPage(nickname: state.nickname))
+      case .didTapBackButton:
+        return .send(.navigateToPreviousPage)
       default:
         return .none
       }
