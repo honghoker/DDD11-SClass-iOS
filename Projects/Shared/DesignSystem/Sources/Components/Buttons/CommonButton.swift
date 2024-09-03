@@ -13,7 +13,12 @@ public struct CommonButton: View {
   private let isActive: Bool
   private let action: () -> Void
   
-  public init(title: String, style: CommonButtonStyle, isActive: Bool, action: @escaping () -> Void) {
+  public init(
+    title: String,
+    style: CommonButtonStyle,
+    isActive: Bool,
+    action: @escaping () -> Void
+  ) {
     self.title = title
     self.style = style
     self.isActive = isActive
@@ -35,8 +40,7 @@ public struct CommonButton: View {
       .frame(height: 54)
     })
     .background(
-      isActive ?
-      style.activeBackgroundColor : style.disableBackgroundColor
+      isActive ? style.activeBackgroundColor : style.disableBackgroundColor
     )
     .clipShape(RoundedRectangle(cornerRadius: 10))
     .if(style == .line && isActive) {
@@ -46,6 +50,7 @@ public struct CommonButton: View {
             .stroke(.greyScale100, lineWidth: 1)
         }
     }
+    .disabled(!isActive)
   }
 }
 
@@ -70,7 +75,7 @@ public enum CommonButtonStyle {
     case .line:
       return .white
     case .`default`:
-      return .greyScale200
+      return .primary600
     case .contrast:
       return .white
     }
@@ -82,7 +87,7 @@ public enum CommonButtonStyle {
     case .line:
       return .white
     case .`default`:
-      return .primary600
+      return .greyScale200
     case .contrast:
       return .white
     }

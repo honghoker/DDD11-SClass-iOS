@@ -30,4 +30,5 @@ public extension Image {
   static let chatbot: Self = ImageAsset.chatbot.swiftUIImage
   
   static let onboardingLogo: Self = ImageAsset.onboardingLogo.swiftUIImage
+  static let `left`: Self = ImageAsset.left.swiftUIImage
 }

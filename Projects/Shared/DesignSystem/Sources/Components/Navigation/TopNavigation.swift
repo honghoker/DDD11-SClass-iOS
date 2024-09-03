@@ -9,7 +9,7 @@ import SwiftUI
 
 public struct TopNavigation: View {
   
-  public typealias NavigationItem = (SharedDesignSystemImages, () -> Void)
+  public typealias NavigationItem = (Image, () -> Void)
   
   private let leadingItem: NavigationItem?
   
@@ -72,7 +72,7 @@ public struct TopNavigation: View {
     Button(action: {
       item.1()
     }, label: {
-      item.0.swiftUIImage
+      item.0
         .resizable()
         .scaledToFit()
         .frame(width: 24, height: 24)
