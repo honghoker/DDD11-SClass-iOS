@@ -31,4 +31,5 @@ public extension Image {
   
   static let onboardingLogo: Self = ImageAsset.onboardingLogo.swiftUIImage
   static let `left`: Self = ImageAsset.left.swiftUIImage
+  static let onboardingAISettingComplete: Self = ImageAsset.onboardingAISettingComplete.swiftUIImage
 }
