@@ -9,6 +9,7 @@ let project = Project.makeModule(
   product: .staticFramework,
   settings: .settings(),
   dependencies: [
+    .feature(implements: .onboarding),
     .feature(implements: .home),
     .feature(implements: .history),
     .feature(implements: .chat),
