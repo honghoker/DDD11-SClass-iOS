@@ -30,6 +30,20 @@ extension KeychainClient {
   }
 }
 
+extension KeychainClient {
+  public var userID: String? {
+    return getString(for: KeychainKey.userID)
+  }
+  
+  public func setUserID(_ udid: String) {
+    setString(udid, for: KeychainKey.userID)
+  }
+  
+  public var isSignIn: Bool {
+    return getString(for: KeychainKey.userID) != nil
+  }
+}
+
 extension KeychainClient: DependencyKey {
   public static var liveValue: Self {
     guard let appIdentifierPrefix = Bundle.main.infoDictionary?["AppIdentifierPrefix"] as? String else {
