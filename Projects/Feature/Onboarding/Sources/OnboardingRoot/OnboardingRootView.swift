@@ -20,8 +20,23 @@ public struct OnboardingRootView: View {
   }
   
   public var body: some View {
-    NavigationStack {
-      
+    NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
+      OnboardingHelloView(store: store)
+    } destination: { store in
+      switch store.case {
+      case .nickName(let store):
+        OnboardingNicknameView(store: store)
+          .navigationBarBackButtonHidden()
+      case .job(let store):
+        OnboardingJobView(store: store)
+          .navigationBarBackButtonHidden()
+      case .workExperience(let store):
+        OnboardingWorkExperienceView(store: store)
+          .navigationBarBackButtonHidden()
+      case .complete:
+        OnboardingCompleteView(store: self.store)
+          .navigationBarBackButtonHidden()
+      }
     }
   }
 }
