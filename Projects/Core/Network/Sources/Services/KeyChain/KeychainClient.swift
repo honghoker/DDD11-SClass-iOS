@@ -46,7 +46,8 @@ extension KeychainClient {
 
 extension KeychainClient: DependencyKey {
   public static var liveValue: Self {
-    guard let appIdentifierPrefix = Bundle.main.infoDictionary?["AppIdentifierPrefix"] as? String else {
+    // TODO: - TEAMID 추가 시 AppIdentifierPrefix로 변경
+    guard let appIdentifierPrefix = Bundle.main.infoDictionary?["CFBundleIdentifier"] as? String else {
       fatalError("AppIdentifierPrefix is not set in Info.plist")
     }
     
