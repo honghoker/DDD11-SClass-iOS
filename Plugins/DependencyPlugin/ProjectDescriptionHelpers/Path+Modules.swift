@@ -28,18 +28,6 @@ public extension ProjectDescription.Path {
   }
 }
 
-// MARK: ProjectDescription.Path + Domain
-
-public extension ProjectDescription.Path {
-  static var domain: Self {
-    return .relativeToRoot("Projects/\(ModulePath.Domain.name)")
-  }
-  
-  static func domain(implementation module: ModulePath.Domain) -> Self {
-    return .relativeToRoot("Projects/\(ModulePath.Domain.name)/\(module.rawValue)")
-  }
-}
-
 // MARK: ProjectDescription.Path + Core
 
 public extension ProjectDescription.Path {

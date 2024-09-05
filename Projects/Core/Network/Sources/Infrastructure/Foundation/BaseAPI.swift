@@ -15,7 +15,6 @@ enum OnboardingKitDomain {
 }
 
 extension OnboardingKitDomain {
-  
   var url: String {
     switch self {
     case .onboarding:

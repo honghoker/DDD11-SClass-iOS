@@ -1,8 +1,8 @@
 //
 //  JobType.swift
-//  DomainUser
+//  CoreDomain
 //
-//  Created by 홍은표 on 8/30/24.
+//  Created by 홍은표 on 9/5/24.
 //
 
 import Foundation

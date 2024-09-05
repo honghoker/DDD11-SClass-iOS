@@ -3,15 +3,13 @@ import ProjectDescription
 import DependencyPlugin
 import ProjectTemplatePlugin
 
-let project = Project.makeModule(
-  name: "Domain",
-  bundleId: .appBundleID(name: "Domain"),
+let project = Project.makeAppModule(
+  name: "CoreDomain",
+  bundleId: .appBundleID(name: "Core.Domain"),
   product: .staticFramework,
   settings: .settings(),
   dependencies: [
-    .core,
-    .domain(implements: .user)
+
   ],
   sources: ["Sources/**"]
 )
-
