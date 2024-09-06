@@ -8,7 +8,6 @@
 import Foundation
 
 import Core
-import Domain
 
 import ComposableArchitecture
 
@@ -30,7 +29,7 @@ public struct OnboardingRootStore {
     case path(StackActionOf<Path>)
     case didTapNextButton
     case didTapCompleteButton
-    case onCompleteSetting(Result<Void, Error>)
+    case onCompleteSetting(TaskResult<Void>)
     case onSuccessSignUp
   }
   
@@ -110,23 +109,28 @@ public struct OnboardingRootStore {
     // TODO: 요청 시 로딩 화면 이동
     
     guard let nickname = state.nickname,
-          let job = state.selectedJob?.rawValue,
+          let job = state.selectedJob,
           let workExperience = state.workExperience
     else {
       return .none
     }
     
     let userID: String = UUID().uuidString
-    keychainClient.setUserID(userID)
+    let userInfo: UserInfo = .init(
+      userID: userID,
+      nickName: nickname,
+      job: job,
+      workExperience: workExperience
+    )
     
     return .run { send in
-      await send(
-        .onCompleteSetting(
-          Result {
-            try await onboardingAPIClient.postSignUp(userID, nickname, job, workExperience)
-          }
-        )
-      )
+      do {
+        try await onboardingAPIClient.postSignUp(userInfo)
+        keychainClient.setUserID(userID)
+        await send(.onCompleteSetting(.success(())))
+      } catch {
+        await send(.onCompleteSetting(.failure(error)))
+      }
     }
   }
 }

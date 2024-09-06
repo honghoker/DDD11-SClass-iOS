@@ -7,15 +7,24 @@
 
 import Foundation
 
+import CoreDomain
+
 import Moya
 
 enum OnboardingAPI {
-  case signUp(userID: String, nickname: String, job: String, workExperience: Int)
+  case signUp(_ requestDTO: SignUpRequestDTO)
 }
 
 extension OnboardingAPI: BaseAPI {
   var domain: OnboardingKitDomain {
     return .onboarding
+  }
+  
+  var method: Moya.Method {
+    switch self {
+    case .signUp:
+      return .post
+    }
   }
   
   var urlPath: String {
@@ -25,26 +34,18 @@ extension OnboardingAPI: BaseAPI {
     }
   }
   
-  var error: [Int: NetworkError]? {
+  var parameters: [String: Any]? {
     return nil
   }
   
-  var parameters: [String: Any]? {
+  var task: Task {
     switch self {
-    case .signUp(let userID, let nickname, let job, let workExperience):
-      return [
-        "userId": userID,
-        "nickname": nickname,
-        "job": job,
-        "workExperience": workExperience
-      ]
+    case .signUp(let requestDTO):
+      return .requestJSONEncodable(requestDTO)
     }
   }
   
-  var method: Moya.Method {
-    switch self {
-    case .signUp:
-      return .post
-    }
+  var error: [Int: NetworkError]? {
+    return nil
   }
 }

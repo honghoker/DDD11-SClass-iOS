@@ -7,6 +7,11 @@
 
 import Foundation
 
-enum NetworkError: Int {
-  case unknown = 500
+import Moya
+
+enum NetworkError: Error {
+  case underlying(MoyaError)
+  case invalidResponse(statusCode: Int, message: String)
+  case noData
+  case decodingError(Error)
 }

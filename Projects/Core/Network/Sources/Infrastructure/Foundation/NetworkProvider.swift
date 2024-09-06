@@ -40,14 +40,14 @@ final class NetworkProvider<API: BaseAPI>: Requestable {
 }
 
 fileprivate extension MoyaProvider {
-  func asyncRequest(_ target: Target) async throws -> Response {
+  func asyncRequest(_ api: Target) async throws -> Response {
     try await withCheckedThrowingContinuation { continuation in
-      self.request(target) { result in
+      self.request(api) { result in
         switch result {
         case .success(let response):
           continuation.resume(returning: response)
         case .failure(let error):
-          continuation.resume(throwing: error)
+          continuation.resume(throwing: NetworkError.underlying(error))
         }
       }
     }

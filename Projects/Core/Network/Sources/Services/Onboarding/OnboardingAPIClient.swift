@@ -6,19 +6,17 @@
 //
 
 import Foundation
-import ComposableArchitecture
+
+import CoreDomain
+
 import Combine
 import CombineMoya
+import ComposableArchitecture
 import Moya
 
 @DependencyClient
 public struct OnboardingAPIClient: Sendable {
-  public var postSignUp: @Sendable(
-    _ userID: String,
-    _ nickname: String,
-    _ job: String,
-    _ workExperience: Int
-  ) async throws -> Void
+  public var postSignUp: @Sendable(_ userInfo: UserInfo) async throws -> Void
 }
 
 public extension DependencyValues {
@@ -30,15 +28,16 @@ public extension DependencyValues {
 
 extension OnboardingAPIClient: DependencyKey {
   public static var liveValue: OnboardingAPIClient = .init(
-    postSignUp: { userID, nickname, job, workExperience in
-      let api = OnboardingAPI.signUp(
-        userID: userID,
-        nickname: nickname,
-        job: job,
-        workExperience: workExperience
+    postSignUp: { userInfo in
+      let signUpRequestDTO: SignUpRequestDTO = .init(
+        userId: userInfo.userID,
+        nickname: userInfo.nickName,
+        job: userInfo.job.rawValue,
+        workExperience: userInfo.workExperience
       )
       
-      _ = try await NetworkProvider<OnboardingAPI>().request(api)
+      let api = OnboardingAPI.signUp(signUpRequestDTO)      
+      let responseDTO: EmptyResponseDTO = try await APIService<OnboardingAPI>().request(api: api)
     }
   )
   

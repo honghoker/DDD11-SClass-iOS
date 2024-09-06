@@ -7,7 +7,7 @@
 
 import Foundation
 
-import DomainUser
+import CoreDomain
 
 import ComposableArchitecture
 

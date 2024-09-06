@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-import DomainUser
+import CoreDomain
 import SharedDesignSystem
 
 import ComposableArchitecture

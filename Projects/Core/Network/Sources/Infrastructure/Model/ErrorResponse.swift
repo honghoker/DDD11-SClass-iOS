@@ -8,34 +8,37 @@
 import Foundation
 
 struct ErrorResponse: Error, Decodable {
-  let code: NetworkError
-  let message: String
+  let error: Error
   
-  enum CodingKeys: CodingKey {
-    case code
-    case message
-  }
-  
-  init(code: NetworkError, message: String) {
-    self.code = code
-    self.message = message
-  }
-  
-  init(from decoder: any Decoder) throws {
-    let container = try decoder.container(keyedBy: CodingKeys.self)
-    let codeRawValue = try container.decode(Int.self, forKey: .code)
-    self.code = .init(rawValue: codeRawValue) ?? .unknown
-    self.message = try container.decode(String.self, forKey: .message)
+  struct Error: Decodable {
+    let message: String
+    let error: String
+    let code: Int
   }
 }
 
 extension ErrorResponse {
-  public var errorDescription: String {
-    return "\(message)(코드: \(code.rawValue))"
+  init(from decoder: any Decoder) throws {
+    let container = try decoder.container(keyedBy: CodingKeys.self)
+    error = try container.decode(Error.self, forKey: .error)
   }
   
-  static let defaultError = ErrorResponse(
-    code: .unknown,
-    message: "알 수 없는 에러"
-  )
+  enum CodingKeys: String, CodingKey {
+    case error = "message"
+  }
+}
+
+extension ErrorResponse.Error {
+  init(from decoder: any Decoder) throws {
+    let container = try decoder.container(keyedBy: CodingKeys.self)
+    self.message = try container.decode(String.self, forKey: .message)
+    self.error = try container.decode(String.self, forKey: .error)
+    self.code = try container.decode(Int.self, forKey: .code)
+  }
+  
+  enum CodingKeys: String, CodingKey {
+    case message
+    case error
+    case code = "statusCode"
+  }
 }
