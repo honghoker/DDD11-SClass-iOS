@@ -11,3 +11,4 @@
 @_exported import FeatureChat
 @_exported import FeatureArticle
 @_exported import FeatureMyPage
+@_exported import FeatureSplash

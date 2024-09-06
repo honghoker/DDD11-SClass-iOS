@@ -15,15 +15,17 @@ import ComposableArchitecture
 public struct RootStore {
   @ObservableState
   public enum State {
+    case splash(SplashStore.State)
     case onboarding(OnboardingRootStore.State)
     case mainTab(MainTabStore.State)
     
     init() {
-      self = .onboarding(OnboardingRootStore.State())
+      self = .splash(SplashStore.State())
     }
   }
   
   public enum Action {
+    case splash(SplashStore.Action)
     case onboarding(OnboardingRootStore.Action)
     case mainTab(MainTabStore.Action)
   }
@@ -31,6 +33,12 @@ public struct RootStore {
   public var body: some ReducerOf<Self> {
     Reduce { state, action in
       switch action {
+      case .splash(.routeToMainTabScreen):
+        state = .mainTab(MainTabStore.State(.home))
+        return .none
+      case .splash(.routeToOnboardingScreen):
+        state = .onboarding(OnboardingRootStore.State())
+        return .none
       case .onboarding(.onSuccessSignUp):
         state = .mainTab(MainTabStore.State(.home))
         return .none
@@ -39,6 +47,9 @@ public struct RootStore {
       default:
         return .none
       }
+    }
+    .ifCaseLet(\.splash, action: \.splash) {
+      SplashStore()
     }
     .ifCaseLet(\.onboarding, action: \.onboarding) {
       OnboardingRootStore()

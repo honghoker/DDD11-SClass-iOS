@@ -15,6 +15,7 @@ let project = Project.makeModule(
     .feature(implements: .chat),
     .feature(implements: .article),
     .feature(implements: .myPage),
+    .feature(implements: .splash),
     .core
   ],
   sources: ["Sources/**"]

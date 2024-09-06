@@ -1,11 +1,12 @@
 //
-//  .swift
+//  MyPageStore.swift
 //  FeatureMyPage
 //
 //  Created by 홍은표 on 8/9/24.
 //
 
 import Foundation
+
 import ComposableArchitecture
 
 @Reducer
