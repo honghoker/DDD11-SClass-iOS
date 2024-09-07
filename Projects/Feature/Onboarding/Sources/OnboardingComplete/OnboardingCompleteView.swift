@@ -30,11 +30,16 @@ struct OnboardingCompleteView: View {
             .frame(width: 50, height: 50)
           
           VStack(alignment: .leading, spacing: 16) {
-            Text("AI 설정 완료")
-              .notoSans(.display_3)
-              .foregroundStyle(.white)
+            Text(
+              """
+              매일 성장하고
+              더 멋지게 일해보세요.
+              """
+            )
+            .notoSans(.display_3)
+            .foregroundStyle(.white)
             
-            Text("내 업무 맞춤형 체크리스트를 만들어보세요.")
+            Text("이제 신입키트와 함께, 맞춤형 AI로 업무 고민을 쉽게 해결하세요.")
               .notoSans(.body_2)
               .foregroundStyle(.white)
           }
