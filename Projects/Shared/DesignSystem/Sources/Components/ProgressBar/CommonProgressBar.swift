@@ -9,7 +9,7 @@ import SwiftUI
 
 public struct CommonProgressBar: View {
   
-  private let progress : Double
+  private let progress: Double
   
   public init(progress: Double) {
     self.progress = progress

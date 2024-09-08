@@ -35,21 +35,6 @@ public extension TargetDependency {
   }
 }
 
-// MARK: TargetDependency + Domain
-
-public extension TargetDependency {
-  static var domain: Self {
-    return .project(target: ModulePath.Domain.name, path: .domain)
-  }
-  
-  static func domain(implements module: ModulePath.Domain) -> Self {
-    return .project(
-      target: ModulePath.Domain.name + module.rawValue,
-      path: .domain(implementation: module)
-    )
-  }
-}
-
 // MARK: TargetDependency + Core
 
 public extension TargetDependency {

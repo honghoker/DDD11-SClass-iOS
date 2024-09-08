@@ -22,10 +22,14 @@ public extension Image {
   static let lock: Self = ImageAsset.lock.swiftUIImage
   static let articleEmptyView: Self = ImageAsset.articleEmptyView.swiftUIImage
   static let historyEmptyView: Self = ImageAsset.historyEmptyView.swiftUIImage
-  static let right: Self = ImageAsset.right.swiftUIImage
+  static let `right`: Self = ImageAsset.right.swiftUIImage
   static let check: Self = ImageAsset.check.swiftUIImage
   
   static let sendDeactive: Self = ImageAsset.sendDeactive.swiftUIImage
   static let sendActive: Self = ImageAsset.sendActive.swiftUIImage
   static let chatbot: Self = ImageAsset.chatbot.swiftUIImage
+  
+  static let onboardingLogo: Self = ImageAsset.onboardingLogo.swiftUIImage
+  static let `left`: Self = ImageAsset.left.swiftUIImage
+  static let onboardingAISettingComplete: Self = ImageAsset.onboardingAISettingComplete.swiftUIImage
 }

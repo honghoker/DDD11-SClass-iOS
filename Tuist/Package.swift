@@ -18,7 +18,11 @@ let package = Package(
     .package(
       url: "https://github.com/Moya/Moya",
       revision: "c263811c1f3dbf002be9bd83107f7cdc38992b26" // 15.0.3
-    )
+    ),
+    .package(
+      url: "https://github.com/kishikawakatsumi/KeychainAccess.git",
+      revision: "84e546727d66f1adc5439debad16270d0fdd04e7" // 4.2.2
+    ),
   ],
   targets: [
     .target(

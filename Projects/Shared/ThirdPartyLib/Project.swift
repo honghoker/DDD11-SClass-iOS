@@ -12,7 +12,8 @@ let project = Project.makeModule(
   dependencies: [
     .SPM.composableArchitecture,
     .SPM.moya,
-    .SPM.combineMoya
+    .SPM.combineMoya,
+    .SPM.keychainAccess
   ],
   sources: ["Sources/**"]
 )

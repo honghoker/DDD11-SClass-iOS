@@ -22,4 +22,9 @@ public extension TargetDependency.SPM {
     name: "CombineMoya",
     condition: .none
   )
+  
+  static let keychainAccess: TargetDependency = .external(
+    name: "KeychainAccess",
+    condition: .none
+  )
 }

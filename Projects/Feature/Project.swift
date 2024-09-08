@@ -9,12 +9,14 @@ let project = Project.makeModule(
   product: .staticFramework,
   settings: .settings(),
   dependencies: [
+    .feature(implements: .onboarding),
     .feature(implements: .home),
     .feature(implements: .history),
     .feature(implements: .chat),
     .feature(implements: .article),
     .feature(implements: .myPage),
-    .domain
+    .feature(implements: .splash),
+    .core
   ],
   sources: ["Sources/**"]
 )

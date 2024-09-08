@@ -10,7 +10,6 @@ import ProjectDescription
 
 public enum ModulePath {
   case feature(Feature)
-  case domain(Domain)
   case core(Core)
   case shared(Shared)
 }
@@ -30,23 +29,15 @@ public extension ModulePath {
 
 public extension ModulePath {
   enum Feature: String, CaseIterable {
+    case onboarding = "Onboarding"
     case home = "Home"
     case history = "History"
     case chat = "Chat"
     case article = "Article"
     case myPage = "MyPage"
+    case splash = "Splash"
     
     public static let name: String = "Feature"
-  }
-}
-
-// MARK: DomainModule
-
-public extension ModulePath {
-  enum Domain: String, CaseIterable {
-    case user = "User"
-    
-    public static let name: String = "Domain"
   }
 }
 
@@ -54,6 +45,7 @@ public extension ModulePath {
 
 public extension ModulePath {
   enum Core: String, CaseIterable {
+    case domain = "Domain"
     case network = "Network"
     
     public static let name: String = "Core"

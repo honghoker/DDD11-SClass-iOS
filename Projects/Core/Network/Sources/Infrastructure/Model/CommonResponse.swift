@@ -7,15 +7,17 @@
 
 import Foundation
 
-// TODO: api json 형식 나오면 추후 수정 예정
 struct CommonResponse<T: Decodable>: Decodable {
-  let success: Bool
   let data: T?
-  let error: ErrorResponse?
+}
+
+extension CommonResponse {
+  public init(from decoder: Decoder) throws {
+    let container = try decoder.container(keyedBy: CodingKeys.self)
+    data = try container.decode(T.self, forKey: .data)
+  }
   
-  enum CodingKeys: CodingKey {
-    case success
+  private enum CodingKeys: String, CodingKey {
     case data
-    case error
   }
 }

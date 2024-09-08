@@ -10,15 +10,17 @@ import Foundation
 import Moya
 
 enum OnboardingKitDomain {
+  case onboarding
   case home
 }
 
 extension OnboardingKitDomain {
-  
   var url: String {
     switch self {
+    case .onboarding:
+      return "/v1/onboarding"
     case .home:
-      return "/home"
+      return "/v1/home/articles"
     }
   }
 }

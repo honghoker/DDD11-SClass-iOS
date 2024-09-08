@@ -7,33 +7,24 @@
 
 import Foundation
 
-import Combine
-import Moya
-
 class APIService<API: BaseAPI>: Requestable {
-  
   let provider = NetworkProvider<API>()
-  var cancelable = Set<AnyCancellable>()
   
-  func mapAPIResponse<T: Decodable>(api: API) -> AnyPublisher<T, ErrorResponse> {
-    return provider.request(api)
-      .tryMap { response in
-        let commonResponse = try JSONDecoder().decode(CommonResponse<T>.self, from: response.data)
-        print("response: \(commonResponse)")
-        
-        if let data = commonResponse.data {
-          return data
-        } else {
-          throw commonResponse.error ?? ErrorResponse.defaultError
-        }
+  func request<T: Decodable>(api: API) async throws -> T {
+    let response = try await provider.request(api)
+    
+    if let httpResponse = response.response, 200 ..< 400 ~= httpResponse.statusCode {
+      let decodedResponse = try JSONDecoder().decode(CommonResponse<T>.self, from: response.data)
+      print("response: \(decodedResponse)")
+      if let responseData = decodedResponse.data {
+        return responseData
+      } else {
+        throw NetworkError.noData
       }
-      .mapError { error in
-        if let customError = error as? ErrorResponse {
-          return customError
-        } else {
-          return ErrorResponse.defaultError
-        }
-      }
-      .eraseToAnyPublisher()
+    } else {
+      let decodedError = try JSONDecoder().decode(ErrorResponse.self, from: response.data)
+      let error = decodedError.error
+      throw NetworkError.invalidResponse(statusCode: error.code, message: error.message)
+    }
   }
 }
