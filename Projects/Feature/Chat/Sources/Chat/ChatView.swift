@@ -107,7 +107,7 @@ public struct ChatView: View {
         )
         .if(message.type == .info) {
           $0.onTapGesture {
-            navigationStore.send(.createCheckList(message))
+            store.send(.didTapCreateCheckListButton(message))
           }
         }
       }

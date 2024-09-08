@@ -36,8 +36,9 @@ public struct ChatStore {
     // 메세지 보내기
     case didTapSendButton
     case onCompleteSend(TaskResult<Message>)
+    case didTapCreateCheckListButton(MessageEntity)
+    case onCompleteCreateCheckList(String)
     
-  
     // 예시 체크리스트 생성
     case didTapExmapleButton
     
@@ -85,18 +86,49 @@ public struct ChatStore {
         )
         return sendMessage(state: &state)
       case .onCompleteSend(.success(let chatResponse)):
-        state.chatList.append(
-          .init(
-            title: chatResponse.text,
-            content: chatResponse.text,
-            type: .answer
+        if let url = chatResponse.text.range(
+          of: "https?://[a-zA-Z0-9./_-]+",
+          options: .regularExpression
+        ) {
+            let path = chatResponse.text[url].components(separatedBy: "/")
+            if path.count == 7  {
+                state.chatList.append(
+                    .init(
+                        title: "체크리스트 생성 완료",
+                        content: "탭을 하여 체크리스트를 확인해보세요",
+                        type: .info,
+                        path: path[5]
+                    )
+                )
+            }
+            else {
+                state.chatList.append(
+                  .init(
+                    title: chatResponse.text,
+                    content: chatResponse.text,
+                    type: .answer
+                  )
+                )
+            }
+        } else {
+          state.chatList.append(
+            .init(
+              title: chatResponse.text,
+              content: chatResponse.text,
+              type: .answer
+            )
           )
-        )
-          
+        }
         return .none
       case .onCompleteSend(.failure):
         return .none
         
+      case .didTapCreateCheckListButton(let message):
+        if let path = message.path {
+          return .send(.onCompleteCreateCheckList(path))
+        } else {
+          return .none
+        }
       case .didTapExitButton:
         state.isPresented = true
         return .none
@@ -109,6 +141,8 @@ public struct ChatStore {
       case .didTapExmapleButton:
         return .none
       case .onCloseView:
+        return .none
+      case .onCompleteCreateCheckList(_):
         return .none
       }
     }

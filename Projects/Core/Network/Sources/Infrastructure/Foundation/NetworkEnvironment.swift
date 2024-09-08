@@ -8,7 +8,7 @@
 import Foundation
 
 enum NetworkEnvironment {
-  static let baseURL = "http://43.203.233.63:8080"
+  static let baseURL = "https://s-class.koyeb.app"
 }
 
 extension NetworkEnvironment {

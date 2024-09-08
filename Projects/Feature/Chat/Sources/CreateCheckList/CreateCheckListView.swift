@@ -6,6 +6,9 @@
 //
 
 import SwiftUI
+
+import CoreDomain
+
 import ComposableArchitecture
 import SharedDesignSystem
 
@@ -32,6 +35,7 @@ struct CreateCheckListView: View {
         })
       }
       .padding(16)
+      
       CommonButton(
         title: "저장하기",
         style: .default,
@@ -44,21 +48,24 @@ struct CreateCheckListView: View {
       .padding(16)
     }
     .navigationBarBackButtonHidden()
+    .onAppear {
+      store.send(.onAppear)
+    }
   }
 }
 
 private struct CheckItem: View {
   @Bindable var store: StoreOf<CreateCheckListStore>
   @State private var isSelected: Bool = false
-  private let item: CheckListEntity
+  private let item: CheckList
   
-  init(store: StoreOf<CreateCheckListStore>, item: CheckListEntity) {
+  init(store: StoreOf<CreateCheckListStore>, item: CheckList) {
     self.store = store
     self.item = item
   }
   
   var body: some View {
-    DefaultChecklistCellView(isSelected: $isSelected, title: item.todo)
+    DefaultChecklistCellView(isSelected: $isSelected, title: item.label)
       .onTapGesture {
         store.send(.didTapCheckList(item))
       }

@@ -6,6 +6,9 @@
 //
 
 import Foundation
+
+import CoreDomain
+
 import ComposableArchitecture
 
 @Reducer
@@ -14,12 +17,12 @@ public struct EnterKeywordStore {
   
   @ObservableState
   public struct State: Equatable {
-    var chatList: [CheckListEntity]
+    var chatList: [CheckList]
     
     var errorMessage: String?
     var text = ""
     
-    public init(message: [CheckListEntity]) {
+    public init(message: [CheckList]) {
       self.chatList = message
     }
   }

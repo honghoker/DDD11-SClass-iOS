@@ -12,13 +12,17 @@ public struct MessageEntity: Equatable {
   let title: String
   let content: String
   let type: MessageBubbleType
+  let path: String?
   
-  let checkList: [CheckListEntity]
-  
-  public init(title: String, content: String, type: MessageBubbleType, checkList: [CheckListEntity] = []) {
+  public init(
+    title: String,
+    content: String,
+    type: MessageBubbleType,
+    path: String? = .none
+  ) {
     self.title = title
     self.content = content
     self.type = type
-    self.checkList = checkList
+    self.path = path
   }
 }

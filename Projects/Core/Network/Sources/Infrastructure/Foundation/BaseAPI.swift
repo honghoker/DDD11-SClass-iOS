@@ -14,6 +14,7 @@ enum OnboardingKitDomain {
   case home
   case myPage
   case chat
+  case checkList
 }
 
 extension OnboardingKitDomain {
@@ -27,6 +28,8 @@ extension OnboardingKitDomain {
       return "/v1/my"
     case .chat:
       return "/v1/prompt/"
+    case .checkList:
+      return "/v1/checklists/"
     }
   }
 }
