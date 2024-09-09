@@ -26,7 +26,7 @@ public struct MyPageView: View {
           Text(
           """
           안녕하세요
-          nickname 님
+          \(store.nickname) 님
           """
           )
           .notoSans(.display_1)
@@ -57,6 +57,9 @@ public struct MyPageView: View {
         
         Spacer()
       }
+    }
+    .onAppear {
+      store.send(.onAppear)
     }
   }
 }

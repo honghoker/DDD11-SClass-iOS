@@ -7,7 +7,9 @@
 
 import Foundation
 
-import Core
+import CoreCommon
+import CoreDomain
+import CoreNetwork
 
 import ComposableArchitecture
 
@@ -17,6 +19,7 @@ public struct OnboardingRootStore {
   
   @ObservableState
   public struct State {
+    @Shared(.userInfo) var userInfo: UserInfo?
     var path: StackState<Path.State> = .init()
     var nickname: String?
     var selectedJob: JobType?
@@ -29,7 +32,7 @@ public struct OnboardingRootStore {
     case path(StackActionOf<Path>)
     case didTapNextButton
     case didTapCompleteButton
-    case onCompleteSetting(TaskResult<Void>)
+    case onCompleteSetting(TaskResult<UserInfo>)
     case onSuccessSignUp
   }
   
@@ -56,7 +59,8 @@ public struct OnboardingRootStore {
         return .none
       case .didTapCompleteButton:
         return .send(.onSuccessSignUp)
-      case .onCompleteSetting(.success):
+      case .onCompleteSetting(.success(let userInfo)):
+        state.userInfo = userInfo
         state.path.append(.complete)
         return .none
       case .onCompleteSetting(.failure(let error)):
@@ -123,11 +127,11 @@ public struct OnboardingRootStore {
       workExperience: workExperience
     )
     
-    return .run { send in
+    return .run { [userInfo = userInfo] send in
       do {
         try await onboardingAPIClient.postSignUp(userInfo)
         keychainClient.setUserID(userID)
-        await send(.onCompleteSetting(.success(())))
+        await send(.onCompleteSetting(.success((userInfo))))
       } catch {
         await send(.onCompleteSetting(.failure(error)))
       }
