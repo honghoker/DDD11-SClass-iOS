@@ -45,6 +45,7 @@ public extension ModulePath {
 
 public extension ModulePath {
   enum Core: String, CaseIterable {
+    case common = "Common"
     case domain = "Domain"
     case network = "Network"
     
