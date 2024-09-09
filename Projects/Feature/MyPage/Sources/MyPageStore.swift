@@ -21,6 +21,8 @@ public struct MyPageStore {
   }
   
   public enum Action {
+    case didTapPrivacyPolicy
+    case didTapTermsOfService
   }
   
   public var body: some ReducerOf<Self> {
