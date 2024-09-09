@@ -12,6 +12,7 @@ import Moya
 enum OnboardingKitDomain {
   case onboarding
   case home
+  case myPage
 }
 
 extension OnboardingKitDomain {
@@ -21,6 +22,8 @@ extension OnboardingKitDomain {
       return "/v1/onboarding"
     case .home:
       return "/v1/home/articles"
+    case .myPage:
+      return "/v1/my"
     }
   }
 }
