@@ -2,7 +2,7 @@
 //  MyPageStore.swift
 //  FeatureMyPage
 //
-//  Created by 홍은표 on 8/9/24.
+//  Created by 홍은표 on 9/12/24.
 //
 
 import Foundation
@@ -14,36 +14,32 @@ import ComposableArchitecture
 
 @Reducer
 public struct MyPageStore {
-  public init() { }
-  
   @ObservableState
   public struct State {
     @Shared(.userInfo) var userInfo: UserInfo?
     var nickname: String = ""
+    var documents: [LegalDocument] = [.privacyPolicy, .termsOfService]
     
-    public init() {
-      
-    }
+    public init() {}
   }
   
-  public enum Action: BindableAction {
-    case binding(_ action: BindingAction<State>)
+  public enum Action {
     case onAppear
-    case didTapPrivacyPolicy
-    case didTapTermsOfService
+    case didTapDocument(LegalDocument)
+    case navigateToLegalDocumentPage(document: LegalDocument)
   }
+  
+  public init() {}
   
   public var body: some ReducerOf<Self> {
     Reduce { state, action in
       switch action {
-      case .binding(_):
-        return .none
       case .onAppear:
         state.nickname = state.userInfo?.nickName ?? ""
         return .none
-      case .didTapPrivacyPolicy:
-        return .none
-      case .didTapTermsOfService:
+      case .didTapDocument(let document):
+        return .send(.navigateToLegalDocumentPage(document: document))
+      default:
         return .none
       }
     }

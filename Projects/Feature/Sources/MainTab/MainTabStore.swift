@@ -20,7 +20,7 @@ public struct MainTabStore {
     public var history: HistoryStore.State = .init()
     public var chat: ChatStore.State = .init()
     public var article: ArticleStore.State = .init()
-    public var myPage: MyPageStore.State = .init()
+    public var myPage: MyPageRootStore.State = .init()
     
     public init(_ selectedTab: MainTabItem) {
       self.selectedTab = selectedTab
@@ -34,7 +34,7 @@ public struct MainTabStore {
     case history(HistoryStore.Action)
     case chat(ChatStore.Action)
     case article(ArticleStore.Action)
-    case myPage(MyPageStore.Action)
+    case myPage(MyPageRootStore.Action)
   }
   
   public var body: some ReducerOf<Self> {
@@ -75,7 +75,7 @@ public struct MainTabStore {
     }
     
     Scope(state: \.myPage, action: \.myPage) {
-      MyPageStore()
+      MyPageRootStore()
     }
   }
 }

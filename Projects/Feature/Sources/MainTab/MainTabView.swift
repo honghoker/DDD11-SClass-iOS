@@ -42,7 +42,7 @@ private struct TabView: View {
     case .article:
       ArticleView(store: store.scope(state: \.article, action: \.article))
     case .myPage:
-      MyPageView(store: store.scope(state: \.myPage, action: \.myPage))
+      MyPageRootView(store: store.scope(state: \.myPage, action: \.myPage))
     }
   }
 }
