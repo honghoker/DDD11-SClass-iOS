@@ -71,6 +71,13 @@ public struct ChatStore {
         }
       case .onCompleteCreateSession(.success(let response)):
         state.session = response
+        state.chatList.append(
+          .init(
+            title: "",
+            content: "안녕하세요! 궁금한 업무를 물어보시면\n이에 대한 체크리스트를 생성해드려요!",
+            type: .answer
+          )
+        )
         return .none
       case .onCompleteCreateSession(.failure(_)):
         return .none
