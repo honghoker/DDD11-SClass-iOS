@@ -9,6 +9,7 @@ let project = Project.makeModule(
   product: .staticFramework,
   settings: .settings(),
   dependencies: [
+    .core(implements: .common),
     .core(implements: .domain),
     .core(implements: .network),
     .shared

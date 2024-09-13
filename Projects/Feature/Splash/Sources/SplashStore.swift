@@ -7,6 +7,8 @@
 
 import Foundation
 
+import CoreCommon
+import CoreDomain
 import CoreNetwork
 
 import ComposableArchitecture
@@ -17,6 +19,8 @@ public struct SplashStore {
   
   @ObservableState
   public struct State {
+    @Shared(.userInfo) var userInfo: UserInfo?
+    
     public init() { }
   }
   
@@ -24,9 +28,11 @@ public struct SplashStore {
     case onAppear
     case routeToOnboardingScreen
     case routeToMainTabScreen
+    case fetchUser(TaskResult<UserInfo>)
   }
   
   @Dependency(KeychainClient.self) var keychainClient
+  @Dependency(MyPageAPIClient.self) var myPageAPIClient
   
   public var body: some ReducerOf<Self> {
     Reduce { state, action in
@@ -37,15 +43,34 @@ public struct SplashStore {
         return .none
       case .routeToMainTabScreen:
         return .none
+      case .fetchUser(.success(let userInfo)):
+        state.userInfo = userInfo
+        return .send(.routeToMainTabScreen)
+      case .fetchUser(.failure):
+        return .send(.routeToOnboardingScreen)
       }
     }
   }
   
   private func handleRouting() -> Effect<Action> {
     if keychainClient.isSignIn {
-      return .send(.routeToMainTabScreen)
+      return requestFetchUser()
     } else {
       return .send(.routeToOnboardingScreen)
+    }
+  }
+  
+  private func requestFetchUser() -> Effect<Action> {
+    guard let userID = keychainClient.userID else {
+      return .send(.routeToOnboardingScreen)
+    }
+    
+    return .run { [userID = userID] send in
+      await send(.fetchUser(
+        TaskResult {
+          try await myPageAPIClient.fetchUser(userID: userID)
+        }
+      ))
     }
   }
 }
