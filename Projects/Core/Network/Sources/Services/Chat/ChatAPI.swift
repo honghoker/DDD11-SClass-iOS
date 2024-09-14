@@ -20,7 +20,7 @@ enum ChatAPI {
 extension ChatAPI: BaseAPI {
   
   var baseURL: URL {
-    return URL(string: "http://43.203.233.63:8080")!
+    return URL(string: "")!
   }
   
   var domain: OnboardingKitDomain {

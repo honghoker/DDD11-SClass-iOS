@@ -11,6 +11,10 @@ import ProjectDescription
 public typealias InfoPlistDictionary = [String: Plist.Value]
 
 public extension InfoPlistDictionary {
+  func setAppIdentifierPrefix(_ value: String) -> InfoPlistDictionary {
+    return self.merging(["AppIdentifierPrefix": .string(value)]) { (_, new) in new }
+  }
+  
   func setUIUserInterfaceStyle(_ value: String) -> InfoPlistDictionary {
     return self.merging(["UIUserInterfaceStyle": .string(value)]) { (_, new) in new }
   }

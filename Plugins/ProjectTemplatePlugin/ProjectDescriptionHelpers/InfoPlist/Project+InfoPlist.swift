@@ -36,5 +36,6 @@ extension InfoPlist {
       .setUILaunchStoryboardName("LaunchScreen.storyboard")
       .setUIRequiredDeviceCapabilities(["armv7"])
       .setUISupportedInterfaceOrientations(["UIInterfaceOrientationPortrait"])
+      .setAppIdentifierPrefix("$(AppIdentifierPrefix)")
   )
 }

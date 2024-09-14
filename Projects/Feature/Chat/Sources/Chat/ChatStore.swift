@@ -59,10 +59,8 @@ public struct ChatStore {
       case .binding:
         return .none
       case .onAppear:
-        // TODO: 실기기로 바꾸고 나서 수정 필요
-//        guard let userId = keychainClient.userID
-//        else { return .none }
-        let userId = "67768F7F-1AC0-4E93-A4BF-E7C443110F67"
+        guard let userId = keychainClient.userID
+        else { return .none }
         return .run { send in
           do {
             let newSession = try await chatAPIClient.createSession(userId)

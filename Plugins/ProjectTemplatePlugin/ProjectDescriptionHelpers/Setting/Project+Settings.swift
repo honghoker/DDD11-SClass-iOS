@@ -23,8 +23,7 @@ extension Settings {
       .setCFBundleDisplayName(displayName)
       .setOtherLdFlags("-ObjC -all_load")
       .setDebugInformationFormat("non-global")
-      // TODO: - ProvisioningProfile 추가 필요
-//      .setProvisioningProfileSpecifier(provisioningProfile)
+      .setProvisioningProfileSpecifier(provisioningProfile)
   }
   
   public static let appMainSetting: Settings = .settings(
@@ -41,8 +40,7 @@ extension Settings {
       .setCodeSignIdentity()
       .setCodeSignStyle()
       .setVersioningSystem()
-      // TODO: - ProvisioningProfile 추가 필요
-//      .setProvisioningProfileSpecifier("match Development io.DDD.OnboardingKit")
+      .setProvisioningProfileSpecifier("match Development com.DDD.OnboardingKit")
       .setDevelopmentTeam(Project.Environment.organizationTeamId)
       .setSkipInstall(true)
       .setDebugInformationFormat(),
@@ -52,7 +50,7 @@ extension Settings {
         settings: commonSettings(
           appName: Project.Environment.appName,
           displayName: Project.Environment.appName,
-          provisioningProfile: "match Development io.DDD.OnboardingKit"
+          provisioningProfile: "match Development com.DDD.OnboardingKit"
         )
       ),
       .debug(
@@ -60,7 +58,7 @@ extension Settings {
         settings: commonSettings(
           appName: Project.Environment.appDevName,
           displayName: Project.Environment.appDevName,
-          provisioningProfile: "match Development io.DDD.OnboardingKit"
+          provisioningProfile: "match Development com.DDD.OnboardingKit"
         )
       ),
       .release(
@@ -68,7 +66,7 @@ extension Settings {
         settings: commonSettings(
           appName: Project.Environment.appName,
           displayName: Project.Environment.appName,
-          provisioningProfile: "match Development io.DDD.OnboardingKit"
+          provisioningProfile: "match Development com.DDD.OnboardingKit"
         )
       )
     ],
