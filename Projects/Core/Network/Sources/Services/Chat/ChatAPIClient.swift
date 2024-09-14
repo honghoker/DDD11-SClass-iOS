@@ -16,7 +16,7 @@ import Moya
 
 @DependencyClient
 public struct ChatAPIClient: Sendable {
-  public var createSession: @Sendable() async throws -> ChatSession
+  public var createSession: @Sendable(_ userId: String) async throws -> ChatSession
   public var sendMessage: @Sendable(_ session : ChatSession, _ message: String) async throws -> Message
   public var getMessages: @Sendable(_ sessionId: String) async throws -> ChatSession
 }
@@ -30,8 +30,8 @@ public extension DependencyValues {
 
 extension ChatAPIClient: DependencyKey {
   public static var liveValue: ChatAPIClient = .init(
-    createSession: {
-      let api = ChatAPI.createSession
+    createSession: {userId in 
+      let api = ChatAPI.createSession(userId)
       let responseDTO: CreateSessionDTO = try await APIService<ChatAPI>().request(api: api)
       
       return responseDTO.toEntity

@@ -11,15 +11,19 @@ import CoreDomain
 public struct CreateSessionDTO: Decodable {
   let sessionId: String
   let createdAt: String
+  let userId: String
   let messages: [MessageResponseDTO]
 
   
-  public init(sessionId: String, createdAt: String, messages: [MessageResponseDTO]) {
+  public init(sessionId: String, createdAt: String, userId: String, messages: [MessageResponseDTO]) {
     self.sessionId = sessionId
     self.createdAt = createdAt
+    self.userId = userId
     self.messages = messages
   }
+  
   enum CodingKeys : String, CodingKey{
+    case userId = "user_id"
     case sessionId = "session_id"
     case createdAt = "created_at"
     case messages

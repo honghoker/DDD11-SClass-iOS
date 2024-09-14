@@ -7,6 +7,9 @@
 //
 
 import SwiftUI
+
+import CoreDomain
+
 import ComposableArchitecture
 import SharedDesignSystem
 
@@ -37,10 +40,14 @@ public struct ChatView: View {
       }
     } destination: { store in
       switch store.case {
-      case .createCheckList(let store):
-        CreateCheckListView(navigationStore: navigationStore, store: store)
-      case .enterKeyword(let store):
-        EnterKeywordView(store: store, navigationStore: navigationStore)
+      case .createCheckList(_):
+        CreateCheckListView(
+          store: navigationStore.scope(state: \.checkList, action: \.checkList)
+        )
+      case .enterKeyword(_):
+        EnterKeywordView(
+            store: navigationStore.scope(state: \.enterKeyword, action: \.enterKeyword)
+        )
       }
     }
     .opacity(isOpacity ? 1 : 0)
@@ -118,11 +125,18 @@ public struct ChatView: View {
   
   private var inputView: some View {
     VStack {
-      ScrollView(.horizontal, showsIndicators: false) {
-        HStack(spacing: 0) {
-          ForEach(1..<5) { i in
-            PromptExampleView(title: "디자인 체크리스트 예시 \(i)", content: "디자인할 때 체크해야할 리스트") {
-              store.send(.didTapExmapleButton)
+      if store.chatList.count == 1 {
+        ScrollView(.horizontal, showsIndicators: false) {
+          HStack(spacing: 0) {
+            ForEach(CheckListExampleEntity.mock, id: \.title) { item in
+              PromptExampleView(
+                title: item.title,
+                content: item.content,
+                action: {
+                  store.send(.didTapSendButton(item.messsage))
+                  
+                }
+              )
             }
           }
         }
@@ -131,7 +145,7 @@ public struct ChatView: View {
       ChatInputView(
         text: $store.chatMessage,
         action: {
-          store.send(.didTapSendButton)
+          store.send(.didTapSendButton(.none))
         },
         isFocused: $isFocused
       )

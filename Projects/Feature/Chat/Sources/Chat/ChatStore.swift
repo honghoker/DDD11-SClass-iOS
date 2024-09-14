@@ -34,13 +34,10 @@ public struct ChatStore {
     case onCompleteCreateSession(TaskResult<ChatSession>)
     
     // 메세지 보내기
-    case didTapSendButton
+    case didTapSendButton(String?)
     case onCompleteSend(TaskResult<Message>)
     case didTapCreateCheckListButton(MessageEntity)
     case onCompleteCreateCheckList(String)
-    
-    // 예시 체크리스트 생성
-    case didTapExmapleButton
     
     
     // 나가기
@@ -51,6 +48,7 @@ public struct ChatStore {
   }
   
   
+  @Dependency(KeychainClient.self) var keychainClient
   @Dependency(ChatAPIClient.self) var chatAPIClient
   
   public var body: some ReducerOf<Self> {
@@ -61,9 +59,13 @@ public struct ChatStore {
       case .binding:
         return .none
       case .onAppear:
+        // TODO: 실기기로 바꾸고 나서 수정 필요
+//        guard let userId = keychainClient.userID
+//        else { return .none }
+        let userId = "67768F7F-1AC0-4E93-A4BF-E7C443110F67"
         return .run { send in
           do {
-            let newSession = try await chatAPIClient.createSession()
+            let newSession = try await chatAPIClient.createSession(userId)
             await send(.onCompleteCreateSession(.success(newSession)))
           } catch {
             await send(.onCompleteCreateSession(.failure(error)))
@@ -83,15 +85,8 @@ public struct ChatStore {
         return .none
         
         
-      case .didTapSendButton:
-        state.chatList.append(
-          .init(
-            title: state.chatMessage,
-            content: state.chatMessage,
-            type: .question
-          )
-        )
-        return sendMessage(state: &state)
+      case .didTapSendButton(let exampleMessage):
+        return sendMessage(state: &state, newMessage: exampleMessage ?? state.chatMessage)
       case .onCompleteSend(.success(let chatResponse)):
         if let url = chatResponse.text.range(
           of: "https?://[a-zA-Z0-9./_-]+",
@@ -145,8 +140,6 @@ public struct ChatStore {
       case .didTapExitCancelButton:
         state.isPresented = false
         return .none
-      case .didTapExmapleButton:
-        return .none
       case .onCloseView:
         return .none
       case .onCompleteCreateCheckList(_):
@@ -155,8 +148,15 @@ public struct ChatStore {
     }
   }
   
-  private func sendMessage(state: inout State) -> Effect<Action> {
-    let newMessage = state.chatMessage
+  private func sendMessage(state: inout State, newMessage: String) -> Effect<Action> {
+      state.chatList.append(
+        .init(
+          title: newMessage,
+          content: newMessage,
+          type: .question
+        )
+      )
+    
     guard let session = state.session
     else { return .none }
     state.chatMessage.removeAll()

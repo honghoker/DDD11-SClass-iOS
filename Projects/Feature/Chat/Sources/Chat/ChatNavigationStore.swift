@@ -29,6 +29,7 @@ public struct ChatNavigationStore {
     var path = StackState<ChatPath.State>()
     public var chat: ChatStore.State = .init()
     public var checkList: CreateCheckListStore.State = .init(checkListId: "")
+    public var enterKeyword: EnterKeywordStore.State = .init(checkList: .init(id: "", checkBoxList: []))
     public init() {
     }
   }
@@ -39,7 +40,7 @@ public struct ChatNavigationStore {
     
     case chat(ChatStore.Action)
     case checkList(CreateCheckListStore.Action)
-    case enterKeyword([CheckList])
+    case enterKeyword(EnterKeywordStore.Action)
     
     case pop
   }
@@ -50,26 +51,42 @@ public struct ChatNavigationStore {
       ChatStore()
     }
     
+    Scope(state: \.checkList, action: \.checkList) {
+      CreateCheckListStore()
+    }
+    
+    Scope(state: \.enterKeyword, action: \.enterKeyword) {
+      EnterKeywordStore()
+    }
+    
     Reduce { state, action in
       switch action {
       case .initializeChat:
         state.chat = ChatStore.State()
-        return .none
-      case .enterKeyword(let message):
-        state.path.append(.enterKeyword(.init(message: message)))
         return .none
       case .path(_):
         return .none
       case .pop:
         state.path.removeLast()
         return .none
+        
       case .chat(.onCompleteCreateCheckList(let id)):
         state.checkList = CreateCheckListStore.State(checkListId: id)
         state.path.append(.createCheckList(state.checkList))
         return .none
+      case .checkList(.pushEnterKeyword(let checkList)):
+        state.enterKeyword = .init(checkList: checkList)
+        state.path.append(.enterKeyword(state.enterKeyword))
+        return .none
+        
+      case .checkList(.pop), .enterKeyword(.pop):
+        state.path.removeLast()
+        return .none
       case .chat(_):
         return .none
       case .checkList(_):
+        return .none
+      case .enterKeyword(_):
         return .none
       }
     }

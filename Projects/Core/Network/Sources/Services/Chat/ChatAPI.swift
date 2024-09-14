@@ -12,7 +12,7 @@ import CoreDomain
 import Moya
 
 enum ChatAPI {
-  case createSession
+  case createSession(_ userId: String)
   case sendMessage(_ dto: SendMessageRequestDTO, sessionId: String)
   case getMessage(_ sessionId: String)
 }
@@ -52,6 +52,10 @@ extension ChatAPI: BaseAPI {
   
   var parameters: [String: Any]? {
     switch self {
+    case .createSession(let id):
+      return [
+        "userId": id
+      ]
     case .sendMessage(let dto, _):
       return [
         "message": dto.message

@@ -81,8 +81,9 @@ public struct MainTabStore {
         return .none
       case .myPage:
         return .none
-      case .chat(.chat(.onCloseView)):
+      case .chat(.chat(.onCloseView)), .chat(.enterKeyword(.onCloseView)):
         state.isSelectedChat = false
+        state.selectedTab = .home
         return .none
       case .chat:
         return .none

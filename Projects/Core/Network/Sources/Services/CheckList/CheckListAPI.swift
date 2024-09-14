@@ -13,6 +13,8 @@ import Moya
 
 enum CheckListAPI {
   case getCheckList(id: String)
+  case deleteCheckList(checkListId: String, checkBoxList: [String])
+  case changeKeyword(checkListId: String, newKeyword: String)
 }
 
 extension CheckListAPI: BaseAPI {
@@ -24,6 +26,10 @@ extension CheckListAPI: BaseAPI {
     switch self {
     case .getCheckList(_):
       return .get
+    case .deleteCheckList(checkListId: _, checkBoxList: _):
+      return .delete
+    case .changeKeyword(checkListId: _, newKeyword: _):
+      return .patch
     }
   }
   
@@ -31,12 +37,23 @@ extension CheckListAPI: BaseAPI {
     switch self {
     case .getCheckList(let id):
       return "\(id)/checkboxes"
-      
+    case .deleteCheckList(checkListId: let checkListId, checkBoxList: _):
+      return "\(checkListId)/checkboxes"
+    case .changeKeyword(checkListId: let checkListId, newKeyword: _):
+      return "\(checkListId)"
     }
   }
   
   var parameters: [String: Any]? {
     switch self {
+    case .deleteCheckList(checkListId:  _, checkBoxList: let list):
+      return [
+        "checkboxIds": list
+      ]
+    case .changeKeyword(checkListId: _, newKeyword: let keyword):
+      return [
+        "title": keyword
+      ]
     default:
       return .none
     }

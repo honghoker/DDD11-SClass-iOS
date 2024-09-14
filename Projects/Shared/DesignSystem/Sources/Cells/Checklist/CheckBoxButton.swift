@@ -9,14 +9,17 @@ import SwiftUI
 
 struct CheckBoxButton: View {
   @Binding private var isSelected: Bool
+  private let action: () -> ()
   
-  init(isSelected: Binding<Bool>) {
+  init(isSelected: Binding<Bool>, action: @escaping () -> ()) {
     self._isSelected = isSelected
+    self.action = action
   }
   
   var body: some View {
     Button(action: {
       isSelected.toggle()
+      action()
     }) {
       Image.check
         .renderingMode(.template)

@@ -11,5 +11,15 @@ import Foundation
 import CoreDomain
 
 public struct CheckListDTO: Decodable {
+  let checklistId: String
   let checkboxes: [CheckListItemDTO]
+}
+
+extension CheckListDTO {
+  var toEntity: CheckList {
+    .init(
+      id: self.checklistId,
+      checkBoxList: self.checkboxes.map { $0.toEntity }
+    )
+  }
 }

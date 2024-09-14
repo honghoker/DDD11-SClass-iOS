@@ -36,7 +36,7 @@ public struct CheckListItemDTO: Decodable {
 
 
 extension CheckListItemDTO {
-  var toEntity: CheckList {
+  var toEntity: CheckBox {
     .init(
       checkListId: self.checklistId,
       label: self.label,

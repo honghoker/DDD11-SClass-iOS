@@ -10,13 +10,16 @@ import SwiftUI
 public struct DefaultChecklistCellView: View {
   @Binding private var isSelected: Bool
   private let title: String
+  private let action: () -> ()
   
   public init(
     isSelected: Binding<Bool>,
-    title: String
+    title: String,
+    action: @escaping () -> ()
   ) {
     self._isSelected = isSelected
     self.title = title
+    self.action = action
   }
   
   public var body: some View {
@@ -27,7 +30,10 @@ public struct DefaultChecklistCellView: View {
           .foregroundStyle(.primary500)
         
         HStack(spacing: 14) {
-          CheckBoxButton(isSelected: $isSelected)
+          CheckBoxButton(
+            isSelected: $isSelected,
+            action: action
+          )
           
           Text(title)
             .notoSans(.subhead_3)

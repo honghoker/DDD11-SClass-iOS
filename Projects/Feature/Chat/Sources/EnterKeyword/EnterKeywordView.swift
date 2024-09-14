@@ -11,7 +11,6 @@ import SharedDesignSystem
 
 struct EnterKeywordView: View {
   @Bindable var store: StoreOf<EnterKeywordStore>
-  @Bindable var navigationStore: StoreOf<ChatNavigationStore>
   
   @FocusState var isFocused: Bool
   
@@ -19,7 +18,7 @@ struct EnterKeywordView: View {
     VStack(spacing: 0) {
       TopNavigation(
         leadingItem: (Image.left, {
-          navigationStore.send(.pop)
+          store.send(.didTapBackButton)
         }),
         centerTitle: "프로젝트 저장"
       )

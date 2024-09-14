@@ -1,5 +1,5 @@
 //
-//  CheckListItem.swift
+//  CheckBox.swift
 //  CoreDomain
 //
 //  Created by 현수빈 on 9/8/24.
@@ -7,7 +7,8 @@
 
 import Foundation
 
-public struct CheckList: Equatable {
+
+public struct CheckBox: Equatable, Decodable {
   public let checkListId: String
   public let label: String
   public let isCompleted: Bool

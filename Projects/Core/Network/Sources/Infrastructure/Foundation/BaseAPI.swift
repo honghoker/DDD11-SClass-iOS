@@ -64,15 +64,15 @@ extension BaseAPI {
   
   var task: Task {
     if let parameters = parameters {
-      if method == .post {
-        return .requestParameters(
-          parameters: parameters,
-          encoding: JSONEncoding.default
-        )
+      if method == .get {
+          return .requestParameters(
+            parameters: parameters,
+            encoding: URLEncoding.queryString
+          )
       } else {
         return .requestParameters(
           parameters: parameters,
-          encoding: URLEncoding.queryString
+          encoding: JSONEncoding.default
         )
       }
     }
