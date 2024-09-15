@@ -32,7 +32,7 @@ public struct ChatView: View {
           leadingItem: (Image.closeCross, {
             store.send(.didTapExitButton)
           }),
-          centerTitle: "프로젝트 추가"
+          centerTitle: "새 업무 체크리스트"
         )
         content()
           .padding(16)

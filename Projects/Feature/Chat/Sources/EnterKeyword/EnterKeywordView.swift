@@ -20,7 +20,7 @@ struct EnterKeywordView: View {
         leadingItem: (Image.left, {
           store.send(.didTapBackButton)
         }),
-        centerTitle: "프로젝트 저장"
+        centerTitle: "업무 체크리스트 저장"
       )
       .padding(.bottom, 64)
       
