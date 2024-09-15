@@ -147,17 +147,16 @@ public struct ChatStore {
   }
   
   private func sendMessage(state: inout State, newMessage: String) -> Effect<Action> {
-      state.chatList.append(
-        .init(
-          title: newMessage,
-          content: newMessage,
-          type: .question
-        )
+    state.chatList.append(
+      .init(
+        title: newMessage,
+        content: newMessage,
+        type: .question
       )
-    
+    )
+    state.chatMessage.removeAll()
     guard let session = state.session
     else { return .none }
-    state.chatMessage.removeAll()
     
     return .run { send in
       do {

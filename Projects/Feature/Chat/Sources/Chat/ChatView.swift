@@ -22,7 +22,6 @@ public struct ChatView: View {
   
   public init(store: StoreOf<ChatNavigationStore>) {
     self.navigationStore = store
-    store.send(.initializeChat)
     self.store =  store.scope(state: \.chat, action: \.chat)
   }
   

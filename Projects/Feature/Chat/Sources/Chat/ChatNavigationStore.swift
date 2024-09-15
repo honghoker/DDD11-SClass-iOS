@@ -70,18 +70,26 @@ public struct ChatNavigationStore {
         state.path.removeLast()
         return .none
         
+      case .chat(.onCloseView):
+        state.chat = ChatStore.State()
+        return .none
       case .chat(.onCompleteCreateCheckList(let id)):
         state.checkList = CreateCheckListStore.State(checkListId: id)
         state.path.append(.createCheckList(state.checkList))
         return .none
+        
       case .checkList(.pushEnterKeyword(let checkList)):
         state.enterKeyword = .init(checkList: checkList)
         state.path.append(.enterKeyword(state.enterKeyword))
         return .none
-        
-      case .checkList(.pop), .enterKeyword(.pop):
+      case .checkList(.pop):
         state.path.removeLast()
         return .none
+        
+      case .enterKeyword(.pop):
+        state.path.removeLast()
+        return .none
+        
       case .chat(_):
         return .none
       case .checkList(_):
