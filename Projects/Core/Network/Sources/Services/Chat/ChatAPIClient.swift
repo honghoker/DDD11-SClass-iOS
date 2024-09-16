@@ -32,7 +32,7 @@ extension ChatAPIClient: DependencyKey {
   public static var liveValue: ChatAPIClient = .init(
     createSession: {userId in 
       let api = ChatAPI.createSession(userId)
-      let responseDTO: CreateSessionDTO = try await APIService<ChatAPI>().request(api: api)
+      let responseDTO: CreateSessionResponseDTO = try await APIService<ChatAPI>().request(api: api)
       
       return responseDTO.toEntity
     },
@@ -47,7 +47,7 @@ extension ChatAPIClient: DependencyKey {
     getMessages: { sessionId in
       
       let api = ChatAPI.getMessage(sessionId)
-      let responseDTO: CreateSessionDTO = try await APIService<ChatAPI>().request(api: api)
+      let responseDTO: CreateSessionResponseDTO = try await APIService<ChatAPI>().request(api: api)
       
       return responseDTO.toEntity
     }

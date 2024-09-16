@@ -8,9 +8,9 @@
 import Foundation
 
 import CoreDomain
+import SharedDesignSystem
 
 import ComposableArchitecture
-import SharedDesignSystem
 
 public extension ChatNavigationStore {
   @Reducer

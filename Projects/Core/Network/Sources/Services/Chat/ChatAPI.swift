@@ -41,11 +41,11 @@ extension ChatAPI: BaseAPI {
   var urlPath: String {
     switch self {
     case .createSession:
-      return ""
+      return "/"
     case .sendMessage( _, let sessionId):
-      return "\(sessionId)/messages/"
+      return "/\(sessionId)/messages/"
     case .getMessage(let sessionId):
-      return "\(sessionId)/messages/"
+      return "/\(sessionId)/messages/"
       
     }
   }

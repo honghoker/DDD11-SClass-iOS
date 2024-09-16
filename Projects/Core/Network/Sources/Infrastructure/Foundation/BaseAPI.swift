@@ -27,9 +27,9 @@ extension OnboardingKitDomain {
     case .myPage:
       return "/v1/my"
     case .chat:
-      return "/v1/prompt/"
+      return "/v1/prompt"
     case .checkList:
-      return "/v1/checklists/"
+      return "/v1/checklists"
     }
   }
 }

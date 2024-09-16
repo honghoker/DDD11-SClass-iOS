@@ -80,9 +80,9 @@ public struct ChatView: View {
   @ViewBuilder
   func content() -> some View {
     VStack {
-      ScrollView {
-        ZStack {
-          placeholderView
+      ZStack {
+        placeholderView
+        ScrollView {
           chattingView
         }
       }

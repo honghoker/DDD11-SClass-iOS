@@ -1,5 +1,5 @@
 //
-//  CreateSessionDTO.swift
+//  CreateSessionResponseDTO.swift
 //  CoreNetwork
 //
 //  Created by 현수빈 on 9/8/24.
@@ -8,7 +8,7 @@
 import Foundation
 import CoreDomain
 
-public struct CreateSessionDTO: Decodable {
+public struct CreateSessionResponseDTO: Decodable {
   let sessionId: String
   let createdAt: String
   let userId: String
@@ -30,7 +30,7 @@ public struct CreateSessionDTO: Decodable {
  }
   
 }
-extension CreateSessionDTO {
+extension CreateSessionResponseDTO {
   var toEntity: ChatSession {
     .init(
       sessionId: self.sessionId,

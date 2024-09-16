@@ -36,11 +36,11 @@ extension CheckListAPI: BaseAPI {
   var urlPath: String {
     switch self {
     case .getCheckList(let id):
-      return "\(id)/checkboxes"
+      return "/\(id)/checkboxes"
     case .deleteCheckList(checkListId: let checkListId, checkBoxList: _):
-      return "\(checkListId)/checkboxes"
+      return "/\(checkListId)/checkboxes"
     case .changeKeyword(checkListId: let checkListId, newKeyword: _):
-      return "\(checkListId)"
+      return "/\(checkListId)"
     }
   }
   
