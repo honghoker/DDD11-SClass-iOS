@@ -13,7 +13,7 @@ class APIService<API: BaseAPI>: Requestable {
   func request<T: Decodable>(api: API) async throws -> T {
     let response = try await provider.request(api)
     
-    if let httpResponse = response.response, 200 ..< 400 ~= httpResponse.statusCode {
+    if let httpResponse = response.response, 200 ..< 500 ~= httpResponse.statusCode {
       let decodedResponse = try JSONDecoder().decode(CommonResponse<T>.self, from: response.data)
       print("response: \(decodedResponse)")
       if let responseData = decodedResponse.data {

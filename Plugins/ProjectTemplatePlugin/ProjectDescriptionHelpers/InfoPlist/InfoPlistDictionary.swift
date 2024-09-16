@@ -11,6 +11,10 @@ import ProjectDescription
 public typealias InfoPlistDictionary = [String: Plist.Value]
 
 public extension InfoPlistDictionary {
+  func setAppIdentifierPrefix(_ value: String) -> InfoPlistDictionary {
+    return self.merging(["AppIdentifierPrefix": .string(value)]) { (_, new) in new }
+  }
+  
   func setUIUserInterfaceStyle(_ value: String) -> InfoPlistDictionary {
     return self.merging(["UIUserInterfaceStyle": .string(value)]) { (_, new) in new }
   }
@@ -34,6 +38,14 @@ public extension InfoPlistDictionary {
   func setCFBundleName(_ value: String) -> InfoPlistDictionary {
     return self.merging(["CFBundleName": .string(value)]) { (_, new) in new }
   }
+  
+  func setAppTransportSecurity(arbitaryLoad: Bool) -> [String: Plist.Value] {
+       return [
+           "NSAppTransportSecurity": .dictionary([
+               "NSAllowsArbitraryLoads": .boolean(arbitaryLoad)
+           ])
+       ]
+   }
   
   func setCFBundlePackageType(_ value: String) -> InfoPlistDictionary {
     return self.merging(["CFBundlePackageType": .string(value)]) { (_, new) in new }

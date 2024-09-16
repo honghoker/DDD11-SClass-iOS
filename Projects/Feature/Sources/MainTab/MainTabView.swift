@@ -10,16 +10,23 @@ import SharedDesignSystem
 import ComposableArchitecture
 
 public struct MainTabView: View {
-  private let store: StoreOf<MainTabStore>
+  @Bindable var store: StoreOf<MainTabStore>
   
   public init(store: StoreOf<MainTabStore>) {
     self.store = store
   }
   
   public var body: some View {
-    VStack(spacing: .zero) {
-      TabView(store: store)
-      TabBarView(store: store)
+    ZStack {
+      VStack(spacing: .zero) {
+        TabView(store: store)
+        TabBarView(store: store)
+      }
+      if store.isSelectedChat {
+        ChatView(
+          store: store.scope(state: \.chat, action: \.chat)
+        )
+      }
     }
   }
 }
@@ -38,7 +45,7 @@ private struct TabView: View {
     case .history:
       HistoryView(store: store.scope(state: \.history, action: \.history))
     case .chat:
-      ChatView(store: store.scope(state: \.chat, action: \.chat))
+      EmptyView()
     case .article:
       ArticleView(store: store.scope(state: \.article, action: \.article))
     case .myPage:
@@ -115,7 +122,7 @@ private struct CircleTabItem: View {
   fileprivate var body: some View {
     TabBarItemCircleView(image: MainTabItem.chat.image)
       .onTap {
-        // TODO: - chat view navigate
+        store.send(.selectTab(.chat))
       }
       .padding(.bottom, 11)
   }

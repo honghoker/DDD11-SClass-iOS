@@ -11,7 +11,9 @@ import ProjectDescription
 extension InfoPlist {
   public static let appInfoPlist: Self = .extendingDefault(
     with: InfoPlistDictionary()
+      .setAppTransportSecurity(arbitaryLoad: true)
       .setUIUserInterfaceStyle("Light")
+      .setAppIdentifierPrefix("$(AppIdentifierPrefix)")
       .setCFBundleDevelopmentRegion("$(DEVELOPMENT_LANGUAGE)")
       .setCFBundleExecutable("$(EXECUTABLE_NAME)")
       .setCFBundleIdentifier("$(PRODUCT_BUNDLE_IDENTIFIER)")
@@ -21,7 +23,6 @@ extension InfoPlist {
       .setCFBundleShortVersionString("1.0.0")
       .setCFBundleVersion("1.0.0")
       .setLSRequiresIPhoneOS(true)
-      .setUIAppFonts(["PretendardVariable.ttf"])
       .setUIApplicationSceneManifest([
         "UIApplicationSupportsMultipleScenes": true,
         "UISceneConfigurations": [

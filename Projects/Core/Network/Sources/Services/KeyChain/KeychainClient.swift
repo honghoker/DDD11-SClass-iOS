@@ -46,17 +46,13 @@ extension KeychainClient {
 
 extension KeychainClient: DependencyKey {
   public static var liveValue: Self {
-    // TODO: - Provisioning Profile 추가 시 해당 코드로 변경
-//    guard let appIdentifierPrefix = Bundle.main.infoDictionary?["AppIdentifierPrefix"] as? String else {
-//      fatalError("AppIdentifierPrefix is not set in Info.plist")
-//    }
-    
-    // 런타임 에러 방지
-    let appIdentifierPrefix = Bundle.main.infoDictionary?["AppIdentifierPrefix"] as? String ?? ""
+    guard let appIdentifierPrefix = Bundle.main.infoDictionary?["AppIdentifierPrefix"] as? String else {
+      fatalError("AppIdentifierPrefix is not set in Info.plist")
+    }
     
     let keychain = Keychain(
-      service: "io.DDD.OnboardingKit",
-      accessGroup: "\(appIdentifierPrefix)group.io.DDD.OnboardingKit"
+      service: "com.DDD.OnboardingKit",
+      accessGroup: "\(appIdentifierPrefix)group.com.DDD.OnboardingKit"
     )
     
     return Self(

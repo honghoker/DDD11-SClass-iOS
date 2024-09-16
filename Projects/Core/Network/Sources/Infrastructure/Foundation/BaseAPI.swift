@@ -13,6 +13,8 @@ enum OnboardingKitDomain {
   case onboarding
   case home
   case myPage
+  case chat
+  case checkList
 }
 
 extension OnboardingKitDomain {
@@ -24,6 +26,10 @@ extension OnboardingKitDomain {
       return "/v1/home/articles"
     case .myPage:
       return "/v1/my"
+    case .chat:
+      return "/v1/prompt"
+    case .checkList:
+      return "/v1/checklists"
     }
   }
 }
@@ -58,15 +64,15 @@ extension BaseAPI {
   
   var task: Task {
     if let parameters = parameters {
-      if method == .post {
-        return .requestParameters(
-          parameters: parameters,
-          encoding: JSONEncoding.default
-        )
+      if method == .get {
+          return .requestParameters(
+            parameters: parameters,
+            encoding: URLEncoding.queryString
+          )
       } else {
         return .requestParameters(
           parameters: parameters,
-          encoding: URLEncoding.queryString
+          encoding: JSONEncoding.default
         )
       }
     }
