@@ -27,4 +27,9 @@ public extension TargetDependency.SPM {
     name: "KeychainAccess",
     condition: .none
   )
+  
+  static let kingfisher: TargetDependency = .external(
+    name: "Kingfisher",
+    condition: .none
+  )
 }

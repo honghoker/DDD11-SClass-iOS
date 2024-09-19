@@ -13,7 +13,8 @@ let project = Project.makeModule(
     .SPM.composableArchitecture,
     .SPM.moya,
     .SPM.combineMoya,
-    .SPM.keychainAccess
+    .SPM.keychainAccess,
+    .SPM.kingfisher
   ],
   sources: ["Sources/**"]
 )
