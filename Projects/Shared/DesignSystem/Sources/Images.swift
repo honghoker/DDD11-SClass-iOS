@@ -34,4 +34,5 @@ public extension Image {
   static let onboardingAISettingComplete: Self = ImageAsset.onboardingAISettingComplete.swiftUIImage
   static let chatPlaceholder: Self = ImageAsset.chatPlaceholder.swiftUIImage
 
+  static let plus: Self = ImageAsset.plus.swiftUIImage
 }

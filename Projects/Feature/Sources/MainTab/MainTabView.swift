@@ -124,6 +124,7 @@ private struct CircleTabItem: View {
       .onTap {
         store.send(.selectTab(.chat))
       }
-      .padding(.bottom, 11)
+      .padding(.top, 3)
+      .padding(.bottom, 2)
   }
 }

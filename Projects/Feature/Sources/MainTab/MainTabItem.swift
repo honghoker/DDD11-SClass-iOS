@@ -36,7 +36,7 @@ public enum MainTabItem: Hashable {
     case .history:
       return Image.history
     case .chat:
-      return Image.chat
+      return Image.plus
     case .article:
       return Image.article
     case .myPage:

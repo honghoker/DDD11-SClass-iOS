@@ -20,13 +20,25 @@ public struct TabBarItemCircleView: View {
     Button(action: {
       onTap?()
     }) {
-      image
-        .padding(.top, 10)
-        .padding(.bottom, 12)
-        .padding(.horizontal, 11)
-        .background(.primary700)
+      VStack(spacing: .zero) {
+        image
+          .resizable()
+          .scaledToFit()
+          .frame(width: 24, height: 24)
+        
+        Text("생성")
+          .notoSans(.nav_title_inactive)
+          .foregroundStyle(.white)
+      }
+      .padding(.horizontal, 15)
+      .padding(.vertical, 9)
+      .background(.primary700)
+      .clipShape(Circle())
     }
-    .cornerRadius(23)
+    .padding(2)
+    .background(.white)
+    .clipShape(Circle())
+    .shadow(color: .black.opacity(0.1), radius: 6, x: 0, y: 4)
   }
   
   public func onTap(_ completion: @escaping () -> ()) -> Self {
