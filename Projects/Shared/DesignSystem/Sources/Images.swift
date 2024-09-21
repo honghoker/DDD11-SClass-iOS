@@ -33,6 +33,8 @@ public extension Image {
   static let `left`: Self = ImageAsset.left.swiftUIImage
   static let onboardingAISettingComplete: Self = ImageAsset.onboardingAISettingComplete.swiftUIImage
   static let chatPlaceholder: Self = ImageAsset.chatPlaceholder.swiftUIImage
-
+  
+  static let homeBackground: Self = ImageAsset.homeBackground.swiftUIImage
   static let plus: Self = ImageAsset.plus.swiftUIImage
+  static let appendFolder: Self = ImageAsset.appendFolder.swiftUIImage
 }

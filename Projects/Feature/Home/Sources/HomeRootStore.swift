@@ -25,6 +25,7 @@ public struct HomeRootStore {
   public enum Action {
     case path(StackActionOf<Path>)
     case home(HomeStore.Action)
+    case onPresentChat
   }
   
   @Reducer
@@ -37,7 +38,11 @@ public struct HomeRootStore {
       switch action {
       case .path:
         return .none
+      case .home(.onPresentChat):
+        return .send(.onPresentChat)
       case .home:
+        return .none
+      default:
         return .none
       }
     }

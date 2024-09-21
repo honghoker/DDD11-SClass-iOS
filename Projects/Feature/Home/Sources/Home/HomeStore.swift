@@ -24,6 +24,8 @@ public struct HomeStore {
   
   public enum Action {
     case onAppear
+    case didTapAppendFolderButton
+    case onPresentChat
     case fetchArticles(TaskResult<[Article]>)
   }
   
@@ -46,10 +48,14 @@ public struct HomeStore {
             }
           ))
         }
+      case .didTapAppendFolderButton:
+        return .send(.onPresentChat)
       case .fetchArticles(.success(let aritlces)):
         state.articles = Array(aritlces.prefix(3))
         return .none
       case .fetchArticles(.failure(let error)):
+        return .none
+      default:
         return .none
       }
     }

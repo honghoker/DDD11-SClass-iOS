@@ -53,7 +53,6 @@ public struct MainTabStore {
       HistoryStore()
     }
     
-    
     Scope(state: \.article, action: \.article) {
       ArticleStore()
     }
@@ -67,12 +66,9 @@ public struct MainTabStore {
       case .binding:
         return .none
       case .selectTab(let tab):
-        if tab == .chat {
-          state.isSelectedChat = true
-          return .none
-        }
-        state.selectedTab = tab
-        return .none
+        return changeSelectedTab(state: &state, tab: tab)
+      case .home(.onPresentChat):
+        return changeSelectedTab(state: &state, tab: .chat)
       case .home:
         return .none
       case .history:
@@ -89,5 +85,14 @@ public struct MainTabStore {
         return .none
       }
     }
+  }
+  
+  private func changeSelectedTab(state: inout State, tab: MainTabItem) -> Effect<Action> {
+    if tab == .chat {
+      state.isSelectedChat = true
+      return .none
+    }
+    state.selectedTab = tab
+    return .none
   }
 }
