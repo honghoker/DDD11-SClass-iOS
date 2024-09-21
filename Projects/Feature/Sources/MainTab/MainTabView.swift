@@ -41,7 +41,7 @@ private struct TabView: View {
   fileprivate var body: some View {
     switch store.selectedTab {
     case .home:
-      HomeView(store: store.scope(state: \.home, action: \.home))
+      HomeRootView(store: store.scope(state: \.home, action: \.home))
     case .history:
       HistoryView(store: store.scope(state: \.history, action: \.history))
     case .chat:
@@ -124,6 +124,7 @@ private struct CircleTabItem: View {
       .onTap {
         store.send(.selectTab(.chat))
       }
-      .padding(.bottom, 11)
+      .padding(.top, 3)
+      .padding(.bottom, 2)
   }
 }

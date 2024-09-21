@@ -23,7 +23,7 @@ extension OnboardingKitDomain {
     case .onboarding:
       return "/v1/onboarding"
     case .home:
-      return "/v1/home/articles"
+      return "/v1/home"
     case .myPage:
       return "/v1/my"
     case .chat:

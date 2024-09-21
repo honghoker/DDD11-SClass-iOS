@@ -23,6 +23,10 @@ let package = Package(
       url: "https://github.com/kishikawakatsumi/KeychainAccess.git",
       revision: "84e546727d66f1adc5439debad16270d0fdd04e7" // 4.2.2
     ),
+    .package(
+      url: "https://github.com/onevcat/Kingfisher.git",
+      revision: "2ef543ee21d63734e1c004ad6c870255e8716c50" // 7.12.0
+    )
   ],
   targets: [
     .target(
