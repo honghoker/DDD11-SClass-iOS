@@ -1,5 +1,5 @@
 //
-//  HomeStore.swift
+//  HomeRootStore.swift
 //  FeatureHome
 //
 //  Created by 홍은표 on 7/27/24.
@@ -9,12 +9,13 @@ import Foundation
 import ComposableArchitecture
 
 @Reducer
-public struct HomeStore {
+public struct HomeRootStore {
   public init() { }
   
   @ObservableState
   public struct State {
     var path = StackState<Path.State>()
+    var home: HomeStore.State = .init()
     
     public init() {
       
@@ -23,6 +24,7 @@ public struct HomeStore {
   
   public enum Action {
     case path(StackActionOf<Path>)
+    case home(HomeStore.Action)
   }
   
   @Reducer
@@ -35,8 +37,14 @@ public struct HomeStore {
       switch action {
       case .path:
         return .none
+      case .home:
+        return .none
       }
     }
     .forEach(\.path, action: \.path)
+    
+    Scope(state: \.home, action: \.home) {
+      HomeStore()
+    }
   }
 }

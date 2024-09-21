@@ -41,7 +41,7 @@ private struct TabView: View {
   fileprivate var body: some View {
     switch store.selectedTab {
     case .home:
-      HomeView(store: store.scope(state: \.home, action: \.home))
+      HomeRootView(store: store.scope(state: \.home, action: \.home))
     case .history:
       HistoryView(store: store.scope(state: \.history, action: \.history))
     case .chat:

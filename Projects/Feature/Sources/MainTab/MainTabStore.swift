@@ -16,7 +16,7 @@ public struct MainTabStore {
   public struct State {
     public var selectedTab: MainTabItem
     
-    public var home: HomeStore.State = .init()
+    public var home: HomeRootStore.State = .init()
     public var history: HistoryStore.State = .init()
     public var chat: ChatNavigationStore.State = .init()
     public var article: ArticleStore.State = .init()
@@ -32,7 +32,7 @@ public struct MainTabStore {
   public enum Action: BindableAction {
     case binding(BindingAction<State>)
     case selectTab(MainTabItem)
-    case home(HomeStore.Action)
+    case home(HomeRootStore.Action)
     case history(HistoryStore.Action)
     case chat(ChatNavigationStore.Action)
     case article(ArticleStore.Action)
@@ -46,7 +46,7 @@ public struct MainTabStore {
     }
     
     Scope(state: \.home, action: \.home) {
-      HomeStore()
+      HomeRootStore()
     }
     
     Scope(state: \.history, action: \.history) {

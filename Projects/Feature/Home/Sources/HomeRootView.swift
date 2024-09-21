@@ -1,5 +1,5 @@
 //
-//  HomeView.swift
+//  HomeRootView.swift
 //  OnboardingKit.
 //
 //  Created by SClass on 2024/07/20
@@ -9,16 +9,16 @@
 import SwiftUI
 import ComposableArchitecture
 
-public struct HomeView: View {
-  public let store: StoreOf<HomeStore>
+public struct HomeRootView: View {
+  public let store: StoreOf<HomeRootStore>
   
-  public init(store: StoreOf<HomeStore>) {
+  public init(store: StoreOf<HomeRootStore>) {
     self.store = store
   }
   
   public var body: some View {
     NavigationStack {
-      Text("홈")
+      HomeView(store: store.scope(state: \.home, action: \.home))
     }
   }
 }
