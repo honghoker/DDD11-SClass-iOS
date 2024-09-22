@@ -20,7 +20,12 @@ enum ChatAPI {
 extension ChatAPI: BaseAPI {
   
   var baseURL: URL {
-    return URL(string: "")!
+    guard let value = Bundle.main.infoDictionary?["chatBaseURL"] as? String,
+          let url = URL(string: value)
+    else {
+      fatalError("Base URL is not set in plist for this configuration.")
+    }
+    return url
   }
   
   var domain: OnboardingKitDomain {
