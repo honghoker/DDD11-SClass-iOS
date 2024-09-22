@@ -20,8 +20,8 @@ extension InfoPlist {
       .setCFBundleInfoDictionaryVersion("6.0")
       .setCFBundleName("$(PRODUCT_NAME)")
       .setCFBundlePackageType("APPL")
-      .setCFBundleShortVersionString("1.0.0")
-      .setCFBundleVersion("1.0.0")
+      .setCFBundleShortVersionString(Project.Environment.appVersion)
+      .setCFBundleVersion(Project.Environment.appVersion)
       .setLSRequiresIPhoneOS(true)
       .setUIApplicationSceneManifest([
         "UIApplicationSupportsMultipleScenes": true,
@@ -36,5 +36,13 @@ extension InfoPlist {
       .setUILaunchStoryboardName("LaunchScreen.storyboard")
       .setUIRequiredDeviceCapabilities(["armv7"])
       .setUISupportedInterfaceOrientations(["UIInterfaceOrientationPortrait"])
+      .setCustomValue("baseURL", "$(BASE_URL)")
+      .setCustomValue("chatBaseURL", "$(CHAT_BASE_URL)")
+  )
+  
+  public static let networkInfoPlist: Self = .extendingDefault(
+    with: InfoPlistDictionary()
+      .setCustomValue("baseURL", "$(BASE_URL)")
+      .setCustomValue("chatBaseURL", "$(CHAT_BASE_URL)")
   )
 }
