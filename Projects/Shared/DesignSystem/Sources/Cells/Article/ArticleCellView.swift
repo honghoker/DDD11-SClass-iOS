@@ -8,7 +8,6 @@
 import Foundation
 import SwiftUI
 
-import SharedUtils
 
 public struct ArticleCellView<Thumbnail: View>: View {
   private let thumbnailImage: Thumbnail
