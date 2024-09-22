@@ -40,7 +40,7 @@ extension Settings {
       .setCodeSignIdentity()
       .setCodeSignStyle()
       .setVersioningSystem()
-      .setProvisioningProfileSpecifier("match Development com.DDD.OnboardingKit")
+      .setProvisioningProfileSpecifier("match AppStore com.DDD.OnboardingKit")
       .setDevelopmentTeam(Project.Environment.organizationTeamId)
       .setSkipInstall(true)
       .setDebugInformationFormat(),
@@ -48,17 +48,17 @@ extension Settings {
       .debug(
         name: .debug,
         settings: commonSettings(
-          appName: Project.Environment.appName,
-          displayName: Project.Environment.appName,
+          appName: Project.Environment.appDevName,
+          displayName: Project.Environment.appDevName,
           provisioningProfile: "match Development com.DDD.OnboardingKit"
         )
       ),
       .debug(
         name: .qa,
         settings: commonSettings(
-          appName: Project.Environment.appDevName,
-          displayName: Project.Environment.appDevName,
-          provisioningProfile: "match Development com.DDD.OnboardingKit"
+          appName: Project.Environment.appDemoName,
+          displayName: Project.Environment.appDemoName,
+          provisioningProfile: "match AppStore com.DDD.OnboardingKit"
         )
       ),
       .release(
@@ -66,7 +66,7 @@ extension Settings {
         settings: commonSettings(
           appName: Project.Environment.appName,
           displayName: Project.Environment.appName,
-          provisioningProfile: "match Development com.DDD.OnboardingKit"
+          provisioningProfile: "match AppStore com.DDD.OnboardingKit"
         )
       )
     ],

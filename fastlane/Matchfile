@@ -1,4 +1,5 @@
-git_url("git@github.com:sunny5875/DDD11-SClass-iOS-Match.git")
+git_url("https://github.com/sunny5875/DDD11-SClass-iOS-Match.git")
 storage_mode("git")
 platform("ios")
 app_identifier([ENV["APP_IDENTIFIER"]])
+clone_branch_directly(true)
