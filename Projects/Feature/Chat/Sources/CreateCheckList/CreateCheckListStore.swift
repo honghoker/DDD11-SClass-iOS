@@ -22,7 +22,7 @@ public struct CreateCheckListStore {
     var selectedCheckList: [CheckBox] = []
     
     public init(checkListId: String) {
-      self.checkList = .init(id: checkListId, checkBoxList: [])
+      self.checkList = .init(id: checkListId)
     }
   }
   
