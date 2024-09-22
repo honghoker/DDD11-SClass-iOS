@@ -30,7 +30,7 @@ extension Settings {
     base: SettingsDictionary()
       .setProductName(Project.Environment.appName)
       .setCFBundleDisplayName(Project.Environment.appName)
-      .setMarketingVersion(.appVersion(version: "1.0.0"))
+      .setMarketingVersion(.appVersion(version: Project.Environment.appVersion))
       .setASAuthenticationServicesEnabled()
       .setPushNotificationsEnabled()
       .setEnableBackgroundModes()
@@ -51,7 +51,8 @@ extension Settings {
           appName: Project.Environment.appDevName,
           displayName: Project.Environment.appDevName,
           provisioningProfile: "match Development com.DDD.OnboardingKit"
-        )
+        ),
+        xcconfig: "Resources/Config.xcconfig"
       ),
       .debug(
         name: .qa,
@@ -59,7 +60,8 @@ extension Settings {
           appName: Project.Environment.appDemoName,
           displayName: Project.Environment.appDemoName,
           provisioningProfile: "match AppStore com.DDD.OnboardingKit"
-        )
+        ),
+        xcconfig: "Resources/Config.xcconfig"
       ),
       .release(
         name: .release,
@@ -67,7 +69,8 @@ extension Settings {
           appName: Project.Environment.appName,
           displayName: Project.Environment.appName,
           provisioningProfile: "match AppStore com.DDD.OnboardingKit"
-        )
+        ),
+        xcconfig: "Resources/Config.xcconfig"
       )
     ],
     defaultSettings: .recommended

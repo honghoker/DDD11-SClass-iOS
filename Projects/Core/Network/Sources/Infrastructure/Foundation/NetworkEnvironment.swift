@@ -8,7 +8,13 @@
 import Foundation
 
 enum NetworkEnvironment {
-  static let baseURL = ""
+  static var baseURL: String {
+    guard let url = Bundle.main.infoDictionary?["baseURL"] as? String
+    else {
+      fatalError("Base URL is not set in plist for this configuration.")
+    }
+    return url
+  }
 }
 
 extension NetworkEnvironment {
