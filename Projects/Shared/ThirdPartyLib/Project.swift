@@ -14,7 +14,8 @@ let project = Project.makeModule(
     .SPM.moya,
     .SPM.combineMoya,
     .SPM.keychainAccess,
-    .SPM.kingfisher
+    .SPM.kingfisher,
+    .SPM.skeletonUI
   ],
   sources: ["Sources/**"]
 )

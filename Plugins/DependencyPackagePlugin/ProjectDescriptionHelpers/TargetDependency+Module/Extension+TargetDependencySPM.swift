@@ -32,4 +32,9 @@ public extension TargetDependency.SPM {
     name: "Kingfisher",
     condition: .none
   )
+  
+  static let skeletonUI: TargetDependency = .external(
+    name: "SkeletonUI",
+    condition: .none
+  )
 }
