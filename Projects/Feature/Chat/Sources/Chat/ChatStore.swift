@@ -36,8 +36,8 @@ public struct ChatStore {
     // 메세지 보내기
     case didTapSendButton(String?)
     case onCompleteSend(TaskResult<Message>)
-    case didTapCreateCheckListButton(MessageEntity)
-    case onCompleteCreateCheckList(String)
+    case didTapCreateChecklistButton(MessageEntity)
+    case onCompleteCreateChecklist(String)
     
     
     // 나가기
@@ -123,9 +123,9 @@ public struct ChatStore {
       case .onCompleteSend(.failure):
         return .none
         
-      case .didTapCreateCheckListButton(let message):
+      case .didTapCreateChecklistButton(let message):
         if let path = message.path {
-          return .send(.onCompleteCreateCheckList(path))
+          return .send(.onCompleteCreateChecklist(path))
         } else {
           return .none
         }
@@ -140,7 +140,7 @@ public struct ChatStore {
         return .none
       case .onCloseView:
         return .none
-      case .onCompleteCreateCheckList(_):
+      case .onCompleteCreateChecklist(_):
         return .none
       }
     }

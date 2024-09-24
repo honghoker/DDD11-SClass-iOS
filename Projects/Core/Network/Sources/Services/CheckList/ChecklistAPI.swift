@@ -1,5 +1,5 @@
 //
-//  CheckListAPI.swift
+//  ChecklistAPI.swift
 //  CoreNetwork
 //
 //  Created by 현수빈 on 9/8/24.
@@ -11,35 +11,35 @@ import CoreDomain
 
 import Moya
 
-enum CheckListAPI {
+enum ChecklistAPI {
   /// 목록 조회
-  case getCheckLists(userID: String)
+  case getChecklists(userID: String)
   /// 상세 조회
-  case getCheckList(id: String)
+  case getChecklist(id: String)
   /// 체크리스트 프로젝트 삭제
-  case deleteChecklist(checklistId: String)
+  case deleteProject(checklistId: String)
   /// 체크리스트 다중 항목 삭제
-  case deleteCheckList(checkListId: String, checkBoxList: [String])
+  case deleteChecklist(checkListId: String, checkBoxList: [String])
   /// 체크리스트 프로젝트 제목 변경
   case changeKeyword(checkListId: String, newKeyword: String)
   /// 완료 상태 변경
-  case complete(checklistId: String, id: String)
+  case complete(checklistId: String, id: String, completed: Int)
 }
 
-extension CheckListAPI: BaseAPI {
+extension ChecklistAPI: BaseAPI {
   var domain: OnboardingKitDomain {
     return .checkList
   }
   
   var method: Moya.Method {
     switch self {
-    case .getCheckLists:
+    case .getChecklists:
       return .get
-    case .getCheckList:
+    case .getChecklist:
       return .get
-    case .deleteChecklist:
+    case .deleteProject:
       return .delete
-    case .deleteCheckList:
+    case .deleteChecklist:
       return .delete
     case .changeKeyword:
       return .patch
@@ -50,42 +50,42 @@ extension CheckListAPI: BaseAPI {
   
   var urlPath: String {
     switch self {
-    case .getCheckLists:
+    case .getChecklists:
       return ""
       
-    case .getCheckList(let id):
+    case .getChecklist(let id):
       return "/\(id)/checkboxes"
       
-    case .deleteChecklist(let checklistId):
+    case .deleteProject(let checklistId):
       return "/\(checklistId)"
     
-    case .deleteCheckList(let checkListId, _):
+    case .deleteChecklist(let checkListId, _):
       return "/\(checkListId)/checkboxes"
     
     case .changeKeyword(let checkListId, _):
       return "/\(checkListId)"
     
-    case .complete(let checklistId, let id):
+    case .complete(let checklistId, let id, _):
       return "/\(checklistId)/checkboxes/\(id)/completed"
     }
   }
   
   var parameters: [String: Any]? {
     switch self {
-    case .getCheckLists(let userID):
+    case .getChecklists(let userID):
       return [
         "userId": userID
       ]
       
-    case .getCheckList:
+    case .getChecklist:
       return nil
       
-    case .deleteChecklist(let checklistId):
+    case .deleteProject(let checklistId):
       return [
         "checklistId": checklistId
       ]
       
-    case .deleteCheckList(_, let list):
+    case .deleteChecklist(_, let list):
       return [
         "checkboxIds": list
       ]
@@ -95,10 +95,11 @@ extension CheckListAPI: BaseAPI {
         "title": keyword
       ]
       
-    case .complete(let checklistId, let id):
+    case .complete(let checklistId, let id, let completed):
       return [
         "checklistId": checklistId,
-        "id": id
+        "id": id,
+        "completed": completed
       ]
     }
   }

@@ -1,5 +1,5 @@
 //
-//  CreateCheckListStore.swift
+//  CreateChecklistStore.swift
 //  FeatureChat
 //
 //  Created by 현수빈 on 8/28/24.
@@ -13,37 +13,37 @@ import ComposableArchitecture
 import CoreNetwork
 
 @Reducer
-public struct CreateCheckListStore {
+public struct CreateChecklistStore {
   public init() { }
   
   @ObservableState
-  public struct State: Equatable {
-    var checkList: CheckList
-    var selectedCheckList: [CheckBox] = []
+  public struct State {
+    var checkList: Checklist
+    var selectedChecklist: [CheckBox] = []
     
     public init(checkListId: String) {
       self.checkList = .init(id: checkListId)
     }
   }
   
-  public enum Action: BindableAction, Equatable {
+  public enum Action: BindableAction {
     case binding(BindingAction<State>)
     case onAppear
-    case onCompleteGetCheckList(TaskResult<CheckList>)
+    case onCompleteGetChecklist(TaskResult<Checklist>)
     
     case didTapReCreateButton
-    case didTapCheckList(CheckBox)
+    case didTapChecklist(CheckBox)
     
     case didTapSaveButton
     case onCompleteSaveButton([CheckBox])
-    case pushEnterKeyword(CheckList)
+    case pushEnterKeyword(Checklist)
     
     // navigation
     case didTapBackButton
     case pop
   }
   
-  @Dependency(CheckListAPIClient.self) var checkListAPIClient
+  @Dependency(ChecklistAPIClient.self) var checklistAPIClient
   
   public var body: some ReducerOf<Self> {
     Reduce { state, action in
@@ -54,32 +54,32 @@ public struct CreateCheckListStore {
         let checkListId = state.checkList.id
         return .run { send in
           do {
-            let checkList = try await checkListAPIClient.getCheckList(checkListId)
-            await send(.onCompleteGetCheckList(.success(checkList)))
+            let checkList = try await checklistAPIClient.getChecklist(checkListId)
+            await send(.onCompleteGetChecklist(.success(checkList)))
           } catch {
-            await send(.onCompleteGetCheckList(.failure(error)))
+            await send(.onCompleteGetChecklist(.failure(error)))
           }
         }
-      case .onCompleteGetCheckList(.success(let list)):
+      case .onCompleteGetChecklist(.success(let list)):
         state.checkList = list
         return .none
-      case .onCompleteGetCheckList(.failure):
+      case .onCompleteGetChecklist(.failure):
         return .none
-      case .didTapCheckList(let selected):
-        if let index = state.selectedCheckList.firstIndex(of: selected) {
-          state.selectedCheckList.remove(at: index)
+      case .didTapChecklist(let selected):
+        if let index = state.selectedChecklist.firstIndex(of: selected) {
+          state.selectedChecklist.remove(at: index)
         } else {
-          state.selectedCheckList.append(selected)
+          state.selectedChecklist.append(selected)
         }
         return .none
       case .didTapSaveButton:
         let checkListId = state.checkList.id
-        let deleteCheckBoxList = state.checkList.checkBoxList.filter { !state.selectedCheckList.contains($0)
+        let deleteCheckBoxList = state.checkList.checkBoxList.filter { !state.selectedChecklist.contains($0)
         }.map { $0.id }
-        let selectCheckBoxList = state.selectedCheckList
+        let selectCheckBoxList = state.selectedChecklist
         return .run { send in
           do {
-            _ = try await checkListAPIClient.deleteCheckList(
+            _ = try await checklistAPIClient.deleteChecklist(
               checkListId: checkListId,
               checkBoxList: deleteCheckBoxList
             )

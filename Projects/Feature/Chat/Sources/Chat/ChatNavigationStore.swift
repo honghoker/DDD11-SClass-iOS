@@ -15,7 +15,7 @@ import ComposableArchitecture
 public extension ChatNavigationStore {
   @Reducer
   public enum ChatPath {
-    case createCheckList(CreateCheckListStore)
+    case createChecklist(CreateChecklistStore)
     case enterKeyword(EnterKeywordStore)
   }
 }
@@ -28,7 +28,7 @@ public struct ChatNavigationStore {
   public struct State {
     var path = StackState<ChatPath.State>()
     public var chat: ChatStore.State = .init()
-    public var checkList: CreateCheckListStore.State = .init(checkListId: "")
+    public var checkList: CreateChecklistStore.State = .init(checkListId: "")
     public var enterKeyword: EnterKeywordStore.State = .init(checkList: .init(id: ""))
     public init() {
     }
@@ -39,7 +39,7 @@ public struct ChatNavigationStore {
     case initializeChat
     
     case chat(ChatStore.Action)
-    case checkList(CreateCheckListStore.Action)
+    case checkList(CreateChecklistStore.Action)
     case enterKeyword(EnterKeywordStore.Action)
     
     case pop
@@ -52,7 +52,7 @@ public struct ChatNavigationStore {
     }
     
     Scope(state: \.checkList, action: \.checkList) {
-      CreateCheckListStore()
+      CreateChecklistStore()
     }
     
     Scope(state: \.enterKeyword, action: \.enterKeyword) {
@@ -73,9 +73,9 @@ public struct ChatNavigationStore {
       case .chat(.onCloseView):
         state.chat = ChatStore.State()
         return .none
-      case .chat(.onCompleteCreateCheckList(let id)):
-        state.checkList = CreateCheckListStore.State(checkListId: id)
-        state.path.append(.createCheckList(state.checkList))
+      case .chat(.onCompleteCreateChecklist(let id)):
+        state.checkList = CreateChecklistStore.State(checkListId: id)
+        state.path.append(.createChecklist(state.checkList))
         return .none
         
       case .checkList(.pushEnterKeyword(let checkList)):

@@ -10,7 +10,7 @@ import Foundation
 import CoreDomain
 
 struct ChecklistsResponseDTO: Decodable {
-  let checklists: [CheckListResponseDTO]
+  let checklists: [ChecklistResponseDTO]
   
   enum CodingKeys: String, CodingKey {
     case checklists = "checklists"
@@ -18,7 +18,7 @@ struct ChecklistsResponseDTO: Decodable {
 }
 
 extension ChecklistsResponseDTO {
-  var toEntity: [CheckList] {
+  var toEntity: [Checklist] {
     return checklists.map(\.toEntity)
   }
 }

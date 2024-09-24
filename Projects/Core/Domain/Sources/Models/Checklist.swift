@@ -1,5 +1,5 @@
 //
-//  CheckList.swift
+//  Checklist.swift
 //  CoreDomain
 //
 //  Created by 현수빈 on 9/14/24.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct CheckList: Decodable, Equatable {
+public struct Checklist: Decodable, Equatable {
   public let id: String
   public var title: String?
   public var checkBoxList: [CheckBox]
@@ -24,5 +24,15 @@ public struct CheckList: Decodable, Equatable {
       title: nil,
       checkBoxList: []
     )
+  }
+  
+  enum CodingKeys: String, CodingKey {
+    case id
+    case title
+    case checkBoxList
+  }
+  
+  public static func == (lhs: Self, rhs: Self) -> Bool {
+    return lhs.id == rhs.id
   }
 }
