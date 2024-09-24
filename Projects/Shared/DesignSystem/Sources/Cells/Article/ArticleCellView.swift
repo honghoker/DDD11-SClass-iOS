@@ -77,7 +77,7 @@ public struct ArticleCellView<Thumbnail: View>: View {
         GeometryReader { geometry in
           Divider()
             .background(Color(hex: "E1E3E7"))
-            .frame(width: geometry.size.width - 99.12)
+            .frame(width: max(0, geometry.size.width - 99.12))
         }
         .frame(height: 0.5)
       }
