@@ -11,16 +11,16 @@ public struct TopArticleNavigation: View {
   
   @State private var title: String = ""
   private let leftAction: () -> Void
-  private let rightAction: () -> Void
+  private let url: String
   
   public init(
     title: String,
-    leftAction: @escaping () -> Void,
-    rightAction: @escaping () -> Void
+    url: String,
+    leftAction: @escaping () -> Void
   ) {
     self.title = title
+    self.url = url
     self.leftAction = leftAction
-    self.rightAction = rightAction
   }
   
   public var body: some View {
@@ -32,10 +32,13 @@ public struct TopArticleNavigation: View {
       
       titleContect()
       
-      navigationItem(
-        image: .externalLink,
-        rightAction
-      )
+      ShareLink(item: URL(string: url)!) {
+        Image.externalLink
+          .resizable()
+          .scaledToFit()
+          .frame(width: 24, height: 24)
+          .foregroundStyle(.greyScale950)
+      }
     }
   }
   
