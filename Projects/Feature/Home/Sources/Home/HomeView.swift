@@ -9,7 +9,6 @@ import Foundation
 import SwiftUI
 
 import SharedDesignSystem
-import SharedUtils
 
 import ComposableArchitecture
 
@@ -33,6 +32,12 @@ struct HomeView: View {
     }
     .onAppear {
       store.send(.onAppear)
+    }
+    .fullScreenCover(item: $store.selectedArticle) { article in
+      HomeArticleWebView(
+        store: store,
+        article: article
+      )
     }
   }
   
@@ -104,14 +109,18 @@ struct HomeView: View {
       )
       
       ForEach(store.articles) { article in
-        ArticleCellView(
-          thumbnail: { ThumbnailImage(urlString: article.thumbnailURL) },
-          title: article.title,
-          category: article.category,
-          platform: article.platform,
-          postDate: article.postDate.formatted(using: .shortForm),
-          url: article.url
-        )
+        Button(action: {
+          store.send(.didTapArticle(article))
+        } ) {
+          ArticleCellView(
+            thumbnail: { ThumbnailImage(urlString: article.thumbnailURL) },
+            title: article.title,
+            category: article.category,
+            platform: article.platform,
+            postDate: article.postDate.formatted(using: .shortForm),
+            url: article.url
+          )
+        }
       }
     }
   }
