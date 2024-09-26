@@ -28,8 +28,8 @@ public struct ChatNavigationStore {
   public struct State {
     var path = StackState<ChatPath.State>()
     public var chat: ChatStore.State = .init()
-    public var checkList: CreateChecklistStore.State = .init(checkListId: "")
-    public var enterKeyword: EnterKeywordStore.State = .init(checkList: .init(id: ""))
+    public var checklist: CreateChecklistStore.State = .init(checklistID: "")
+    public var enterKeyword: EnterKeywordStore.State = .init(checklist: .init(id: ""))
     public init() {
     }
   }
@@ -39,7 +39,7 @@ public struct ChatNavigationStore {
     case initializeChat
     
     case chat(ChatStore.Action)
-    case checkList(CreateChecklistStore.Action)
+    case checklist(CreateChecklistStore.Action)
     case enterKeyword(EnterKeywordStore.Action)
     
     case pop
@@ -51,7 +51,7 @@ public struct ChatNavigationStore {
       ChatStore()
     }
     
-    Scope(state: \.checkList, action: \.checkList) {
+    Scope(state: \.checklist, action: \.checklist) {
       CreateChecklistStore()
     }
     
@@ -66,6 +66,7 @@ public struct ChatNavigationStore {
         return .none
       case .path(_):
         return .none
+        
       case .pop:
         state.path.removeLast()
         return .none
@@ -73,16 +74,18 @@ public struct ChatNavigationStore {
       case .chat(.onCloseView):
         state.chat = ChatStore.State()
         return .none
+        
       case .chat(.onCompleteCreateChecklist(let id)):
-        state.checkList = CreateChecklistStore.State(checkListId: id)
-        state.path.append(.createChecklist(state.checkList))
+        state.checklist = CreateChecklistStore.State(checklistID: id)
+        state.path.append(.createChecklist(state.checklist))
         return .none
         
-      case .checkList(.pushEnterKeyword(let checkList)):
-        state.enterKeyword = .init(checkList: checkList)
+      case .checklist(.pushEnterKeyword(let checklist)):
+        state.enterKeyword = .init(checklist: checklist)
         state.path.append(.enterKeyword(state.enterKeyword))
         return .none
-      case .checkList(.pop):
+        
+      case .checklist(.pop):
         state.path.removeLast()
         return .none
         
@@ -92,8 +95,10 @@ public struct ChatNavigationStore {
         
       case .chat(_):
         return .none
-      case .checkList(_):
+        
+      case .checklist(_):
         return .none
+        
       case .enterKeyword(_):
         return .none
       }

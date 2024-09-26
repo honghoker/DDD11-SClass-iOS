@@ -18,13 +18,13 @@ public struct EnterKeywordStore {
   
   @ObservableState
   public struct State {
-    var checkList: Checklist
+    var checklist: Checklist
     
     var errorMessage: String?
     var text = ""
     
-    public init(checkList: Checklist) {
-      self.checkList = checkList
+    public init(checklist: Checklist) {
+      self.checklist = checklist
     }
   }
   
@@ -32,7 +32,7 @@ public struct EnterKeywordStore {
     case binding(BindingAction<State>)
     case didTapSaveButton
     case onCompleteTapSaveButton
-    case onCloseView
+    case onCloseView(checklist: Checklist)
     
     case didTapBackButton
     case pop
@@ -47,18 +47,18 @@ public struct EnterKeywordStore {
       case .binding:
         return .none
       case .didTapSaveButton:
-        let checkListId = state.checkList.id
+        let checklistID = state.checklist.id
         let keyword = state.text
         return .run { send in
           do {
-            try await checklistAPIClient.changeKeyword(checkListId: checkListId, newKeyword: keyword)
+            try await checklistAPIClient.changeKeyword(checklistId: checklistID, newKeyword: keyword)
             await send(.onCompleteTapSaveButton)
           } catch {
             print(error.localizedDescription)
           }
         }
       case .onCompleteTapSaveButton:
-        return .send(.onCloseView)
+        return .send(.onCloseView(checklist: state.checklist))
         
       case .didTapBackButton:
         return .send(.pop)

@@ -18,11 +18,11 @@ public struct CreateChecklistStore {
   
   @ObservableState
   public struct State {
-    var checkList: Checklist
+    var checklist: Checklist
     var selectedChecklist: [CheckBox] = []
     
-    public init(checkListId: String) {
-      self.checkList = .init(id: checkListId)
+    public init(checklistID: String) {
+      self.checklist = .init(id: checklistID)
     }
   }
   
@@ -50,18 +50,19 @@ public struct CreateChecklistStore {
       switch action {
       case .binding:
         return .none
+        
       case .onAppear:
-        let checkListId = state.checkList.id
+        let checklistID = state.checklist.id
         return .run { send in
           do {
-            let checkList = try await checklistAPIClient.getChecklist(checkListId)
-            await send(.onCompleteGetChecklist(.success(checkList)))
+            let checklist = try await checklistAPIClient.getChecklist(checklistID)
+            await send(.onCompleteGetChecklist(.success(checklist)))
           } catch {
             await send(.onCompleteGetChecklist(.failure(error)))
           }
         }
       case .onCompleteGetChecklist(.success(let list)):
-        state.checkList = list
+        state.checklist = list
         return .none
       case .onCompleteGetChecklist(.failure):
         return .none
@@ -73,14 +74,14 @@ public struct CreateChecklistStore {
         }
         return .none
       case .didTapSaveButton:
-        let checkListId = state.checkList.id
-        let deleteCheckBoxList = state.checkList.checkBoxList.filter { !state.selectedChecklist.contains($0)
+        let checklistId = state.checklist.id
+        let deleteCheckBoxList = state.checklist.checkBoxList.filter { !state.selectedChecklist.contains($0)
         }.map { $0.id }
         let selectCheckBoxList = state.selectedChecklist
         return .run { send in
           do {
             _ = try await checklistAPIClient.deleteChecklist(
-              checkListId: checkListId,
+              checklistId: checklistId,
               checkBoxList: deleteCheckBoxList
             )
             await send(.onCompleteSaveButton(selectCheckBoxList))
@@ -89,8 +90,8 @@ public struct CreateChecklistStore {
           }
         }
       case .onCompleteSaveButton(let list):
-        state.checkList.checkBoxList = list
-        return .send(.pushEnterKeyword(state.checkList))
+        state.checklist.checkBoxList = list
+        return .send(.pushEnterKeyword(state.checklist))
         
       case .didTapBackButton:
         return .send(.pop)

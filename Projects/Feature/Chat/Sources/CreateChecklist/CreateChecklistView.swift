@@ -26,7 +26,7 @@ struct CreateChecklistView: View {
       
       
       ScrollView {
-        ForEach(store.checkList.checkBoxList, id: \.id) {
+        ForEach(store.checklist.checkBoxList, id: \.id) {
           CheckItem(store: store, item: $0)
         }
         ButtonSmall(title: "체크리스트 다시 생성하기", highLightTitle: "체크리스트", action: {
