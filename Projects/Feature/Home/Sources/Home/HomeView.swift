@@ -109,18 +109,17 @@ struct HomeView: View {
       )
       
       ForEach(store.articles) { article in
-        Button(action: {
-          store.send(.didTapArticle(article))
-        } ) {
-          ArticleCellView(
-            thumbnail: { ThumbnailImage(urlString: article.thumbnailURL) },
-            title: article.title,
-            category: article.category,
-            platform: article.platform,
-            postDate: article.postDate.formatted(using: .shortForm),
-            url: article.url
-          )
-        }
+        ArticleCellView(
+          thumbnail: { ThumbnailImage(urlString: article.thumbnailURL) },
+          title: article.title,
+          category: article.category,
+          platform: article.platform,
+          postDate: article.postDate.formatted(using: .shortForm),
+          url: article.url,
+          onTap: {
+            store.send(.didTapArticle(article))
+          }
+        )
       }
     }
   }
