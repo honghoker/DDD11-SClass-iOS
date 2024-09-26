@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 
+import CoreDomain
 import SharedDesignSystem
 
 import ComposableArchitecture
@@ -24,8 +25,8 @@ struct HomeView: View {
       backgroundView(size: geometry.size)
       
       ScrollView {
-        VStack(spacing: 16) {
-          header
+        VStack(alignment: .leading, spacing: 16) {
+          HeaderView(store: store)
           content(size: geometry.size)
         }
       }
@@ -41,55 +42,31 @@ struct HomeView: View {
     }
   }
   
-  func backgroundView(size: CGSize) -> some View {
+  private func backgroundView(size: CGSize) -> some View {
     Image.homeBackground
       .resizable()
       .scaledToFill()
       .frame(width: size.width, height: size.height)
   }
   
-  private var header: some View {
-    VStack(alignment: .leading, spacing: 16) {
-      Text("나의 업무폴더")
-        .notoSans(.display_2)
-        .foregroundStyle(.white)
-      
-      Button(action: {
-        store.send(.didTapAppendFolderButton)
-      }) {
-        VStack(spacing: 4) {
-          Image.appendFolder
-            .resizable()
-            .scaledToFit()
-            .frame(width: 33, height: 33)
-          
-          VStack(spacing: .zero) {
-            Text("폴더 추가하기")
-              .notoSans(.subhead_3)
-              .foregroundStyle(.primary600)
-            
-            Text("채팅을 통해 업무 폴더를 생성해보세요")
-              .notoSans(.body_1)
-              .foregroundStyle(.greyScale400)
-          }
-        }
-      }
-      .frame(maxWidth: .infinity)
-      .frame(height: 162)
-      .background(.greyScale050)
-      .clipShape(RoundedRectangle(cornerRadius: 10))
-    }
-    .padding(.top, 28)
-    .padding(.horizontal, 16)
-  }
-  
   @ViewBuilder
   private func content(size: CGSize) -> some View {
     VStack(spacing: .zero) {
-      Spacer().frame(height: 24)
+      Spacer().frame(height: 14)
       
-      articleList
+      if store.isLoading {
+        SkeletonContentView(width: size.width)
+      } else {
+        VStack(spacing: 20) {
+          if let selectedCard = store.selectedCard {
+            checklistList(selectedCard: selectedCard)
+          }
+          
+          articleList
+        }
+      }
     }
+    .frame(width: size.width)
     .background(.white)
     .clipShape(
       .rect(
@@ -99,6 +76,30 @@ struct HomeView: View {
         topTrailingRadius: 20
       )
     )
+  }
+  
+  @ViewBuilder
+  private func checklistList(selectedCard: CardModel) -> some View {
+    VStack(spacing: 16) {
+      ListSection(
+        title: selectedCard.title,
+        onTap: {
+          // TODO: - 해당 업무 폴더 편집 화면으로 이동
+        }
+      )
+      
+      ForEach(store.displayedCheckBoxes) { checkBox in
+        ColorChecklistCellView(
+          title: checkBox.label,
+          isSelected: checkBox.isCompleted,
+          onTap: {
+            store.send(.didTapChecklistCompleteButton(checkBox: checkBox))
+          }
+        )
+      }
+      .padding(.horizontal, 16)
+      .animation(.easeIn, value: store.state.displayedCheckBoxes)
+    }
   }
   
   private var articleList: some View {
