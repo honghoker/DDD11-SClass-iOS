@@ -36,3 +36,27 @@ public struct Checklist: Decodable, Equatable {
     return lhs.id == rhs.id
   }
 }
+
+public extension Checklist {
+  static let mock1 = Self(
+    id: UUID().uuidString,
+    title: "디자인 시스템",
+    checkBoxList: [
+      .mock1,
+      .mock2,
+      .mock3,
+      .mock4
+    ]
+  )
+  
+  static let mock2 = Self(
+    id: UUID().uuidString,
+    title: "외주/거래처 협업",
+    checkBoxList: [
+      .mock5,
+      .mock6,
+      .mock7,
+      .mock8
+    ]
+  )
+}
