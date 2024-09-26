@@ -62,6 +62,7 @@ public struct TopArticleNavigation: View {
       )
       .foregroundStyle(Color.init(hex: "A7A7A7"))
       .notoSans(.body_long_1)
+      .disabled(true)
     }
     .padding(.horizontal, 6)
     .padding(.vertical, 4)
