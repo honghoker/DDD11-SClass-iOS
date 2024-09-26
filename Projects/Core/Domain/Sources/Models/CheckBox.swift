@@ -44,3 +44,77 @@ public struct CheckBox: Decodable, Identifiable, Equatable {
     return lhs.id == rhs.id
   }
 }
+
+extension CheckBox {
+  static let mock1 = Self(
+    checkListId: UUID().uuidString,
+    label: "협업 도구 활용",
+    isCompleted: false,
+    isMain: false,
+    createdAt: "",
+    id: UUID().uuidString
+  )
+  
+  static let mock2 = Self(
+    checkListId: UUID().uuidString,
+    label: "컴포넌트 요소화 등록",
+    isCompleted: false,
+    isMain: false,
+    createdAt: "",
+    id: UUID().uuidString
+  )
+  
+  static let mock3 = Self(
+    checkListId: UUID().uuidString,
+    label: "교육과 문서화",
+    isCompleted: false,
+    isMain: false,
+    createdAt: "",
+    id: UUID().uuidString
+  )
+  
+  static let mock4 = Self(
+    checkListId: UUID().uuidString,
+    label: "체크리스트를 생성해보세요",
+    isCompleted: false,
+    isMain: false,
+    createdAt: "",
+    id: UUID().uuidString
+  )
+  
+  static let mock5 = Self(
+    checkListId: UUID().uuidString,
+    label: "체크리스트를 생성해볼까요?1",
+    isCompleted: false,
+    isMain: false,
+    createdAt: "",
+    id: UUID().uuidString
+  )
+  
+  static let mock6 = Self(
+    checkListId: UUID().uuidString,
+    label: "체크리스트를 생성해볼까요?2",
+    isCompleted: false,
+    isMain: false,
+    createdAt: "",
+    id: UUID().uuidString
+  )
+  
+  static let mock7 = Self(
+    checkListId: UUID().uuidString,
+    label: "체크리스트를 생성해볼까요?3",
+    isCompleted: false,
+    isMain: false,
+    createdAt: "",
+    id: UUID().uuidString
+  )
+  
+  static let mock8 = Self(
+    checkListId: UUID().uuidString,
+    label: "체크리스트를 생성해볼까요?4",
+    isCompleted: false,
+    isMain: false,
+    createdAt: "",
+    id: UUID().uuidString
+  )
+}
