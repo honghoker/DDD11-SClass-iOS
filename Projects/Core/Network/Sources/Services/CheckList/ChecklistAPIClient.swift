@@ -18,9 +18,9 @@ import Moya
 public struct ChecklistAPIClient: Sendable {
   public var getChecklists: @Sendable(_ userID: String) async throws -> [Checklist]
   public var getChecklist: @Sendable(_ id: String) async throws -> Checklist
-  public var deleteProject: @Sendable(_ checkListId: String) async throws -> Void
-  public var deleteChecklist: @Sendable(_ checkListId: String, _ checkBoxList: [String]) async throws -> [String]
-  public var changeKeyword: @Sendable(_ checkListId: String, _ newKeyword: String) async throws -> Void
+  public var deleteProject: @Sendable(_ checklistId: String) async throws -> Void
+  public var deleteChecklist: @Sendable(_ checklistId: String, _ checkBoxList: [String]) async throws -> [String]
+  public var changeKeyword: @Sendable(_ checklistId: String, _ newKeyword: String) async throws -> Void
   public var complete: @Sendable(_ checklistId: String, _ id: String, _ completed: Bool) async throws -> Void
 }
 
@@ -47,13 +47,13 @@ extension ChecklistAPIClient: DependencyKey {
       let api = ChecklistAPI.deleteProject(checklistId: checklistId)
       let responseDTO: EmptyResponseDTO = try await APIService<ChecklistAPI>().request(api: api)
     },
-    deleteChecklist: { checkListId, checkBox in
-      let api = ChecklistAPI.deleteChecklist(checkListId: checkListId, checkBoxList: checkBox)
+    deleteChecklist: { checklistId, checkBox in
+      let api = ChecklistAPI.deleteChecklist(checklistId: checklistId, checkBoxList: checkBox)
       let responseDTO: DeleteChecklistResponseDTO = try await APIService<ChecklistAPI>().request(api: api)
       return responseDTO.deletedIds
     },
-    changeKeyword: { checkListId, title in
-      let api = ChecklistAPI.changeKeyword(checkListId: checkListId, newKeyword: title)
+    changeKeyword: { checklistId, title in
+      let api = ChecklistAPI.changeKeyword(checklistId: checklistId, newKeyword: title)
       let responseDTO: EmptyResponseDTO = try await APIService<ChecklistAPI>().request(api: api)
     },
     complete: { checklistId, id, completed in

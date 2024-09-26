@@ -77,10 +77,14 @@ public struct MainTabStore {
         return .none
       case .myPage:
         return .none
-      case .chat(.chat(.onCloseView)), .chat(.enterKeyword(.onCloseView)):
+      case .chat(.chat(.onCloseView)):
         state.isSelectedChat = false
         state.selectedTab = .home
         return .none
+      case .chat(.enterKeyword(.onCloseView(let checklist))):
+        state.isSelectedChat = false
+        state.selectedTab = .home
+        return .send(.home(.onAppendChecklist(checklist: checklist)))
       case .chat:
         return .none
       }

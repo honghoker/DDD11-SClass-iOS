@@ -19,16 +19,16 @@ enum ChecklistAPI {
   /// 체크리스트 프로젝트 삭제
   case deleteProject(checklistId: String)
   /// 체크리스트 다중 항목 삭제
-  case deleteChecklist(checkListId: String, checkBoxList: [String])
+  case deleteChecklist(checklistId: String, checkBoxList: [String])
   /// 체크리스트 프로젝트 제목 변경
-  case changeKeyword(checkListId: String, newKeyword: String)
+  case changeKeyword(checklistId: String, newKeyword: String)
   /// 완료 상태 변경
   case complete(checklistId: String, id: String, completed: Int)
 }
 
 extension ChecklistAPI: BaseAPI {
   var domain: OnboardingKitDomain {
-    return .checkList
+    return .checklist
   }
   
   var method: Moya.Method {
@@ -59,11 +59,11 @@ extension ChecklistAPI: BaseAPI {
     case .deleteProject(let checklistId):
       return "/\(checklistId)"
     
-    case .deleteChecklist(let checkListId, _):
-      return "/\(checkListId)/checkboxes"
+    case .deleteChecklist(let checklistId, _):
+      return "/\(checklistId)/checkboxes"
     
-    case .changeKeyword(let checkListId, _):
-      return "/\(checkListId)"
+    case .changeKeyword(let checklistId, _):
+      return "/\(checklistId)"
     
     case .complete(let checklistId, let id, _):
       return "/\(checklistId)/checkboxes/\(id)/completed"

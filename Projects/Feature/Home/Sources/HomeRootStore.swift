@@ -8,6 +8,8 @@
 import Foundation
 import ComposableArchitecture
 
+import CoreDomain
+
 @Reducer
 public struct HomeRootStore {
   public init() { }
@@ -26,6 +28,7 @@ public struct HomeRootStore {
     case path(StackActionOf<Path>)
     case home(HomeStore.Action)
     case onPresentChat
+    case onAppendChecklist(checklist: Checklist)
   }
   
   @Reducer
@@ -38,10 +41,16 @@ public struct HomeRootStore {
       switch action {
       case .path:
         return .none
+        
       case .home(.onPresentChat):
         return .send(.onPresentChat)
+        
       case .home:
         return .none
+        
+      case .onAppendChecklist(let checklist):
+        return .send(.home(.onAppendChecklist(checklist: checklist)))
+        
       default:
         return .none
       }

@@ -41,7 +41,7 @@ public struct ChatView: View {
       switch store.case {
       case .createChecklist(_):
         CreateChecklistView(
-          store: navigationStore.scope(state: \.checkList, action: \.checkList)
+          store: navigationStore.scope(state: \.checklist, action: \.checklist)
         )
       case .enterKeyword(_):
         EnterKeywordView(

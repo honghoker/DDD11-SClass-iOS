@@ -39,6 +39,7 @@ public struct HomeStore {
     case didTapProjectFolder(card: CardModel)
     case didTapChecklistCompleteButton(checkBox: CheckBox)
     case isLoadingChanged(isLoading: Bool)
+    case onAppendChecklist(checklist: Checklist)
   }
   
   public init() {}
@@ -84,16 +85,10 @@ public struct HomeStore {
           print(error)
           await send(.isLoadingChanged(isLoading: false))
         }
-        
+      
       case .setCards(let checklists):
-        state.cards = checklists.map { checklist in
-          var card = CardModel(
-            id: checklist.id,
-            title: checklist.title,
-            checkBoxList: checklist.checkBoxList
-          )
-          card.calculatePercent()
-          return card
+        state.cards = checklists.map {
+          .init(id: $0.id, title: $0.title, checkBoxList: $0.checkBoxList)
         }
         
         guard let firstCard = state.cards.first else {
@@ -145,6 +140,17 @@ public struct HomeStore {
         
       case .isLoadingChanged(let isLoading):
         state.isLoading = isLoading
+        return .none
+        
+      case .onAppendChecklist(let checklist):
+        let card = CardModel(
+          id: checklist.id,
+          title: checklist.title,
+          checkBoxList: checklist.checkBoxList
+        )
+        
+        state.cards.insert(card, at: 0)
+        
         return .none
         
       default:
