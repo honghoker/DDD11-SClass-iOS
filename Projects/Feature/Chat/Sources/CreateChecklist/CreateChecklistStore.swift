@@ -63,6 +63,7 @@ public struct CreateChecklistStore {
         }
       case .onCompleteGetChecklist(.success(let list)):
         state.checklist = list
+        state.selectedChecklist = list.checkBoxList
         return .none
       case .onCompleteGetChecklist(.failure):
         return .none

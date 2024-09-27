@@ -58,6 +58,7 @@ public struct EnterKeywordStore {
           }
         }
       case .onCompleteTapSaveButton:
+        state.checklist.title = state.text
         return .send(.onCloseView(checklist: state.checklist))
         
       case .didTapBackButton:
