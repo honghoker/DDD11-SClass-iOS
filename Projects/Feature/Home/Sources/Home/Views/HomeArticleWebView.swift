@@ -34,6 +34,5 @@ struct HomeArticleWebView: View {
       .padding()
       WebViewRepresentable(url: article.url)
     }
-    
   }
 }

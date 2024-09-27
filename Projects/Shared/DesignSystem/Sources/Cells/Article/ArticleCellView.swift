@@ -17,6 +17,7 @@ public struct ArticleCellView<Thumbnail: View>: View {
   private let platform: String
   private let postDate: String
   private let url: String
+  private let onTap: () -> Void
   
   public init(
     @ViewBuilder thumbnail: () -> Thumbnail,
@@ -24,7 +25,8 @@ public struct ArticleCellView<Thumbnail: View>: View {
     category: String,
     platform: String,
     postDate: String,
-    url: String
+    url: String,
+    onTap: @escaping () -> Void
   ) {
     self.thumbnailImage = thumbnail()
     self.title = title
@@ -32,52 +34,57 @@ public struct ArticleCellView<Thumbnail: View>: View {
     self.platform = platform
     self.postDate = postDate
     self.url = url
+    self.onTap = onTap
   }
   
   public var body: some View {
-    VStack(spacing: 12) {
-      HStack(alignment: .top, spacing: .zero) {
-        VStack(alignment: .leading, spacing: .zero) {
-          Text(category)
-            .notoSans(.caption)
-            .foregroundStyle(.primary700)
-            .padding(.bottom, 4)
-          
-          Text(title)
-            .notoSans(.subhead_4)
-            .foregroundStyle(.greyScale900)
-            .padding(.bottom, 8)
-            .lineLimit(2)
-            .multilineTextAlignment(.leading)
-          
-          HStack(alignment: .center, spacing: 6) {
-            Text(platform)
+    Button(action: {
+      onTap()
+    }) {
+      VStack(spacing: 12) {
+        HStack(alignment: .top, spacing: .zero) {
+          VStack(alignment: .leading, spacing: .zero) {
+            Text(category)
               .notoSans(.caption)
-              .foregroundStyle(.greyScale400)
+              .foregroundStyle(.primary700)
+              .padding(.bottom, 4)
             
-            Circle()
-              .frame(width: 3, height: 3)
+            Text(title)
+              .notoSans(.subhead_4)
               .foregroundStyle(.greyScale900)
+              .padding(.bottom, 8)
+              .lineLimit(2)
+              .multilineTextAlignment(.leading)
             
-            Text(postDate)
-              .notoSans(.caption)
-              .foregroundStyle(.greyScale400)
+            HStack(alignment: .center, spacing: 6) {
+              Text(platform)
+                .notoSans(.caption)
+                .foregroundStyle(.greyScale400)
+              
+              Circle()
+                .frame(width: 3, height: 3)
+                .foregroundStyle(.greyScale900)
+              
+              Text(postDate)
+                .notoSans(.caption)
+                .foregroundStyle(.greyScale400)
+            }
           }
+          .padding(.trailing, 4.88)
+          
+          Spacer(minLength: 18)
+          
+          thumbnailImage
         }
-        .padding(.trailing, 4.88)
         
-        Spacer(minLength: 18)
-        
-        thumbnailImage
+        GeometryReader { geometry in
+          Divider()
+            .background(Color(hex: "E1E3E7"))
+            .frame(width: max(0, geometry.size.width - 99.12))
+        }
+        .frame(height: 0.5)
       }
-      
-      GeometryReader { geometry in
-        Divider()
-          .background(Color(hex: "E1E3E7"))
-          .frame(width: geometry.size.width - 99.12)
-      }
-      .frame(height: 0.5)
+      .padding(.horizontal, 15.94)
     }
-    .padding(.horizontal, 15.94)
   }
 }

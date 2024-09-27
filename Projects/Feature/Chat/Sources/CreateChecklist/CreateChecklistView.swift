@@ -1,5 +1,5 @@
 //
-//  CreateCheckListView.swift
+//  CreateChecklistView.swift
 //  FeatureChat
 //
 //  Created by 현수빈 on 8/28/24.
@@ -12,8 +12,8 @@ import CoreDomain
 import ComposableArchitecture
 import SharedDesignSystem
 
-struct CreateCheckListView: View {
-  @Bindable var store: StoreOf<CreateCheckListStore>
+struct CreateChecklistView: View {
+  @Bindable var store: StoreOf<CreateChecklistStore>
   
   var body: some View {
     VStack {
@@ -26,7 +26,7 @@ struct CreateCheckListView: View {
       
       
       ScrollView {
-        ForEach(store.checkList.checkBoxList, id: \.id) {
+        ForEach(store.checklist.checkBoxList, id: \.id) {
           CheckItem(store: store, item: $0)
         }
         ButtonSmall(title: "체크리스트 다시 생성하기", highLightTitle: "체크리스트", action: {
@@ -53,11 +53,11 @@ struct CreateCheckListView: View {
 }
 
 private struct CheckItem: View {
-  @Bindable var store: StoreOf<CreateCheckListStore>
+  @Bindable var store: StoreOf<CreateChecklistStore>
   @State private var isSelected: Bool = true
   private let item: CheckBox
   
-  init(store: StoreOf<CreateCheckListStore>, item: CheckBox) {
+  init(store: StoreOf<CreateChecklistStore>, item: CheckBox) {
     self.store = store
     self.item = item
   }
@@ -67,7 +67,7 @@ private struct CheckItem: View {
       isSelected: $isSelected,
       title: item.label
     ) {
-      store.send(.didTapCheckList(item))
+      store.send(.didTapChecklist(item))
     }
   }
 }

@@ -1,5 +1,5 @@
 ////
-////  CheckList.swift
+////  Checklist.swift
 ////  FeatureChat
 ////
 ////  Created by 현수빈 on 8/30/24.
@@ -7,7 +7,7 @@
 //
 //import Foundation
 //
-//public struct CheckList: Equatable {
+//public struct Checklist: Equatable {
 //  let id: Int
 //  let todo: String
 //  

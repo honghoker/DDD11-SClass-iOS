@@ -1,5 +1,5 @@
 //
-//  CheckListItemDTO.swift
+//  ChecklistItemDTO.swift
 //  CoreNetwork
 //
 //  Created by 현수빈 on 9/8/24.
@@ -9,7 +9,7 @@ import Foundation
 
 import CoreDomain
 
-public struct CheckListItemDTO: Decodable {
+public struct ChecklistItemDTO: Decodable {
   let checklistId: String
   let label: String
   let isCompleted: Int
@@ -35,10 +35,10 @@ public struct CheckListItemDTO: Decodable {
 }
 
 
-extension CheckListItemDTO {
+extension ChecklistItemDTO {
   var toEntity: CheckBox {
     .init(
-      checkListId: self.checklistId,
+      checklistId: self.checklistId,
       label: self.label,
       isCompleted: self.isCompleted == 1,
       isMain: self.isMain == 1,

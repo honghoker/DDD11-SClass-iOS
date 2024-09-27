@@ -1,5 +1,5 @@
 //
-//  CheckListExampleEntity.swift
+//  ChecklistExampleEntity.swift
 //  CoreDomain
 //
 //  Created by 현수빈 on 9/14/24.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct CheckListExampleEntity {
+public struct ChecklistExampleEntity {
   public let title: String
   public let content: String
   public let messsage: String

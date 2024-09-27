@@ -17,29 +17,28 @@ public struct EnterKeywordStore {
   public init() { }
   
   @ObservableState
-  public struct State: Equatable {
-    var checkList: CheckList
+  public struct State {
+    var checklist: Checklist
     
     var errorMessage: String?
     var text = ""
     
-    public init(checkList: CheckList ) {
-      self.checkList = checkList
+    public init(checklist: Checklist) {
+      self.checklist = checklist
     }
   }
   
-  public enum Action: BindableAction, Equatable {
+  public enum Action: BindableAction {
     case binding(BindingAction<State>)
     case didTapSaveButton
     case onCompleteTapSaveButton
-    case onCloseView
+    case onCloseView(checklist: Checklist)
     
     case didTapBackButton
     case pop
   }
   
-  
-  @Dependency(CheckListAPIClient.self) var checkListAPIClient
+  @Dependency(ChecklistAPIClient.self) var checklistAPIClient
   
   public var body: some ReducerOf<Self> {
     BindingReducer()
@@ -48,18 +47,18 @@ public struct EnterKeywordStore {
       case .binding:
         return .none
       case .didTapSaveButton:
-        let checkListId = state.checkList.id
+        let checklistID = state.checklist.id
         let keyword = state.text
         return .run { send in
           do {
-            try await checkListAPIClient.changeKeyword(checkListId: checkListId, newKeyword: keyword)
+            try await checklistAPIClient.changeKeyword(checklistId: checklistID, newKeyword: keyword)
             await send(.onCompleteTapSaveButton)
           } catch {
             print(error.localizedDescription)
           }
         }
       case .onCompleteTapSaveButton:
-        return .send(.onCloseView)
+        return .send(.onCloseView(checklist: state.checklist))
         
       case .didTapBackButton:
         return .send(.pop)

@@ -39,9 +39,9 @@ public struct ChatView: View {
       }
     } destination: { store in
       switch store.case {
-      case .createCheckList(_):
-        CreateCheckListView(
-          store: navigationStore.scope(state: \.checkList, action: \.checkList)
+      case .createChecklist(_):
+        CreateChecklistView(
+          store: navigationStore.scope(state: \.checklist, action: \.checklist)
         )
       case .enterKeyword(_):
         EnterKeywordView(
@@ -113,7 +113,7 @@ public struct ChatView: View {
         )
         .if(message.type == .info) {
           $0.onTapGesture {
-            store.send(.didTapCreateCheckListButton(message))
+            store.send(.didTapCreateChecklistButton(message))
           }
         }
       }
@@ -127,7 +127,7 @@ public struct ChatView: View {
       if store.chatList.count == 1 {
         ScrollView(.horizontal, showsIndicators: false) {
           HStack(spacing: 0) {
-            ForEach(CheckListExampleEntity.mock, id: \.title) { item in
+            ForEach(ChecklistExampleEntity.mock, id: \.title) { item in
               PromptExampleView(
                 title: item.title,
                 content: item.content,

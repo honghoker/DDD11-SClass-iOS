@@ -26,6 +26,10 @@ let package = Package(
     .package(
       url: "https://github.com/onevcat/Kingfisher.git",
       revision: "2ef543ee21d63734e1c004ad6c870255e8716c50" // 7.12.0
+    ),
+    .package(
+      url: "https://github.com/CSolanaM/SkeletonUI.git",
+      revision: "f025e9ba5d051374d7344efa8859df5b9399a181" // 2.0.2
     )
   ],
   targets: [
