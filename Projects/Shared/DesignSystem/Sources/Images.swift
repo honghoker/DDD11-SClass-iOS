@@ -37,4 +37,7 @@ public extension Image {
   static let homeBackground: Self = ImageAsset.homeBackground.swiftUIImage
   static let plus: Self = ImageAsset.plus.swiftUIImage
   static let appendFolder: Self = ImageAsset.appendFolder.swiftUIImage
+    
+  static let vertical: Self = ImageAsset.vertical.swiftUIImage
+  static let horizontal: Self = ImageAsset.horizontal.swiftUIImage
 }
