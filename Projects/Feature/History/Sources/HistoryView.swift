@@ -33,10 +33,12 @@ public struct HistoryView: View {
       .sheet(isPresented: $store.showModal) {
         CheckListBottomSheetView(store: store)
           .presentationDetents([.height(200)])
+          .cornerRadius(20)
       }
       .sheet(isPresented: $store.showEditTitleModal) {
         CheckListEditTitleBottomSheetView(store: store)
-          .presentationDetents([.height(300)])
+          .presentationDetents([.height(320)])
+          .cornerRadius(20)
       }
       .historyAlert(
         isPresented: $store.showDeleteAlert,
@@ -96,7 +98,7 @@ public struct HistoryView: View {
             Image.horizontal
           }
         }
-        .foregroundStyle(store.selected == entity ? Color.white : Color.black)
+        .foregroundStyle(store.selected == entity ? .white : .black)
       }
       
       HStack {
@@ -104,7 +106,7 @@ public struct HistoryView: View {
           .notoSans(.headline)
           .multilineTextAlignment(.leading)
           .frame(height: 56)
-          .foregroundColor((store.selected == entity ? Color.white : Color.greyScale950))
+          .foregroundColor((store.selected == entity ? .white : .greyScale950))
         Spacer()
       }
       
@@ -112,11 +114,11 @@ public struct HistoryView: View {
         Spacer()
         Text("1 day ago") // TODO: 수정
           .notoSans(.caption)
-          .foregroundColor((store.selected == entity ? Color.white : Color.greyScale500))
+          .foregroundColor((store.selected == entity ? .white : .greyScale500))
       }
     }
     .padding(16)
-    .background(store.selected == entity ? Color.primary500 : Color.primary050)
+    .background(store.selected == entity ? .primary500 : .primary050)
     .aspectRatio(1, contentMode: .fill)
     .clipShape(RoundedRectangle(cornerRadius: 10))
     

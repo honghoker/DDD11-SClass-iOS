@@ -72,6 +72,7 @@ public struct HistoryStore {
       case .didTapCheckList(let selected):
         state.selected = selected
         state.showModal = true
+        state.showEditTitleModal = false
         return .none
         
       case .didTapEditTitle:

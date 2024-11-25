@@ -50,10 +50,9 @@ struct CheckListEditTitleBottomSheetView: View {
           title: "취소",
           style: .line,
           isActive: true,
-          action: {store.send(.didTapEditTitleCancel)}
+          action: { store.send(.didTapEditTitleCancel) }
         )
       }
-      Spacer()
     }
     .padding(.horizontal, 16)
     .onAppear {

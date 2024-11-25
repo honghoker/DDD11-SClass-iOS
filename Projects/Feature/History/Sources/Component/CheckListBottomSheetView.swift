@@ -6,10 +6,11 @@
 //
 
 import SwiftUI
-import ComposableArchitecture
 
-import SharedDesignSystem
 import CoreDomain
+import SharedDesignSystem
+
+import ComposableArchitecture
 
 struct CheckListBottomSheetView: View {
   @Bindable var store: StoreOf<HistoryStore>
@@ -52,5 +53,6 @@ struct CheckListBottomSheetView: View {
       }
       Spacer()
     }
+    .padding(16)
   }
 }
