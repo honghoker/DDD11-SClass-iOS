@@ -42,4 +42,5 @@ public extension Image {
   static let horizontal: Self = ImageAsset.horizontal.swiftUIImage
   
   static let trash: Self = ImageAsset.trash.swiftUIImage
+	static let pencil: Self = ImageAsset.pencil.swiftUIImage
 }

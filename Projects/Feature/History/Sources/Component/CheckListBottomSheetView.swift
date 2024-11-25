@@ -29,7 +29,7 @@ struct CheckListBottomSheetView: View {
       )
       
       HStack {
-        Text("제목 변경")
+        Text("내용 변경")
           .notoSans(.body_3)
           .foregroundStyle(Color.greyScale950)
         Spacer()
