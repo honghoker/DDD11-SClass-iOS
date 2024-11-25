@@ -63,7 +63,7 @@ private struct CheckItem: View {
   }
   
   var body: some View {
-    DefaultChecklistCellView(
+    CreateChecklistCellView(
       isSelected: $isSelected,
       title: item.label
     ) {
