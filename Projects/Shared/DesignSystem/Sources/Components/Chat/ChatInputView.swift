@@ -36,7 +36,7 @@ public struct ChatInputView<T: Hashable>: View {
         .padding(.horizontal, 15)
         .padding(.vertical, 10)
         .background(
-          isFocused.wrappedValue == focusValue ? Color.white : .greyScale050
+          isFocused.wrappedValue == focusValue ? .greyScale0 : .greyScale050
         )
         .clipShape(RoundedRectangle(cornerRadius: 10))
         .overlay {

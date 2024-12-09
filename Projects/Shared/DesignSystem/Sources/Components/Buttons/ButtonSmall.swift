@@ -35,7 +35,7 @@ public struct ButtonSmall: View {
           .resizable()
           .scaledToFit()
           .frame(width: 20)
-          .foregroundStyle(isPressed ? .white : .greyScale950)
+          .foregroundStyle(isPressed ? .greyScale0 : .greyScale950)
         
         
         ColoredText(
@@ -50,7 +50,7 @@ public struct ButtonSmall: View {
       .frame(maxWidth: .infinity)
       .frame(height: 48)
     })
-    .background(isPressed ? .primary600 : .white)
+    .background(isPressed ? .primary600 : .greyScale0)
     .clipShape(RoundedRectangle(cornerRadius: 10))
     .overlay {
       RoundedRectangle(cornerRadius: 10)

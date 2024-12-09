@@ -51,7 +51,7 @@ public struct TopArticleNavigation: View {
         .frame(width: 14)
         .foregroundStyle(Color.init(hex: "66625F"))
         .padding(5)
-        .background(.white)
+        .background(.greyScale0)
         .clipShape(Circle())
       
       TextField(

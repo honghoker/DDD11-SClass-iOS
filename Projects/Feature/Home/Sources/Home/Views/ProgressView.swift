@@ -23,7 +23,7 @@ struct ProgressView: View {
     VStack(alignment: .leading, spacing: .zero) {
       ZStack {
         Circle()
-          .stroke(isSelected ? .white : .greyScale100, lineWidth: 8)
+          .stroke(isSelected ? .greyScale0 : .greyScale100, lineWidth: 8)
           .frame(width: 62, height: 62)
         
         Circle()

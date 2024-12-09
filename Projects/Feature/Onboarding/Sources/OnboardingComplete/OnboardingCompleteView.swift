@@ -37,11 +37,11 @@ struct OnboardingCompleteView: View {
               """
             )
             .notoSans(.display_3)
-            .foregroundStyle(.white)
+            .foregroundStyle(.greyScale0)
             
             Text("이제 신입키트와 함께, 맞춤형 AI로 업무 고민을 쉽게 해결하세요.")
               .notoSans(.body_2)
-              .foregroundStyle(.white)
+              .foregroundStyle(.greyScale0)
           }
         }
         .padding(.horizontal, 15)

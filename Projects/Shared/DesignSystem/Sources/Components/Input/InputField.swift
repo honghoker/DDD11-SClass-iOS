@@ -58,7 +58,7 @@ public struct InputField<T: Hashable>: View {
             Image.closeCross
               .resizable()
               .scaledToFit()
-              .foregroundStyle(.white)
+              .foregroundStyle(.greyScale0)
               .frame(width: 16)
               .background(Color.init(hex: "DFDFDF"))
               .clipShape(Circle())
@@ -70,7 +70,7 @@ public struct InputField<T: Hashable>: View {
       .frame(height: 56)
       .background(
         isFocused.wrappedValue == focusValue || errorMessage != nil
-        ? .white
+        ? .greyScale0
         : .greyScale050
       )
       .clipShape(RoundedRectangle(cornerRadius: 10))

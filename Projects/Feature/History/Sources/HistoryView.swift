@@ -86,7 +86,7 @@ public struct HistoryView: View {
           .notoSans(.subhead_3)
           .foregroundColor(Color.black)
           .padding(10)
-          .background(Color.white)
+          .background(.greyScale0)
           .clipShape(Circle())
         
         Spacer()
@@ -98,7 +98,7 @@ public struct HistoryView: View {
             Image.horizontal
           }
         }
-        .foregroundStyle(store.selected == entity ? .white : .black)
+        .foregroundStyle(store.selected == entity ? .greyScale0 : .black)
       }
       
       HStack {
@@ -106,7 +106,7 @@ public struct HistoryView: View {
           .notoSans(.headline)
           .multilineTextAlignment(.leading)
           .frame(height: 56)
-          .foregroundColor((store.selected == entity ? .white : .greyScale950))
+          .foregroundColor((store.selected == entity ? .greyScale0 : .greyScale950))
         Spacer()
       }
       
@@ -114,7 +114,7 @@ public struct HistoryView: View {
         Spacer()
         Text("1 day ago") // TODO: 수정
           .notoSans(.caption)
-          .foregroundColor((store.selected == entity ? .white : .greyScale500))
+          .foregroundColor((store.selected == entity ? .greyScale0 : .greyScale500))
       }
     }
     .padding(16)

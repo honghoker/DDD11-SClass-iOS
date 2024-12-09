@@ -68,7 +68,7 @@ struct HomeView: View {
       }
     }
     .frame(width: size.width)
-    .background(.white)
+    .background(.greyScale0)
     .clipShape(
       .rect(
         topLeadingRadius: 20,

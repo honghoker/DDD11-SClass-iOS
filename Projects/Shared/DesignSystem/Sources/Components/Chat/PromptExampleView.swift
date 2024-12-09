@@ -27,14 +27,14 @@ public struct PromptExampleView: View {
       VStack(alignment: .leading, spacing: 4) {
         Text(title)
           .notoSans(.subhead_2)
-          .foregroundStyle(isPressed ? Color.white : Color.greyScale950)
+          .foregroundStyle(isPressed ? .greyScale0 : .greyScale950)
         Text(content)
           .notoSans(.caption)
-          .foregroundStyle(isPressed ? Color.greyScale100 : Color.greyScale400)
+          .foregroundStyle(isPressed ? .greyScale100 : .greyScale400)
       }
       .padding(.horizontal, 10)
       .padding(.vertical, 14)
-      .background(isPressed ? Color.primary600 : Color.greyScale050)
+      .background(isPressed ? .primary600 : .greyScale050)
       .clipShape(RoundedRectangle(cornerRadius: 14))
     }
     .buttonStyle(

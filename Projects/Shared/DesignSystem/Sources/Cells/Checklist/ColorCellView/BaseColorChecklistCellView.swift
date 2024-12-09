@@ -18,7 +18,7 @@ private extension ColorChecklistCellType {
     case .default:
       return .primary050
     case .detail:
-      return .white
+      return .greyScale0
     }
   }
   

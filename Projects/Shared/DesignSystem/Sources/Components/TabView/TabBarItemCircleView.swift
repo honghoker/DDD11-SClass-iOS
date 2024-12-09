@@ -28,7 +28,7 @@ public struct TabBarItemCircleView: View {
         
         Text("생성")
           .notoSans(.nav_title_inactive)
-          .foregroundStyle(.white)
+          .foregroundStyle(.greyScale0)
       }
       .padding(.horizontal, 15)
       .padding(.vertical, 9)
@@ -36,7 +36,7 @@ public struct TabBarItemCircleView: View {
       .clipShape(Circle())
     }
     .padding(2)
-    .background(.white)
+    .background(.greyScale0)
     .clipShape(Circle())
     .shadow(color: .black.opacity(0.1), radius: 6, x: 0, y: 4)
   }
