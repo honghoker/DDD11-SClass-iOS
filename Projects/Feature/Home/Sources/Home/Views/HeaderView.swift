@@ -69,7 +69,7 @@ struct HeaderView: View {
         // TODO: 프로젝트 관리 페이지 이동
       }) {
         HStack(spacing: 4) {
-          Text("나의 프로젝트")
+          Text("나의 업무 폴더")
             .notoSans(.display_2)
             .foregroundStyle(.white)
           
