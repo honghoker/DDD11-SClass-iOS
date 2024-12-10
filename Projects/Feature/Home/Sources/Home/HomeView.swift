@@ -80,27 +80,49 @@ struct HomeView: View {
   }
   
   @ViewBuilder
-  private func checklistList(selectedCard: CardModel) -> some View {
+  private func checklistList(selectedCard: Card) -> some View {
     VStack(spacing: 16) {
       ListSection(
         title: selectedCard.title,
         onTap: {
-          // TODO: - 해당 업무 폴더 편집 화면으로 이동
+          store.send(.didTapNavigateToDetailChecklist(card: selectedCard))
         }
       )
       
-      ForEach(store.displayedCheckBoxes) { checkBox in
-        ColorChecklistCellView(
-          title: checkBox.label,
-          isSelected: checkBox.isCompleted,
-          onTap: {
-            store.send(.didTapChecklistCompleteButton(checkBox: checkBox))
+      Group {
+        if store.displayedCheckBoxes.isEmpty {
+          checklistCompleteView
+        } else {
+          ForEach(store.displayedCheckBoxes) { checkBox in
+            DefaultColorChecklistCellView(
+              title: checkBox.label,
+              isSelected: checkBox.isCompleted,
+              onToggle: {
+                store.send(.didTapChecklistCompleteButton(checkBox: checkBox))
+              }
+            )
           }
-        )
+        }
       }
       .padding(.horizontal, 16)
-      .animation(.easeIn, value: store.state.displayedCheckBoxes)
     }
+  }
+  
+  private var checklistCompleteView: some View {
+    HStack(spacing: .zero) {
+      Text("체크리스트를 모두 완료했어요.")
+        .multilineTextAlignment(.leading)
+        .notoSans(.body_long_1)
+        .foregroundStyle(.greyScale600)
+        .padding(.leading, 20)
+      Spacer()
+    }
+    .padding(.trailing, 15)
+    .frame(maxWidth: .infinity)
+    .frame(height: 48)
+    .background(.primary100)
+    .clipShape(RoundedRectangle(cornerRadius: 4))
+    .shadow(color: .greyScale950.opacity(0.05), radius: 5, x: 0, y: 4)
   }
   
   private var articleList: some View {
