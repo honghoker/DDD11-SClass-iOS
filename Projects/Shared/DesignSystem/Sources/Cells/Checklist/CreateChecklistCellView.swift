@@ -47,7 +47,7 @@ public struct CreateChecklistCellView: View {
     .frame(height: 78)
     .background(.greyScale0)
     .clipShape(RoundedRectangle(cornerRadius: 4))
-    .shadow(color: .black.opacity(0.05), radius: 5, x: 0, y: 4)
+    .shadow(color: .greyScale950.opacity(0.05), radius: 5, x: 0, y: 4)
   }
 }
 

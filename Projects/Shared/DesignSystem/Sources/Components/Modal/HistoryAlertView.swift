@@ -71,7 +71,7 @@ struct HistoryAlertView: View {
     .background(.greyScale0)
     .clipShape(RoundedRectangle(cornerRadius: 16))
     .shadow(
-      color: Color.black.opacity(0.16),
+      color: .greyScale950.opacity(0.16),
       radius: 18,
       x: 0,
       y: 8

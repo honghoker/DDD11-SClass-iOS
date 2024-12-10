@@ -39,7 +39,7 @@ struct OnboardingWorkExperienceView: View {
         """
       )
       .notoSans(.display_1)
-      .foregroundStyle(.black)
+      .foregroundStyle(.greyScale950)
       .multilineTextAlignment(.center)
       .padding(.top, 81)
       

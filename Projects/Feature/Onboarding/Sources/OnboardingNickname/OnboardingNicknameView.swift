@@ -36,7 +36,7 @@ struct OnboardingNicknameView: View {
       VStack(spacing: 8) {
         Text("닉네임을 설정해주세요")
           .notoSans(.display_1)
-          .foregroundStyle(.black)
+          .foregroundStyle(.greyScale950)
         
         Text("닉네임은 8자 이하, 공백 및 특수기호는 불가능해요")
           .notoSans(.body_1)

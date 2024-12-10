@@ -84,7 +84,7 @@ public struct HistoryView: View {
       HStack {
         Text("\(entity.checkBoxList.count)")
           .notoSans(.subhead_3)
-          .foregroundColor(Color.black)
+          .foregroundColor(.greyScale950)
           .padding(10)
           .background(.greyScale0)
           .clipShape(Circle())
@@ -98,7 +98,7 @@ public struct HistoryView: View {
             Image.horizontal
           }
         }
-        .foregroundStyle(store.selected == entity ? .greyScale0 : .black)
+        .foregroundStyle(store.selected == entity ? .greyScale0 : .greyScale950)
       }
       
       HStack {

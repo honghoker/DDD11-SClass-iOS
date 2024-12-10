@@ -38,7 +38,7 @@ public struct TabBarItemCircleView: View {
     .padding(2)
     .background(.greyScale0)
     .clipShape(Circle())
-    .shadow(color: .black.opacity(0.1), radius: 6, x: 0, y: 4)
+    .shadow(color: .greyScale950.opacity(0.1), radius: 6, x: 0, y: 4)
   }
   
   public func onTap(_ completion: @escaping () -> ()) -> Self {

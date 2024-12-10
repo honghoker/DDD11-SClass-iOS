@@ -74,7 +74,7 @@ struct BaseColorChecklistCellView: View {
     .frame(height: 48)
     .background(isSelected ? type.selectedBackgroundColor : type.defaultBackgroundColor)
     .clipShape(RoundedRectangle(cornerRadius: 4))
-    .shadow(color: .black.opacity(0.05), radius: 5, x: 0, y: 4)
+    .shadow(color: .greyScale950.opacity(0.05), radius: 5, x: 0, y: 4)
   }
 }
 
