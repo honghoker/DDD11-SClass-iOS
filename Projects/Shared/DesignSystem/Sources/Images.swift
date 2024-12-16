@@ -40,4 +40,6 @@ public extension Image {
     
   static let vertical: Self = ImageAsset.vertical.swiftUIImage
   static let horizontal: Self = ImageAsset.horizontal.swiftUIImage
+  
+  static let trash: Self = ImageAsset.trash.swiftUIImage
 }

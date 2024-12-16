@@ -33,7 +33,7 @@ struct HeaderView: View {
     VStack(alignment: .leading, spacing: 16) {
       Text("나의 업무 폴더")
         .notoSans(.display_2)
-        .foregroundStyle(.white)
+        .foregroundStyle(.greyScale0)
       
       Button(action: {
         store.send(.didTapAppendFolderButton)
@@ -69,16 +69,16 @@ struct HeaderView: View {
         // TODO: 프로젝트 관리 페이지 이동
       }) {
         HStack(spacing: 4) {
-          Text("나의 프로젝트")
+          Text("나의 업무 폴더")
             .notoSans(.display_2)
-            .foregroundStyle(.white)
+            .foregroundStyle(.greyScale0)
           
           Image.right
             .renderingMode(.template)
             .resizable()
             .scaledToFit()
             .frame(width: 24, height: 24)
-            .foregroundStyle(.white)
+            .foregroundStyle(.greyScale0)
         }
       }
       .padding(.horizontal, 16)

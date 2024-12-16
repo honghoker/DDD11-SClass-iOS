@@ -23,7 +23,7 @@ struct ListSection: View {
     HStack(spacing: 8) {
       Text(title)
         .notoSans(.subhead_4)
-        .foregroundStyle(.black)
+        .foregroundStyle(.greyScale950)
       
       Spacer()
       

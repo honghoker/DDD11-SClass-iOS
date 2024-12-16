@@ -23,7 +23,7 @@ public struct ColoredText: View {
     highLightText: String,
     defaultColor: Color = .greyScale950,
     highLightColor: Color = .primary600,
-    pressedColor: Color = .white
+    pressedColor: Color = .greyScale0
   ) {
     self._isPressed = isPressed
     self.fullText = fullText

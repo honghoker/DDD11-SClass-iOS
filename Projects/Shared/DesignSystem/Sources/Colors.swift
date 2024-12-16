@@ -34,6 +34,7 @@ public extension ShapeStyle where Self == Color {
   static var sub900: Color { .init(asset: ColorAsset.sub900) }
   static var sub950: Color { .init(asset: ColorAsset.sub950) }
   
+  static var greyScale0: Color { .init(asset: ColorAsset.greyScale0) }
   static var greyScale050: Color { .init(asset: ColorAsset.greyScale50) }
   static var greyScale100: Color { .init(asset: ColorAsset.greyScale100) }
   static var greyScale200: Color { .init(asset: ColorAsset.greyScale200) }
@@ -72,7 +73,7 @@ fileprivate enum Colors {
   case sub900
   case sub950
   
-  case greyScale000
+  case greyScale0
   case greyScale050
   case greyScale100
   case greyScale200

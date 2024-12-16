@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct CheckBox: Decodable, Identifiable, Equatable {
+public struct CheckBox: Decodable, Identifiable, Equatable, Hashable {
   public let checklistId: String
   public let label: String
   public var isCompleted: Bool
@@ -42,6 +42,10 @@ public struct CheckBox: Decodable, Identifiable, Equatable {
   
   public static func == (lhs: Self, rhs: Self) -> Bool {
     return lhs.id == rhs.id
+  }
+  
+  public func hash(into hasher: inout Hasher) {
+    hasher.combine(id)
   }
 }
 

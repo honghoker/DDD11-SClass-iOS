@@ -40,7 +40,7 @@ public struct MessageBubbleView: View {
       Spacer()
       Text(content)
         .notoSans(.body_1)
-        .foregroundStyle(Color.white)
+        .foregroundStyle(.greyScale0)
         .padding(.horizontal, 20)
         .padding(.vertical, 14)
         .background(Color.primary600)

@@ -68,10 +68,10 @@ struct HistoryAlertView: View {
     }
     .padding(.top, 8)
     .frame(width: 328)
-    .background(.white)
+    .background(.greyScale0)
     .clipShape(RoundedRectangle(cornerRadius: 16))
     .shadow(
-      color: Color.black.opacity(0.16),
+      color: .greyScale950.opacity(0.16),
       radius: 18,
       x: 0,
       y: 8
@@ -105,7 +105,7 @@ struct HistoryAlertView: View {
         .foregroundStyle(.greyScale400)
         .padding(.vertical, 10)
         .frame(maxWidth: .infinity)
-        .background(.white)
+        .background(.greyScale0)
         .clipShape(RoundedRectangle(cornerRadius: 8))
         .overlay(
           RoundedRectangle(cornerRadius: 8)
@@ -121,7 +121,7 @@ struct HistoryAlertView: View {
     }) {
       Text(submitText)
         .notoSans(.subhead_3)
-        .foregroundStyle(.white)
+        .foregroundStyle(.greyScale0)
         .padding(.vertical, 10)
         .frame(maxWidth: .infinity)
         .background(.primary600)

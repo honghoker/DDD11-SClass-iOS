@@ -1,5 +1,5 @@
 //
-//  CardModel.swift
+//  Card.swift
 //  FeatureHome
 //
 //  Created by 홍은표 on 9/24/24.
@@ -9,7 +9,7 @@ import Foundation
 
 import CoreDomain
 
-public struct CardModel: Identifiable, Equatable {
+public struct Card: Identifiable, Hashable, Equatable {
   public let id: String
   public let title: String
   public var checkBoxList: [CheckBox]
@@ -20,6 +20,10 @@ public struct CardModel: Identifiable, Equatable {
     self.title = title ?? ""
     self.checkBoxList = checkBoxList
     calculatePercent()
+  }
+  
+  public func hash(into hasher: inout Hasher) {
+    hasher.combine(id)
   }
   
   public static func == (lhs: Self, rhs: Self) -> Bool {

@@ -36,7 +36,7 @@ struct OnboardingJobView: View {
       VStack(spacing: 8) {
         Text("나의 직무를 선택해주세요")
           .notoSans(.display_1)
-          .foregroundStyle(.black)
+          .foregroundStyle(.greyScale950)
         
         Text("새로운 체크리스트와 추천 아티클을 위해 활용돼요.")
           .notoSans(.body_1)

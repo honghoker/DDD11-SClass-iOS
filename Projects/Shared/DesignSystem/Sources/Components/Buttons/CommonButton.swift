@@ -64,7 +64,7 @@ public enum CommonButtonStyle {
     case .line:
       return .greyScale200
     case .`default`:
-      return .white
+      return .greyScale0
     case .contrast:
       return .primary500
     }
@@ -73,11 +73,11 @@ public enum CommonButtonStyle {
   var activeBackgroundColor: Color {
     switch self {
     case .line:
-      return .white
+      return .greyScale0
     case .`default`:
       return .primary600
     case .contrast:
-      return .white
+      return .greyScale0
     }
   }
   
@@ -85,11 +85,11 @@ public enum CommonButtonStyle {
   var disableBackgroundColor: Color {
     switch self {
     case .line:
-      return .white
+      return .greyScale0
     case .`default`:
       return .greyScale200
     case .contrast:
-      return .white
+      return .greyScale0
     }
   }
 }
