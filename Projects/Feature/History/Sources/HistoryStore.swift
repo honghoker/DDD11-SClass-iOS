@@ -18,21 +18,24 @@ public struct HistoryStore {
   public struct State {
     var checkList: [Checklist] = []
     var selected: Checklist? = .none
-    var showModal = false
-    var showEditTitleModal = false
-    var showDeleteAlert = false
+    var modal: ModalType? = .none
     var newTitle: String = ""
     var isActive: Bool {
       3...8 ~= newTitle.count
     }
-    public init() {
-    }
+    
+    var path = StackState<Path.State>()
+    var historyDetail: HistoryDetailStore.State = .init(checklist: .mock1)
+    public init() {}
   }
   
   public enum Action: BindableAction {
     case binding(BindingAction<State>)
+    case path(StackActionOf<Path>)
     case onAppear
-    case didTapCheckList(Checklist)
+    
+    case didTapChecklistMenu(Checklist)
+    case didTapChecklist(Checklist)
     
     // bottomsheet 처리
     case didTapDismiss
@@ -46,10 +49,29 @@ public struct HistoryStore {
     // 제목변경 처리
     case didTapEditTitleConfirm
     case didTapEditTitleCancel
+    
+    
+    case historyDetail(HistoryDetailStore.Action)
+  }
+  
+  @Reducer
+  public enum Path {
+    case historyDetail(HistoryDetailStore)
+  }
+  
+  public enum ModalType: Identifiable {
+    public var id: Self { return self }
+    case menu
+    case delete
+    case editTitle
   }
   
   public var body: some ReducerOf<Self> {
     BindingReducer()
+    
+    Scope(state: \.historyDetail, action: \.historyDetail) {
+      HistoryDetailStore()
+    }
     
     Reduce { state, action in
       switch action {
@@ -69,21 +91,23 @@ public struct HistoryStore {
         ]
         return .none
         
-      case .didTapCheckList(let selected):
+      case .didTapChecklist(let selected):
+        state.historyDetail = .init(checklist: selected)
+        state.path.append(.historyDetail(.init(checklist: selected)))
+        return .none
+        
+      case .didTapChecklistMenu(let selected):
         state.selected = selected
-        state.showModal = true
-        state.showEditTitleModal = false
+        state.modal = .menu
         return .none
         
       case .didTapEditTitle:
-        state.showModal = false
-        state.showEditTitleModal = true
+        state.modal = .editTitle
         state.newTitle = state.selected?.title ?? ""
         return .none
         
       case .didTapDelete:
-        state.showModal = false
-        state.showDeleteAlert = true
+        state.modal = .delete
         return .none
         
       case .didTapDeleteConfirm:
@@ -94,13 +118,8 @@ public struct HistoryStore {
         state.selected = nil
         return .none
         
-      case .didTapDeleteCancel:
-        state.showDeleteAlert = false
-        state.selected = nil
-        return .none
-        
       case .didTapEditTitleConfirm:
-        state.showEditTitleModal = false
+        state.modal = nil
         if let selected = state.selected,
            let index = state.checkList.firstIndex(of: selected) {
           state.checkList[index].title = state.newTitle
@@ -108,19 +127,24 @@ public struct HistoryStore {
         state.selected = nil
         return .none
         
-      case .didTapEditTitleCancel:
-        state.showEditTitleModal = false
+      case .didTapDismiss, .didTapDeleteCancel, .didTapEditTitleCancel:
+        state.modal = nil
         state.selected = nil
         return .none
         
-      case .didTapDismiss:
-        state.showModal = false
-        state.showEditTitleModal = false
-        state.showDeleteAlert = false
-        state.selected = nil
-        return .none
+      case let .path(action):
+        switch action {
+        case .element(id: _, action: .historyDetail(.didTapBackButton)):
+          state.path.removeLast()
+          return .none
+          
+        default:
+          return .none
+        }
         
+      default:
+        return .none
       }
-    }
+    }.forEach(\.path, action: \.path)
   }
 }

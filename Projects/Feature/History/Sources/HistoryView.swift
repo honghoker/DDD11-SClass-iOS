@@ -7,10 +7,11 @@
 //
 
 import SwiftUI
+
 import SharedDesignSystem
 import ComposableArchitecture
-
 import CoreDomain
+
 
 public struct HistoryView: View {
   @Bindable var store: StoreOf<HistoryStore>
@@ -22,7 +23,7 @@ public struct HistoryView: View {
   }
   
   public var body: some View {
-    NavigationStack {
+    NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
       VStack {
         TopNavigation(centerTitle: "나의 기록")
         content
@@ -30,18 +31,11 @@ public struct HistoryView: View {
       .onAppear {
         store.send(.onAppear)
       }
-      .sheet(isPresented: $store.showModal) {
-        CheckListBottomSheetView(store: store)
-          .presentationDetents([.height(200)])
-          .cornerRadius(20)
-      }
-      .sheet(isPresented: $store.showEditTitleModal) {
-        CheckListEditTitleBottomSheetView(store: store)
-          .presentationDetents([.height(320)])
-          .cornerRadius(20)
-      }
       .historyAlert(
-        isPresented: $store.showDeleteAlert,
+        isPresented: .init(
+          get: { store.modal == .delete },
+          set: { store.modal = $0 ? .delete : nil }
+        ),
         title: "카테고리 삭제",
         description: "이 카테고리를 삭제하면 복구할 수 없어요. 그래도 삭제하시겠나요?",
         cancelText: "취소",
@@ -53,6 +47,26 @@ public struct HistoryView: View {
           store.send(.didTapDeleteConfirm)
         }
       )
+      .sheet(item: $store.modal) { modal in
+        switch modal {
+        case .menu:
+          CheckListBottomSheetView(store: store)
+            .presentationDetents([.height(200)])
+            .cornerRadius(20)
+        case .editTitle:
+          CheckListEditTitleBottomSheetView(store: store)
+            .presentationDetents([.height(320)])
+            .cornerRadius(20)
+        case .delete:
+          EmptyView()
+        }
+      }
+    } destination: { store in
+      switch store.case {
+      case .historyDetail(let store):
+        HistoryDetailView(store: store)
+          .navigationBarBackButtonHidden()
+      }
     }
   }
   
@@ -61,7 +75,7 @@ public struct HistoryView: View {
       LazyVGrid(columns: columns) {
         ForEach(store.state.checkList, id: \.id) { history in
           Button(action: {
-            store.send(.didTapCheckList(history))
+            store.send(.didTapChecklist(history))
           }) {
             historyItem(history)
           }
@@ -91,14 +105,18 @@ public struct HistoryView: View {
         
         Spacer()
         
-        Group {
-          if store.selected == entity {
-            Image.check
-          } else {
-            Image.horizontal
+        Button(action: {
+          store.send(.didTapChecklistMenu(entity))
+        }) {
+          Group {
+            if store.selected == entity {
+              Image.check
+            } else {
+              Image.horizontal
+            }
           }
+		  .foregroundStyle(store.selected == entity ? .greyScale0 : .greyScale950)
         }
-        .foregroundStyle(store.selected == entity ? .greyScale0 : .greyScale950)
       }
       
       HStack {

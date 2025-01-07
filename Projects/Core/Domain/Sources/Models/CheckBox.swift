@@ -9,7 +9,7 @@ import Foundation
 
 public struct CheckBox: Decodable, Identifiable, Equatable, Hashable {
   public let checklistId: String
-  public let label: String
+  public var label: String
   public var isCompleted: Bool
   public let isMain: Bool
   public let createdAt: String
