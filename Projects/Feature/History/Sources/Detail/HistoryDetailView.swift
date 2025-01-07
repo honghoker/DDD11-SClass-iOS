@@ -18,11 +18,9 @@ struct HistoryDetailView: View {
   @Bindable var store: StoreOf<HistoryDetailStore>
   
   @Namespace private var namespace
-  @State private var currentTab: TabItem
   
   init(store: StoreOf<HistoryDetailStore>) {
     self.store = store
-    self.currentTab = .checklist
   }
   
   var body: some View {
@@ -36,7 +34,7 @@ struct HistoryDetailView: View {
       
       tabBar
       Group {
-        switch currentTab {
+        switch store.currentTab {
         case .checklist:
           checklistContent
         case .article:
@@ -81,15 +79,13 @@ struct HistoryDetailView: View {
     HStack(spacing: 4) {
       ForEach(TabItem.allCases, id: \.self) { tabItem in
         Button(action: {
-          withAnimation {
-            self.currentTab = tabItem
-          }
+          store.send(.didTapChangeCurrentTab(tabItem), animation: .smooth)
         }) {
           HStack {
             Spacer()
             Text(tabItem.title)
               .foregroundStyle(
-                self.currentTab == tabItem
+                store.currentTab == tabItem
                 ? .primary600
                 : .gray
               )
@@ -98,7 +94,7 @@ struct HistoryDetailView: View {
             Spacer()
           }
           .background(alignment: .bottom) {
-            if self.currentTab == tabItem {
+            if store.currentTab == tabItem {
               Rectangle()
                 .frame(height: 2)
                 .frame(maxWidth: .infinity)
@@ -142,22 +138,6 @@ struct HistoryDetailView: View {
         SkeletonArticleListView(width: geometry.size.width - 32)
       }
       .padding(16)
-    }
-  }
-}
-
-extension HistoryDetailView {
-  enum TabItem: CaseIterable {
-    case checklist
-    case article
-    
-    var title: String {
-      switch self {
-      case .checklist:
-        return "체크리스트"
-      case .article:
-        return "아티클"
-      }
     }
   }
 }

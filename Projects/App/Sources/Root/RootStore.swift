@@ -20,7 +20,7 @@ public struct RootStore {
     case mainTab(MainTabStore.State)
     
     init() {
-      self = .splash(SplashStore.State())
+      self = .mainTab(.init(.history))//.splash(SplashStore.State())
     }
   }
   

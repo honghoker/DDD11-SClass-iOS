@@ -6,9 +6,10 @@
 //
 
 import SwiftUI
-import ComposableArchitecture
 
 import SharedDesignSystem
+
+import ComposableArchitecture
 
 struct CheckBoxEditTitleBottomSheetView: View {
   @Bindable var store: StoreOf<HistoryDetailStore>
@@ -39,12 +40,12 @@ struct CheckBoxEditTitleBottomSheetView: View {
       )
       
       
-      VStack {
+      VStack(spacing: 10) {
         CommonButton(
           title: "수정완료",
           style: .default,
           isActive: store.isActive,
-          action: {store.send(.didTapEditTitleConfirm)}
+          action: { store.send(.didTapEditTitleConfirm) }
         )
         CommonButton(
           title: "취소",

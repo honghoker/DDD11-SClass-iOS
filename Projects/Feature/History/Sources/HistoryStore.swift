@@ -118,11 +118,6 @@ public struct HistoryStore {
         state.selected = nil
         return .none
         
-      case .didTapDeleteCancel:
-        state.modal = nil
-        state.selected = nil
-        return .none
-        
       case .didTapEditTitleConfirm:
         state.modal = nil
         if let selected = state.selected,
@@ -132,12 +127,7 @@ public struct HistoryStore {
         state.selected = nil
         return .none
         
-      case .didTapEditTitleCancel:
-        state.modal = nil
-        state.selected = nil
-        return .none
-        
-      case .didTapDismiss:
+      case .didTapDismiss, .didTapDeleteCancel, .didTapEditTitleCancel:
         state.modal = nil
         state.selected = nil
         return .none

@@ -6,9 +6,10 @@
 //
 
 import Foundation
-import ComposableArchitecture
 
 import CoreDomain
+
+import ComposableArchitecture
 
 @Reducer
 public struct HistoryDetailStore {
@@ -21,6 +22,7 @@ public struct HistoryDetailStore {
     var selected: CheckBox?
     var modal: ModalType? = .none
     var newTitle: String = ""
+    var currentTab: TabItem = .checklist
     var isActive: Bool {
       newTitle != selected?.label
     }
@@ -36,6 +38,8 @@ public struct HistoryDetailStore {
   public enum Action: BindableAction {
     case binding(BindingAction<State>)
     case onAppear
+    
+    case didTapChangeCurrentTab(TabItem)
     
     // MARK: - 체크박스 완료
     case didTapChecklistComplete(CheckBox)
@@ -72,6 +76,10 @@ public struct HistoryDetailStore {
         return .none
         
       case .onAppear:
+        return .none
+        
+      case .didTapChangeCurrentTab(let newTab):
+          state.currentTab = newTab
         return .none
         
       case .didTapChecklistComplete(let checkBox):
@@ -131,6 +139,20 @@ public struct HistoryDetailStore {
         return .none
         
       }
+    }
+  }
+}
+
+public enum TabItem: CaseIterable {
+  case checklist
+  case article
+  
+  var title: String {
+    switch self {
+    case .checklist:
+      return "체크리스트"
+    case .article:
+      return "아티클"
     }
   }
 }
