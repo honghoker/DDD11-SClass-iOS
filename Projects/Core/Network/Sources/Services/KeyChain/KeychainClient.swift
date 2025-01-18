@@ -28,6 +28,10 @@ extension KeychainClient {
   func setString(_ value: String, for key: String) {
     set(value, key)
   }
+  
+  func removeString(for key: String) {
+    try? remove(key)
+  }
 }
 
 extension KeychainClient {
@@ -41,6 +45,10 @@ extension KeychainClient {
   
   public var isSignIn: Bool {
     return getString(for: KeychainKey.userID) != nil
+  }
+  
+  public func signOut() {
+    removeString(for: KeychainKey.userID)
   }
 }
 
