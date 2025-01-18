@@ -27,6 +27,10 @@ public struct MyPageRootView: View {
       case .legalDocument(let store):
         LegalDocumentView(store: store)
           .navigationBarBackButtonHidden()
+        
+      case .accountManagement(let store):
+        AccountManagementView(store: store)
+          .navigationBarBackButtonHidden()
       }
     }
   }

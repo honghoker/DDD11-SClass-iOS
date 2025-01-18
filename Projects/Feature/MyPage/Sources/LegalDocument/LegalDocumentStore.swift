@@ -32,6 +32,7 @@ public struct LegalDocumentStore {
       switch action {
       case .didTapBackButton:
         return .send(.navigateToPreviousPage)
+        
       default:
         return .none
       }

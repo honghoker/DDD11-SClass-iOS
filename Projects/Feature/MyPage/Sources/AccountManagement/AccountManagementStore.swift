@@ -24,6 +24,8 @@ public struct AccountManagementStore {
     case didTapBackButton
     case didTapLogoutButton
     case didTapWithdrawButton
+    
+    case navigateToPreviousPage
   }
   
   @Dependency(KeychainClient.self) var keychainClient
@@ -31,6 +33,9 @@ public struct AccountManagementStore {
   public var body: some ReducerOf<Self> {
     Reduce { state, action in
       switch action {
+      case .didTapBackButton:
+        return .send(.navigateToPreviousPage)
+        
       default:
         return .none
       }

@@ -8,6 +8,7 @@
 import Foundation
 
 public struct UserInfo: Equatable {
+  // TODO: - 연동된 SNS 추가
   public let userID: String
   public let nickName: String
   public let job: JobType

@@ -26,20 +26,33 @@ struct MyPageView: View {
       Spacer()
     }
     .onAppear {
+      guard store.isViewDidLoad == false else { return }
       store.send(.onAppear)
     }
   }
   
   private var headerView: some View {
     VStack(alignment: .leading, spacing: 40) {
-      Text(
+      HStack(spacing: 8) {
+        Text(
       """
       안녕하세요
       \(store.nickname) 님
       """
-      )
-      .notoSans(.display_1)
-      .foregroundStyle(.greyScale950)
+        )
+        .notoSans(.display_1)
+        .foregroundStyle(.greyScale950)
+        
+        Spacer()
+        
+        Button(action: {
+          store.send(.didTapAccountManageButton)
+        }) {
+          Text("계정관리")
+            .notoSans(.body_1)
+            .foregroundStyle(.greyScale600)
+        }
+      }
       
       Divider()
         .background(Color(hex: "DADADA"))

@@ -52,23 +52,29 @@ public struct OnboardingRootStore {
     
     Reduce { state, action in
       switch action {
-      case .binding(_):
+      case .binding:
         return .none
+        
       case .didTapNextButton:
         state.path.append(.nickName(OnboardingNicknameStore.State()))
         return .none
+        
       case .didTapCompleteButton:
         return .send(.onSuccessSignUp)
+        
       case .onCompleteSetting(.success(let userInfo)):
         state.userInfo = userInfo
         state.path.append(.complete)
         return .none
+        
       case .onCompleteSetting(.failure(let error)):
         // TODO: 회원가입 API 예외 처리
         debugPrint("onCompleteSetting error: \(error)")
         return .none
+        
       case let .path(action):
         return handlePathAction(state: &state, action: action)
+        
       case .onSuccessSignUp:
         return .none
       }
