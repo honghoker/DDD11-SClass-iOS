@@ -26,6 +26,7 @@ public struct MyPageRootStore {
     case binding(_ action: BindingAction<State>)
     case path(StackActionOf<Path>)
     case myPage(MyPageStore.Action)
+    case navigateToLoginPage
   }
   
   @Reducer
@@ -73,6 +74,10 @@ public struct MyPageRootStore {
     case .element(id: _, action: .accountManagement(.navigateToPreviousPage)):
       state.path.removeLast()
       return .none
+      
+    case .element(id: _, action: .accountManagement(.navigateToRoot)):
+      state.path.removeLast()
+      return .send(.navigateToLoginPage)
       
     default:
       return .none

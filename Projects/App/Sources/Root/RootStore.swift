@@ -20,7 +20,7 @@ public struct RootStore {
     case mainTab(MainTabStore.State)
     
     init() {
-      self = .splash(SplashStore.State())
+      self = .splash(.init())
     }
   }
   
@@ -34,16 +34,22 @@ public struct RootStore {
     Reduce { state, action in
       switch action {
       case .splash(.routeToMainTabScreen):
-        state = .mainTab(MainTabStore.State(.home))
+        state = .mainTab(.init(.home))
         return .none
+        
       case .splash(.routeToOnboardingScreen):
-        state = .onboarding(OnboardingRootStore.State())
+        state = .onboarding(.init())
         return .none
+        
       case .onboarding(.onSuccessSignUp):
-        state = .mainTab(MainTabStore.State(.home))
+        state = .mainTab(.init(.home))
         return .none
-      case .mainTab:
+      
+      case .mainTab(.routeToLoginPage):
+        // TODO: - 로그인 페이지로 이동하도록 변경
+        state = .onboarding(.init())
         return .none
+        
       default:
         return .none
       }

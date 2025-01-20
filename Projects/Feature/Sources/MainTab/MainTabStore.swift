@@ -37,6 +37,7 @@ public struct MainTabStore {
     case chat(ChatNavigationStore.Action)
     case article(ArticleStore.Action)
     case myPage(MyPageRootStore.Action)
+    case routeToLoginPage
   }
   
   public var body: some ReducerOf<Self> {
@@ -65,27 +66,42 @@ public struct MainTabStore {
       switch action {
       case .binding:
         return .none
+        
       case .selectTab(let tab):
         return changeSelectedTab(state: &state, tab: tab)
+        
       case .home(.onPresentChat):
         return changeSelectedTab(state: &state, tab: .chat)
+        
       case .home:
         return .none
+        
       case .history:
         return .none
+        
       case .article:
         return .none
+        
+      case .myPage(.navigateToLoginPage):
+        return .send(.routeToLoginPage)
+        
       case .myPage:
         return .none
+        
       case .chat(.chat(.onCloseView)):
         state.isSelectedChat = false
         state.selectedTab = .home
         return .none
+        
       case .chat(.enterKeyword(.onCloseView(let checklist))):
         state.isSelectedChat = false
         state.selectedTab = .home
         return .send(.home(.onAppendChecklist(checklist: checklist)))
+        
       case .chat:
+        return .none
+        
+      default:
         return .none
       }
     }

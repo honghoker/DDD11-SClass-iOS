@@ -68,6 +68,8 @@ public struct AccountManagementStore {
     case showSheet(SheetType)
     
     case navigateToPreviousPage
+    case navigateToRoot
+    
     case sheet(PresentationAction<ConfirmationSheetStore.Action>)
   }
   
@@ -112,6 +114,7 @@ public struct AccountManagementStore {
           
           keychainClient.signOut()
           await send(.sheet(.dismiss))
+          await send(.navigateToRoot)
         }
         
       case .sheet(.presented(.didTapCancelButton)), .sheet(.presented(.didTapCloseButton)):
