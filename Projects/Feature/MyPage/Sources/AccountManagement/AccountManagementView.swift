@@ -36,6 +36,11 @@ public struct AccountManagementView: View {
       }
       .background(Color(hex: "FAFAFA"))
     }
+    .sheet(store: store.scope(state: \.$sheet, action: \.sheet)) {
+      ConfirmationSheetView(store: $0)
+        .presentationDetents([.height(308)])
+        .cornerRadius(20)
+    }
   }
   
   private var accountInformation: some View {
