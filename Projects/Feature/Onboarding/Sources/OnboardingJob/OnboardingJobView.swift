@@ -48,7 +48,7 @@ struct OnboardingJobView: View {
         ForEach(JobType.rootJobList ,id: \.0) { job in
           Chip(
             title: job.0,
-            style: job.0 == store.selectRootJob ? .blue : .default,
+            style: job.0 == store.selectedCategory ? .blue : .default,
             onTap: {
               store.send(.didTapJobButton(job.0, job.1))
             }
@@ -69,6 +69,9 @@ struct OnboardingJobView: View {
       )
       .padding(.horizontal, 15)
       .padding(.bottom, 50)
+    }
+    .sheet(isPresented: $store.showModal) {
+      OnboardingDetailJobBottomSheetView(store: store)
     }
   }
 }
