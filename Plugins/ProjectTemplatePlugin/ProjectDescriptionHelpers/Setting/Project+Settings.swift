@@ -50,7 +50,7 @@ extension Settings {
         settings: commonSettings(
           appName: Project.Environment.appDevName,
           displayName: Project.Environment.appDevName,
-          provisioningProfile: "match Development com.DDD.OnboardingKit 1736917996"
+          provisioningProfile: "match Development com.DDD.OnboardingKit"
         ),
         xcconfig: "Resources/Config.xcconfig"
       ),

@@ -47,7 +47,7 @@ private struct TabView: View {
     case .chat:
       EmptyView()
     case .article:
-      ArticleView(store: store.scope(state: \.article, action: \.article))
+      ArticleRootView(store: store.scope(state: \.article, action: \.article))
     case .myPage:
       MyPageRootView(store: store.scope(state: \.myPage, action: \.myPage))
     }

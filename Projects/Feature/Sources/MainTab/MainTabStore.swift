@@ -19,7 +19,7 @@ public struct MainTabStore {
     public var home: HomeRootStore.State = .init()
     public var history: HistoryStore.State = .init()
     public var chat: ChatNavigationStore.State = .init()
-    public var article: ArticleStore.State = .init()
+    public var article: ArticleRootStore.State = .init()
     public var myPage: MyPageRootStore.State = .init()
     
     public var isSelectedChat = false
@@ -35,7 +35,7 @@ public struct MainTabStore {
     case home(HomeRootStore.Action)
     case history(HistoryStore.Action)
     case chat(ChatNavigationStore.Action)
-    case article(ArticleStore.Action)
+    case article(ArticleRootStore.Action)
     case myPage(MyPageRootStore.Action)
     case routeToLoginPage
   }
@@ -55,7 +55,7 @@ public struct MainTabStore {
     }
     
     Scope(state: \.article, action: \.article) {
-      ArticleStore()
+      ArticleRootStore()
     }
     
     Scope(state: \.myPage, action: \.myPage) {

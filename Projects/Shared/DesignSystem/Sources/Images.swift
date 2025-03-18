@@ -47,4 +47,9 @@ public extension Image {
   
   static let kakaoLogin: Self = ImageAsset.kakaoLogin.swiftUIImage
   static let appleLogin: Self = ImageAsset.appleLogin.swiftUIImage
+
+  static let articleAll: Self = ImageAsset.articleAll.swiftUIImage
+  static let articleDevelopment: Self = ImageAsset.articleDevelopment.swiftUIImage
+  static let articlePlan: Self = ImageAsset.articlePlan.swiftUIImage
+  static let articleDesign: Self = ImageAsset.articleDesign.swiftUIImage
 }
