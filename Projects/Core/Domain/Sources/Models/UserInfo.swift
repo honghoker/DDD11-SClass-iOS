@@ -34,7 +34,7 @@ public extension UserInfo {
     socialType: .apple,
     userID: "mockId",
     nickName: "SClass",
-    job: .developer,
+    job: .iOSDeveloper,
     workExperience: 3
   )
 }

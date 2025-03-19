@@ -9,7 +9,6 @@ import SwiftUI
 
 import CoreCommon
 import CoreDomain
-import FeatureHome
 import SharedDesignSystem
 
 import ComposableArchitecture
