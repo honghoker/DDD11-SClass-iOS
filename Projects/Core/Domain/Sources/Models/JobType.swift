@@ -26,7 +26,7 @@ public enum JobType: String, CaseIterable, Identifiable {
   case securityEngineer
   case backEndEngineer
   case QAEngineer
-  case AOSDeveloper
+  case AndroidDeveloper
   case iOSDeveloper
   
   case productManager
@@ -57,7 +57,7 @@ public enum JobType: String, CaseIterable, Identifiable {
     case .securityEngineer: return "보안 엔지니어"
     case .backEndEngineer: return "백엔드 개발자"
     case .QAEngineer: return "QA,테스트 엔지니어"
-    case .AOSDeveloper: return "안드로이드 개발자"
+    case .AndroidDeveloper: return "안드로이드 개발자"
     case .iOSDeveloper: return "iOS 개발자"
     
     case .productManager: return "PM, PO"
@@ -82,7 +82,7 @@ public enum JobType: String, CaseIterable, Identifiable {
 
   
   static let developerJobList: [Self] =
-    [.dataEngineer, .javaDeveloper, .NETDeveloper, .networkManager, .frontEndDeveloper, .securityEngineer, .backEndEngineer, .QAEngineer, .AOSDeveloper, .iOSDeveloper]
+    [.dataEngineer, .javaDeveloper, .NETDeveloper, .networkManager, .frontEndDeveloper, .securityEngineer, .backEndEngineer, .QAEngineer, .AndroidDeveloper, .iOSDeveloper]
   
   static let plannerJobList: [Self]  =
     [.productManager, .servicePlanner, .dataAnalyst, .productPlanner, .operationsManager, .exhibitionPlanner, .performancePlanner]

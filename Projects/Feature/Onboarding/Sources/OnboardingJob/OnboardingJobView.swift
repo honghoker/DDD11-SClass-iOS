@@ -45,7 +45,7 @@ struct OnboardingJobView: View {
       .padding(.top, 81)
       
       HStack(spacing: 10) {
-        ForEach(JobType.rootJobList ,id: \.0) { job in
+        ForEach(JobType.rootJobList, id: \.0) { job in
           Chip(
             title: job.0,
             style: job.0 == store.selectedCategory ? .blue : .default,
