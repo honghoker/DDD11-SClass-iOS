@@ -18,7 +18,7 @@ public struct HistoryDetailStore {
   @ObservableState
   public struct State {
     var checkList: Checklist
-    var article: [Article]
+    var article: [MainArticle]
     var selected: CheckBox?
     var modal: ModalType? = .none
     var newTitle: String = ""

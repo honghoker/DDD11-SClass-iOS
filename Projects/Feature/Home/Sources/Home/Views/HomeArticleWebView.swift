@@ -15,9 +15,9 @@ import ComposableArchitecture
 struct HomeArticleWebView: View {
   @Bindable private var store: StoreOf<HomeStore>
   @State private var showShareSheet: Bool = false
-  private let article: Article
+  private let article: MainArticle
   
-  init(store: StoreOf<HomeStore>, article: Article) {
+  init(store: StoreOf<HomeStore>, article: MainArticle) {
     self.store = store
     self.article = article
   }

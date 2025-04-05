@@ -23,11 +23,11 @@ public struct HomeStore {
     var isLoading: Bool = true
     
     var cards: IdentifiedArrayOf<Card> = []
-    var articles: IdentifiedArrayOf<Article> = []
+    var articles: IdentifiedArrayOf<MainArticle> = []
     var displayedCheckBoxes: IdentifiedArrayOf<CheckBox> = []
     
     var selectedCard: Card?
-    var selectedArticle: Article?
+    var selectedArticle: MainArticle?
     
     public init() {}
   }
@@ -46,7 +46,7 @@ public struct HomeStore {
     // MARK: - User Actions
     
     case didTapAppendFolderButton
-    case didTapArticle(Article)
+    case didTapArticle(MainArticle)
     case didTapArticleExitButton
     case didTapProjectFolder(card: Card)
     case didTapChecklistCompleteButton(checkBox: CheckBox)
@@ -55,7 +55,7 @@ public struct HomeStore {
     // MARK: - Internal Actions
     
     case setCards([Checklist])
-    case setArticles([Article])
+    case setArticles([MainArticle])
     case setSelectedCard(card: Card?)
     case isLoadingChanged(isLoading: Bool)
     case onAppendChecklist(checklist: Checklist)
