@@ -12,7 +12,7 @@ import ComposableArchitecture
 @Reducer
 public struct ArticleRootStore {
   public init() {}
-  
+
   @ObservableState
   public struct State {
     var article: ArticleStore.State = .init()
@@ -21,11 +21,11 @@ public struct ArticleRootStore {
 
     }
   }
-  
+
   public enum Action {
     case article(ArticleStore.Action)
   }
-  
+
   public var body: some ReducerOf<Self> {
     Reduce { state, action in
       switch action {
