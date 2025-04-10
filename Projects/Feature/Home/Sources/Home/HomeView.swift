@@ -133,7 +133,7 @@ struct HomeView: View {
       )
       
       ForEach(store.articles) { article in
-        ArticleCellView(
+        MainArticleCellView(
           thumbnail: { ThumbnailImage(urlString: article.thumbnailURL) },
           title: article.title,
           category: article.category,
