@@ -36,4 +36,23 @@ public extension DateFormatter {
     formatter.timeStyle = .none
     return formatter
   }()
+
+  /// 한국어 로케일을 사용하여 날짜를 "년-월-일" 형식으로 포맷팅하는 DateFormatter
+  ///
+  /// - 날짜 스타일: .short (연, 월, 일)
+  /// - 시간 스타일: .none (시간 정보 제외)
+  /// - 로케일: ko_KR (한국어)
+  ///
+  /// - Example:
+  ///   ```
+  ///   let date = Date()
+  ///   let formattedDate = DateFormatter.shortForm.string(from: date)
+  ///   print(formattedDate) // 출력 예: "2024-09-13"
+  ///   ```
+  static let shortHyphenForm: DateFormatter = {
+    let formatter = DateFormatter()
+    formatter.locale = Locale(identifier: "ko_KR")
+    formatter.dateFormat = "yyyy-MM-dd"
+    return formatter
+  }()
 }
