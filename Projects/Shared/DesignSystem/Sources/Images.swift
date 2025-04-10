@@ -52,4 +52,7 @@ public extension Image {
   static let articleDevelopment: Self = ImageAsset.articleDevelopment.swiftUIImage
   static let articlePlan: Self = ImageAsset.articlePlan.swiftUIImage
   static let articleDesign: Self = ImageAsset.articleDesign.swiftUIImage
+
+  static let share: Self = ImageAsset.share.swiftUIImage
+  static let copyLink: Self = ImageAsset.copyLink.swiftUIImage
 }
