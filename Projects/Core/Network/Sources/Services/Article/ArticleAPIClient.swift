@@ -31,4 +31,10 @@ extension ArticleAPIClient: DependencyKey {
       return responseDTO.articles.map(\.toEntity)
     }
   )
+  
+  public static var testValue: ArticleAPIClient = .init(
+    fetchArticles: {
+      return Article.mockArticles
+    }
+  )
 }

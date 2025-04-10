@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Article: Identifiable {
+public struct Article: Identifiable, Equatable {
   public let id: Int
   public let category: String
   public let subcategory: String
@@ -44,6 +44,10 @@ public struct Article: Identifiable {
     self.thumbnail = thumbnail
     self.url = url
     self.hashtags = hashtags
+  }
+
+  public static func == (lhs: Article, rhs: Article) -> Bool {
+    lhs.id == rhs.id
   }
 }
 
