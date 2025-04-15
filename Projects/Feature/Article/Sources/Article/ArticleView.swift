@@ -48,6 +48,15 @@ public struct ArticleView: View {
           .presentationDetents(.init([.medium]))
       }
     }
+    .fullScreenCover(item: $store.selectedArticle) { article in
+      ArticleWebView(
+        title: article.title,
+        url: article.url,
+        didTapClose: {
+          store.send(.didTapArticleExitButton)
+        }
+      )
+    }
   }
 
   private var categoryButtons: some View {
@@ -102,8 +111,13 @@ public struct ArticleView: View {
             isPopupOpen: store.contextMenu.openedArticleId == article.id,
             onOpenPopup: { globalFrame in
               store.send(.didTapMenuButton(articleId: article.id, globalFrame: globalFrame))
+            },
+            onTap: {
+              store.send(.didTapArticle(article: article))
             }
           )
+          .listRowSeparator(.hidden)
+          .listRowInsets(.init(top: 0, leading: 16, bottom: 0, trailing: 16))
         }
       }
     }

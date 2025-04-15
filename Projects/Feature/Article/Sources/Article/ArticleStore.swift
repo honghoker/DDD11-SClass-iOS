@@ -51,7 +51,8 @@ public struct ArticleStore {
     var articleHeaderTitle: String = "🔥 인기 아티클"
     var articles: IdentifiedArrayOf<Article> = []
     var selectedCategory: ArticleCategory = .all
-    
+    var selectedArticle: Article? = nil
+
     var contextMenu: ContextMenu = .init()
 
     /// 공유
@@ -80,7 +81,9 @@ public struct ArticleStore {
     case didTapShareButton
     case didTapCopyLinkButton
     case didDismissShareSheet
-    
+    case didTapArticle(article: Article)
+    case didTapArticleExitButton
+
     case onCompleteFetchArticles(Result<[Article], Never>)
   }
   
@@ -163,7 +166,15 @@ public struct ArticleStore {
         state.isShareSheetPresented = false
         state.shareURL = nil
         return .none
-        
+
+      case .didTapArticle(let article):
+        state.selectedArticle = article
+        return .none
+
+      case .didTapArticleExitButton:
+        state.selectedArticle = .none
+        return .none
+
       default:
         return .none
       }

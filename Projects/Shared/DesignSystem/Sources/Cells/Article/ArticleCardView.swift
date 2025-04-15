@@ -21,6 +21,7 @@ public struct ArticleCardView<ThumbnailContent: View>: View {
   private let hashtags: [String]
   private let isPopupOpen: Bool
   private let onOpenPopup: (CGRect) -> Void
+  private let onTap: () -> Void
 
   public init(
     @ViewBuilder thumbnailBuilder: @escaping () -> ThumbnailContent,
@@ -30,7 +31,8 @@ public struct ArticleCardView<ThumbnailContent: View>: View {
     description: String,
     hashtags: [String],
     isPopupOpen: Bool,
-    onOpenPopup: @escaping (CGRect) -> Void
+    onOpenPopup: @escaping (CGRect) -> Void,
+    onTap: @escaping () -> Void
   ) {
     self.thumbnailBuilder = thumbnailBuilder
     self.platform = platform
@@ -40,6 +42,7 @@ public struct ArticleCardView<ThumbnailContent: View>: View {
     self.hashtags = hashtags
     self.isPopupOpen = isPopupOpen
     self.onOpenPopup = onOpenPopup
+    self.onTap = onTap
   }
 
   public var body: some View {
@@ -49,9 +52,7 @@ public struct ArticleCardView<ThumbnailContent: View>: View {
       content
       footer
     }
-    .listRowBackground(Color.clear)
-    .listRowSeparator(.hidden)
-    .listRowInsets(.init(top: 0, leading: 16, bottom: 0, trailing: 16))
+    .onTapGesture(perform: onTap)
   }
 
   private var thumbnail: some View {
