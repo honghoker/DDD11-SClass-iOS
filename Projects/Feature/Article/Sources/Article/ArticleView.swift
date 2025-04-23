@@ -24,10 +24,19 @@ public struct ArticleView: View {
 
   public var body: some View {
     ZStack {
-      VStack(alignment: .leading, spacing: 14) {
-        categoryButtons
+      VStack(alignment: .leading, spacing: 16) {
+        ArticleTopNavigation(
+          title: "아티클",
+          onTapSearch: {
+            store.send(.didTapSearchButton)
+          }
+        )
 
-        articleList
+        VStack(alignment: .leading, spacing: 14) {
+          categoryButtons
+
+          articleList
+        }
       }
 
       if store.contextMenu.isPresented {

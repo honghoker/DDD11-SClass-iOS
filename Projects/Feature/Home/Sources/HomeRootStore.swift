@@ -6,9 +6,10 @@
 //
 
 import Foundation
-import ComposableArchitecture
 
 import CoreDomain
+
+import ComposableArchitecture
 
 @Reducer
 public struct HomeRootStore {
@@ -25,7 +26,8 @@ public struct HomeRootStore {
     }
   }
   
-  public enum Action {
+  public enum Action: BindableAction {
+    case binding(BindingAction<State>)
     case path(StackActionOf<Path>)
     case home(HomeStore.Action)
     case detailChecklist(DetailChecklistStore.Action)
@@ -44,9 +46,13 @@ public struct HomeRootStore {
   }
   
   public var body: some ReducerOf<Self> {
+    BindingReducer()
+
     Reduce { state, action in
       switch action {
-        
+      case .binding:
+        return .none
+
       case let .path(action):
         return handlePathAction(state: &state, action: action)
         

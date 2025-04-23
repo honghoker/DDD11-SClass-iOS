@@ -83,8 +83,15 @@ public struct ArticleStore {
     case didDismissShareSheet
     case didTapArticle(article: Article)
     case didTapArticleExitButton
+    case didTapSearchButton
+
+    // MARK: - Internal Actions
 
     case onCompleteFetchArticles(Result<[Article], Never>)
+
+    // MARK: - Delegate Actions(parent)
+
+    case onNaviagteToSearchArticle
   }
   
   // MARK: - Dependencies
@@ -174,6 +181,9 @@ public struct ArticleStore {
       case .didTapArticleExitButton:
         state.selectedArticle = .none
         return .none
+
+      case .didTapSearchButton:
+        return .send(.onNaviagteToSearchArticle)
 
       default:
         return .none
