@@ -20,7 +20,7 @@ public struct ArticleWebView: View {
 
   public var body: some View {
     VStack {
-      TopArticleNavigation(
+      TopArticleWebViewNavigation(
         title: title,
         url: url,
         leftAction: {
