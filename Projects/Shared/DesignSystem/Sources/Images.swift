@@ -56,4 +56,5 @@ public extension Image {
   static let share: Self = ImageAsset.share.swiftUIImage
   static let copyLink: Self = ImageAsset.copyLink.swiftUIImage
   static let search: Self = ImageAsset.search.swiftUIImage
+  static let order: Self = ImageAsset.order.swiftUIImage
 }

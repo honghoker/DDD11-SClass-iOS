@@ -23,26 +23,68 @@ public struct ArticleView: View {
   }
 
   public var body: some View {
-    ZStack {
-      VStack(alignment: .leading, spacing: 16) {
-        ArticleTopNavigation(
-          title: "아티클",
-          onTapSearch: {
-            store.send(.didTapSearchButton)
-          }
-        )
-
-        VStack(alignment: .leading, spacing: 14) {
-          categoryButtons
-
-          articleList
+    VStack(alignment: .leading, spacing: 16) {
+      ArticleTopNavigation(
+        title: "아티클",
+        onTapSearch: {
+          store.send(.didTapSearchButton)
         }
-      }
+      )
 
-      if store.contextMenu.isPresented {
-        contextMenu
+      VStack(alignment: .leading, spacing: 14) {
+        categoryButtons
+
+        articleList
       }
     }
+    .contextMenu(
+      isPresented: store.shareContextMenu.isPresented,
+      anchorFrame: store.shareContextMenu.anchorFrame,
+      items: [
+        .init(
+          icon: .share,
+          title: "공유하기",
+          action: {
+            store.send(.didTapShareButton)
+          }
+        ),
+        .init(
+          icon: .copyLink,
+          title: "링크 복사",
+          action: {
+            store.send(.didTapCopyLinkButton)
+          }
+        )
+      ],
+      alignment: .top,
+      onOutsideTap: {
+        store.send(.didTapOutsidePopup)
+      }
+    )
+    .contextMenu(
+      isPresented: store.sortContextMenu.isPresented,
+      anchorFrame: store.sortContextMenu.anchorFrame,
+      items: [
+        .init(
+          icon: nil,
+          title: "최신순",
+          action: {
+            store.send(.didTapLatestSortButton)
+          }
+        ),
+        .init(
+          icon: nil,
+          title: "인기순",
+          action: {
+            store.send(.didTapPopularitySortButton)
+          }
+        )
+      ],
+      alignment: .bottom,
+      onOutsideTap: {
+        store.send(.didTapOutsidePopup)
+      }
+    )
     .onAppear {
       store.send(.onAppear)
     }
@@ -91,14 +133,14 @@ public struct ArticleView: View {
   private var articleList: some View {
     List {
       VStack(spacing: .zero) {
-        HStack {
-          Text(store.articleHeaderTitle)
-            .notoSans(.subhead_4)
-            .foregroundStyle(.greyScale950)
-            .padding(.vertical, 12)
-
-          Spacer()
-        }
+        ArticleSubNavigationBar(
+          title: store.articleHeaderTitle,
+          showOrderButton: store.selectedCategory != .all,
+          isPresented: store.sortContextMenu.isPresented,
+          onOpenPopup: { globalFrame in
+            store.send(.didTapSortButton(globalFrame: globalFrame))
+          }
+        )
 
         Spacer().frame(height: 6)
       }
@@ -117,7 +159,7 @@ public struct ArticleView: View {
             title: article.title,
             description: article.title,
             hashtags: article.hashtags,
-            isPopupOpen: store.contextMenu.openedArticleId == article.id,
+            isPopupOpen: store.selectedShareArticleId == article.id,
             onOpenPopup: { globalFrame in
               store.send(.didTapMenuButton(articleId: article.id, globalFrame: globalFrame))
             },
@@ -132,32 +174,5 @@ public struct ArticleView: View {
     }
     .listStyle(.plain)
     .listRowSpacing(20)
-  }
-
-  @ViewBuilder private var contextMenu: some View {
-    Color.black.opacity(0.001)
-      .ignoresSafeArea()
-      .layoutPriority(-1)
-      .onTapGesture {
-        store.send(.didTapOutsidePopup)
-      }
-
-    ContextMenuView(items: [
-      .init(
-        icon: .share,
-        title: "공유하기",
-        action: {
-          store.send(.didTapShareButton)
-        }
-      ),
-      .init(
-        icon: .copyLink,
-        title: "링크 복사",
-        action: {
-          store.send(.didTapCopyLinkButton)
-        }
-      )
-    ])
-    .position(store.contextMenu.position)
   }
 }

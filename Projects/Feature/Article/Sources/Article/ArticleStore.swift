@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import UIKit
+import UIKit.UIPasteboard
 
 import CoreDomain
 import CoreNetwork
@@ -15,34 +15,31 @@ import ComposableArchitecture
 
 @Reducer
 public struct ArticleStore {
-  
   public init() {}
-
-  public struct ContextMenu {
-    private let size: CGSize = .init(width: 140, height: 92)
-    private(set) var isPresented: Bool = false
+  
+  public struct ContextMenuState {
+    public var isPresented: Bool = false
     @ObservationStateIgnored
-    private(set) var openedArticleId: Int?
-    @ObservationStateIgnored
-    private(set) var position: CGPoint = .zero
-
+    public var anchorFrame: CGRect? = nil
+    
     public init() {}
-
-    mutating func show(articleId: Int, in globalFrame: CGRect) {
-      let position: CGPoint = .init(
-        x: globalFrame.maxX - (size.width / 2),
-        y: globalFrame.minY - size.height - 12
-      )
-      openedArticleId = articleId
-      self.position = position
-      isPresented = true
+    
+    public mutating func show(anchorFrame: CGRect) {
+      self.anchorFrame = anchorFrame
+      self.isPresented = true
     }
     
-    mutating func dismiss() {
-      openedArticleId = nil
-      position = .zero
-      isPresented = false
+    public mutating func dismiss() {
+      self.anchorFrame = nil
+      self.isPresented = false
     }
+  }
+  
+  public enum MenuItemType {
+    case share
+    case copyLink
+    case latestSort
+    case popularitySort
   }
   
   @ObservableState
@@ -52,10 +49,13 @@ public struct ArticleStore {
     var articles: IdentifiedArrayOf<Article> = []
     var selectedCategory: ArticleCategory = .all
     var selectedArticle: Article? = nil
-
-    var contextMenu: ContextMenu = .init()
-
-    /// 공유
+    
+    var shareContextMenu: ContextMenuState = .init()
+    @ObservationStateIgnored
+    var selectedShareArticleId: Int? = nil
+    
+    var sortContextMenu: ContextMenuState = .init()
+    
     var isShareSheetPresented: Bool = false
     @ObservationStateIgnored
     var shareURL: URL? = nil
@@ -84,13 +84,16 @@ public struct ArticleStore {
     case didTapArticle(article: Article)
     case didTapArticleExitButton
     case didTapSearchButton
-
+    case didTapSortButton(globalFrame: CGRect)
+    case didTapLatestSortButton
+    case didTapPopularitySortButton
+    
     // MARK: - Internal Actions
-
+    
     case onCompleteFetchArticles(Result<[Article], Never>)
-
+    
     // MARK: - Delegate Actions(parent)
-
+    
     case onNaviagteToSearchArticle
   }
   
@@ -129,62 +132,87 @@ public struct ArticleStore {
         return .none
         
       case .didTapMenuButton(let articleId, let globalFrame):
-        if state.contextMenu.openedArticleId == articleId {
-          state.contextMenu.dismiss()
+        if state.selectedShareArticleId == articleId {
+          state.selectedShareArticleId = nil
+          state.shareContextMenu.dismiss()
         } else {
-          state.contextMenu.show(articleId: articleId, in: globalFrame)
+          state.selectedShareArticleId = articleId
+          state.shareContextMenu.show(anchorFrame: globalFrame)
         }
         return .none
         
       case .didTapOutsidePopup:
-        state.contextMenu.dismiss()
+        if state.shareContextMenu.isPresented {
+          state.shareContextMenu.dismiss()
+          state.selectedShareArticleId = nil
+        }
+        
+        if state.sortContextMenu.isPresented {
+          state.sortContextMenu.dismiss()
+        }
+        
         return .none
         
       case .didTapShareButton:
-        guard let id = state.contextMenu.openedArticleId else {
-          return .none
-        }
-        
-        guard
-          let article = state.articles[id: id],
-          let url = URL(string: article.url)
+        guard let articleId = state.selectedShareArticleId,
+              let article = state.articles[id: articleId],
+              let url = URL(string: article.url)
         else {
           return .none
         }
-        
+
+        state.selectedShareArticleId = nil
         state.shareURL = url
-        state.contextMenu.dismiss()
+        state.shareContextMenu.dismiss()
         state.isShareSheetPresented = true
         return .none
         
       case .didTapCopyLinkButton:
-        guard
-          let id = state.contextMenu.openedArticleId,
-          let article = state.articles[id: id]
+        guard let articleId = state.selectedShareArticleId,
+              let article = state.articles[id: articleId]
         else {
           return .none
         }
-        
+
+        state.selectedShareArticleId = nil
         UIPasteboard.general.string = article.url
-        state.contextMenu.dismiss()
+        state.shareContextMenu.dismiss()
         return .none
         
       case .didDismissShareSheet:
         state.isShareSheetPresented = false
         state.shareURL = nil
         return .none
-
+        
       case .didTapArticle(let article):
         state.selectedArticle = article
         return .none
-
+        
       case .didTapArticleExitButton:
         state.selectedArticle = .none
         return .none
-
+        
       case .didTapSearchButton:
         return .send(.onNaviagteToSearchArticle)
-
+        
+      case .didTapSortButton(let globalFrame):
+        if state.sortContextMenu.isPresented {
+          state.sortContextMenu.dismiss()
+        } else {
+          state.sortContextMenu.show(anchorFrame: globalFrame)
+        }
+        return .none
+        
+      case .didTapLatestSortButton:
+        state.articles.sort(by: { $0.postDate > $1.postDate })
+        state.sortContextMenu.dismiss()
+        return .none
+        
+      case .didTapPopularitySortButton:
+        state.articles.sort(by: { $0.views > $1.views })
+        state.sortContextMenu.dismiss()
+        return .none
+        
       default:
         return .none
       }
