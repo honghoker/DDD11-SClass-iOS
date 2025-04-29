@@ -15,8 +15,8 @@ public struct ArticlesResponseDTO: Decodable {
 
 public struct ArticleResponseDTO: Decodable {
   public let id: Int
-  public let category: String
-  public let subcategory: String
+  public let category: ArticleCategoryResponse
+  public let subcategory: ArticleSubcategoryResponse
   public let postDate: String
   public let source: String
   public let title: String
@@ -31,8 +31,8 @@ extension ArticleResponseDTO {
   var toEntity: Article {
     .init(
       id: id,
-      category: category,
-      subcategory: subcategory,
+      category: .init(rawValue: category.rawValue) ?? .all,
+      subcategory: .init(rawValue: subcategory.rawValue) ?? .all,
       postDate: ISO8601DateFormatter().date(from: postDate) ?? Date(),
       source: source,
       title: title,

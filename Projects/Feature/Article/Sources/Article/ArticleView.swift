@@ -99,6 +99,22 @@ public struct ArticleView: View {
           .presentationDetents(.init([.medium]))
       }
     }
+    .sheet(isPresented: $store.subcategorySheet.isPresented) {
+      if let category = store.subcategorySheet.category {
+        ArticleSelectSubcategoryBottomSheetView(
+          category: category,
+          selectedSubcategory: store.subcategorySheet.subcategory,
+          onSelect: { subcategory in
+            store.send(.didTapSubcategoryButton(subcategory))
+          },
+          onClose: {
+            store.send(.didCloseSubcategorySheet)
+          }
+        )
+        .presentationDetents([.height(306)])
+        .presentationCornerRadius(30)
+      }
+    }
     .fullScreenCover(item: $store.selectedArticle) { article in
       ArticleWebView(
         title: article.title,
@@ -134,7 +150,7 @@ public struct ArticleView: View {
     List {
       VStack(spacing: .zero) {
         ArticleSubNavigationBar(
-          title: store.articleHeaderTitle,
+          title: "\(store.articleHeaderTitle) 아티클",
           showOrderButton: store.selectedCategory != .all,
           isPresented: store.sortContextMenu.isPresented,
           onOpenPopup: { globalFrame in

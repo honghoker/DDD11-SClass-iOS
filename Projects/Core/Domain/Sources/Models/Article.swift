@@ -9,8 +9,8 @@ import Foundation
 
 public struct Article: Identifiable, Equatable {
   public let id: Int
-  public let category: String
-  public let subcategory: String
+  public let category: ArticleCategory
+  public let subcategory: ArticleSubcategory
   public let postDate: Date
   public let source: String
   public let title: String
@@ -22,8 +22,8 @@ public struct Article: Identifiable, Equatable {
 
   public init(
     id: Int,
-    category: String,
-    subcategory: String,
+    category: ArticleCategory,
+    subcategory: ArticleSubcategory,
     postDate: Date,
     source: String,
     title: String,
@@ -55,8 +55,8 @@ public extension Article {
   static let mockArticles: [Article] = [
     .init(
       id: 1,
-      category: "개발",
-      subcategory: "BRD(Business requirements document) 작성요청",
+      category: .plan,
+      subcategory: .generalPlan,
       postDate: ISO8601DateFormatter().date(from: "2025-03-31T09:41:28Z")!,
       source: "Apple Developer",
       title: "프로젝트 우선순위를 검토하는 법",
@@ -68,8 +68,8 @@ public extension Article {
     ),
     .init(
       id: 2,
-      category: "기술",
-      subcategory: "iOS 업데이트",
+      category: .development,
+      subcategory: .generalDevelopment,
       postDate: ISO8601DateFormatter().date(from: "2017-03-16T17:40:00+09:00")!,
       source: "TechCrunch",
       title: "iOS 16.3 업데이트에 대한 전체 가이드",
@@ -81,8 +81,8 @@ public extension Article {
     ),
     .init(
       id: 3,
-      category: "마케팅",
-      subcategory: "소셜 미디어 전략",
+      category: .design,
+      subcategory: .generalDesign,
       postDate: ISO8601DateFormatter().date(from: "2025-03-31T09:41:28Z")!,
       source: "MarketingPro",
       title: "2025년 소셜 미디어 트렌드",
@@ -94,8 +94,8 @@ public extension Article {
     ),
     .init(
       id: 4,
-      category: "교육",
-      subcategory: "온라인 학습",
+      category: .design,
+      subcategory: .uiUX,
       postDate: ISO8601DateFormatter().date(from: "2025-04-02T12:00:00Z")!,
       source: "EduOnline",
       title: "자기주도 학습을 위한 최고의 온라인 리소스",
