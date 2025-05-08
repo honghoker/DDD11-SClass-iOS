@@ -1,5 +1,5 @@
 //
-//  TopArticleNavigation.swift
+//  TopArticleWebViewNavigation.swift
 //  SharedDesignSystem
 //
 //  Created by 현수빈 on 8/20/24.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct TopArticleNavigation: View {
+public struct TopArticleWebViewNavigation: View {
   
   @State private var title: String = ""
   private let leftAction: () -> Void

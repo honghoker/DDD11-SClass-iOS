@@ -15,9 +15,11 @@ enum OnboardingKitDomain {
   case myPage
   case chat
   case checklist
+  case article
 }
 
 extension OnboardingKitDomain {
+  // TODO: - API 명세 나온 후 수정 필요
   var url: String {
     switch self {
     case .onboarding:
@@ -30,6 +32,8 @@ extension OnboardingKitDomain {
       return "/v1/prompt"
     case .checklist:
       return "/v1/checklists"
+    case .article:
+      return ""
     }
   }
 }

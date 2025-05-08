@@ -24,6 +24,19 @@ extension ArticleCategory {
     }
   }
 
+  var headerTitle: String {
+    switch self {
+    case .all:
+      return "🔥 인기"
+    case .development:
+      return "개발"
+    case .plan:
+      return "기획"
+    case .design:
+      return "디자인"
+    }
+  }
+
   var title: String {
     switch self {
     case .all:

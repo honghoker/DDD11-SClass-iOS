@@ -1,15 +1,13 @@
 //
-//  ArticleCellView.swift
+//  MainArticleCellView.swift
 //  SharedDesignSystem
 //
 //  Created by 홍은표 on 9/20/24.
 //
 
-import Foundation
 import SwiftUI
 
-
-public struct ArticleCellView<Thumbnail: View>: View {
+public struct MainArticleCellView<Thumbnail: View>: View {
   private let thumbnailImage: Thumbnail
   private let title: String
   private let category: String

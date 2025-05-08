@@ -9,7 +9,7 @@ import Foundation
 
 import CoreDomain
 
-public struct ArticleResponseDTO: Decodable {
+public struct MainArticleResponseDTO: Decodable {
   let id: String
   let category: String
   let postDate: String
@@ -28,8 +28,8 @@ public struct ArticleResponseDTO: Decodable {
     case url
   }
   
-  var toEntity: Article {
-    return Article(
+  var toEntity: MainArticle {
+    return MainArticle(
       id: id,
       title: title,
       category: category,

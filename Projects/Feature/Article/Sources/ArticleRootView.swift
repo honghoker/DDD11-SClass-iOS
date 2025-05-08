@@ -11,15 +11,21 @@ import SwiftUI
 import ComposableArchitecture
 
 public struct ArticleRootView: View {
-  private let store: StoreOf<ArticleRootStore>
+  @Bindable private var store: StoreOf<ArticleRootStore>
 
   public init(store: StoreOf<ArticleRootStore>) {
     self.store = store
   }
 
   public var body: some View {
-    NavigationStack {
+    NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
       ArticleView(store: store.scope(state: \.article, action: \.article))
+    } destination: { store in
+      switch store.case {
+      case .searchArticle(let store):
+        SearchArticleView(store: store)
+          .navigationBarBackButtonHidden()
+      }
     }
   }
 }

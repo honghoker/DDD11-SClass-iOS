@@ -7,6 +7,6 @@
 
 import Foundation
 
-public struct ArticlesResponseDTO: Decodable {
-  let articles: [ArticleResponseDTO]
+public struct MainArticlesResponseDTO: Decodable {
+  let articles: [MainArticleResponseDTO]
 }

@@ -36,9 +36,12 @@ struct HomeView: View {
       store.send(.onAppear)
     }
     .fullScreenCover(item: $store.selectedArticle) { article in
-      HomeArticleWebView(
-        store: store,
-        article: article
+      ArticleWebView(
+        title: article.title,
+        url: article.url,
+        didTapClose: {
+          store.send(.didTapArticleExitButton)
+        }
       )
     }
   }
@@ -133,7 +136,7 @@ struct HomeView: View {
       )
       
       ForEach(store.articles) { article in
-        ArticleCellView(
+        MainArticleCellView(
           thumbnail: { ThumbnailImage(urlString: article.thumbnailURL) },
           title: article.title,
           category: article.category,
