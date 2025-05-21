@@ -8,16 +8,16 @@
 import Foundation
 
 struct CommonResponse<T: Decodable>: Decodable {
+  let code: Int
+  let message: String
   let data: T?
 }
 
 extension CommonResponse {
-  public init(from decoder: Decoder) throws {
-    let container = try decoder.container(keyedBy: CodingKeys.self)
-    data = try container.decode(T.self, forKey: .data)
-  }
   
-  private enum CodingKeys: String, CodingKey {
+  enum CodingKeys: String, CodingKey {
+    case code
+    case message
     case data
   }
 }
