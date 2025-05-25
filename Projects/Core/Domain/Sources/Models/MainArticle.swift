@@ -8,16 +8,16 @@
 import Foundation
 
 public struct MainArticle: Identifiable, Equatable {
-  public let id: String
-  public let title: String
+  public var id: String { url + title }
+  
   public let category: String
+  public let title: String
   public let platform: String
   public let postDate: Date
   public let thumbnailURL: String
   public let url: String
   
   public init(
-    id: String,
     title: String,
     category: String,
     source: String,
@@ -25,7 +25,6 @@ public struct MainArticle: Identifiable, Equatable {
     thumbnailURL: String,
     url: String
   ) {
-    self.id = id
     self.title = title
     self.category = category
     self.platform = source

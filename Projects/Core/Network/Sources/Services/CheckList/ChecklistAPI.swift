@@ -13,7 +13,7 @@ import Moya
 
 enum ChecklistAPI {
   /// 목록 조회
-  case getChecklists(userID: String)
+  case getChecklists(accessToken: String)
   /// 상세 조회
   case getChecklist(id: String)
   /// 체크리스트 프로젝트 삭제
@@ -70,12 +70,19 @@ extension ChecklistAPI: BaseAPI {
     }
   }
   
+  var headers: [String : String]? {
+    switch self {
+    case .getChecklists(let token):
+      NetworkEnvironment.headerFieldWithToken(token)
+    default:
+      NetworkEnvironment.HTTPHeaderField.default
+    }
+  }
+  
   var parameters: [String: Any]? {
     switch self {
-    case .getChecklists(let userID):
-      return [
-        "userId": userID
-      ]
+    case .getChecklists(_):
+      return nil
       
     case .getChecklist:
       return nil

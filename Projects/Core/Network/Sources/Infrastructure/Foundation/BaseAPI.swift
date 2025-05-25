@@ -26,13 +26,13 @@ extension OnboardingKitDomain {
     case .onboarding:
       return ""
     case .home:
-      return "/v1/home"
+      return "/main"
     case .myPage:
       return ""
     case .chat:
       return "/v1/prompt"
     case .checklist:
-      return "/v1/checklists"
+      return "/checklists"
     case .article:
       return ""
     case .login:

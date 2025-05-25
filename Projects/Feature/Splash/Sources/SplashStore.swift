@@ -39,7 +39,7 @@ public struct SplashStore {
     Reduce { state, action in
       switch action {
       case .onAppear:
-        return handleRouting()
+        return handleRouting(state.userInfo)
       case .routeToLoginScreen:
         return .none
       case .routeToOnboardingScreen:
@@ -55,7 +55,7 @@ public struct SplashStore {
     }
   }
   
-  private func handleRouting() -> Effect<Action> {
+  private func handleRouting(_ info: UserInfo?) -> Effect<Action> {
     if keychainClient.isSignIn {
       return requestFetchUser()
     } else {

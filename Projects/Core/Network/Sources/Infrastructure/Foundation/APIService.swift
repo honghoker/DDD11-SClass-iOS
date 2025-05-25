@@ -14,7 +14,7 @@ class APIService<API: BaseAPI>: Requestable {
     print("request: \(String(describing: api.parameters))")
     let response = try await provider.request(api)
     
-    if let httpResponse = response.response, 200 ..< 500 ~= httpResponse.statusCode {
+    if let httpResponse = response.response, 200 ... 500 ~= httpResponse.statusCode {
       let decodedResponse = try JSONDecoder().decode(CommonResponse<T>.self, from: response.data)
       print("response: \(decodedResponse)")
       if let responseData = decodedResponse.data {

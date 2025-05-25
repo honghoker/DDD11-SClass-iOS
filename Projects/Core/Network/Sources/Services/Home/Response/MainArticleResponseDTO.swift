@@ -10,31 +10,26 @@ import Foundation
 import CoreDomain
 
 public struct MainArticleResponseDTO: Decodable {
-  let id: String
-  let category: String
-  let postDate: String
-  let source: String
   let title: String
+  let summary: String
   let thumbnail: String
   let url: String
+  let views: Int
   
   enum CodingKeys: String, CodingKey {
-    case id = "articleId"
-    case category
-    case postDate
-    case source
     case title
+    case summary
     case thumbnail
     case url
+    case views
   }
   
   var toEntity: MainArticle {
     return MainArticle(
-      id: id,
       title: title,
-      category: category,
-      source: source,
-      postDate: ISO8601DateFormatter().date(from: postDate) ?? Date(),
+      category: "디자인 시스템", // TODO: API 에서 안옴
+      source: "채널톡", // TODO: API에서 안옴
+      postDate: Date(), // TODO: API에서 안옴
       thumbnailURL: thumbnail,
       url: url
     )
