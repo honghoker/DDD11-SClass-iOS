@@ -8,24 +8,27 @@
 import Foundation
 
 public struct SignUpRequestDTO: Encodable {
-  let userId: String
+  let accessToken: String
   let nickname: String
-  let job: String
+  let role: String
+  let detailRole: String
   let workExperience: Int
   
-  public init(userId: String, nickname: String, job: String, workExperience: Int) {
-    self.userId = userId
+  public init(accessToken: String, nickname: String, role: String, detailRole: String, workExperience: Int) {
+    self.accessToken = accessToken
     self.nickname = nickname
-    self.job = job
+    self.role = role
+    self.detailRole = detailRole
     self.workExperience = workExperience
   }
 }
 
 public extension SignUpRequestDTO {
   static let mock = Self(
-    userId: "mockID",
+    accessToken: "mockID",
     nickname: "Sclass",
-    job: "developer",
+    role: "developer",
+    detailRole: "iOS developer",
     workExperience: 3
   )
 }

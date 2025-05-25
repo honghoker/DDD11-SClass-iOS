@@ -59,7 +59,7 @@ public struct ChatStore {
       case .binding:
         return .none
       case .onAppear:
-        guard let userId = keychainClient.userID
+        guard let userId = keychainClient.accessToken
         else { return .none }
         return .run { send in
           do {

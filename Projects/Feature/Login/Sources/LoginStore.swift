@@ -33,7 +33,7 @@ public struct LoginStore {
     case didTapAppleLogin
     
     case loginServer(SocialLoginInfo)
-    case loginSuccess(id: String, SocialLoginType)
+    case loginSuccess(TokenInfo, SocialLoginType)
     case loginFailure(Error)
     
     case didTapGuestLogin
@@ -43,6 +43,7 @@ public struct LoginStore {
   }
 
   @Dependency(\.socialLogin) private var socialLogin
+  @Dependency(\.loginAPIClient) private var loginAPIClient
   @Dependency(KeychainClient.self) var keychainClient
   
   public var body: some ReducerOf<Self> {
@@ -59,32 +60,42 @@ public struct LoginStore {
         return .none
         
       case .didTapKakaoLogin:
-        if (UserApi.isKakaoTalkLoginAvailable()) {
           return .run(
             operation: { send in
-              await send(.setLoading(true))
-              let info = try await socialLogin.kakaoLogin()
-              await send(.loginServer(info))
+              if (UserApi.isKakaoTalkLoginAvailable()) {
+                await send(.setLoading(true))
+                let info = try await socialLogin.kakaoLogin()
+                await send(.loginServer(info))
+              } else {
+                throw NSError()
+              }
             },
             catch: { error, send in
-              debugPrint(error)
+              debugPrint(error)        
               await send(.setLoading(false))
               await send(.loginFailure(error))
             }
           )
-        } else {
-          return .none
-        }
         
-      case let .loginServer(info):
-        // TODO: 로그인 API 호출
-        return .run { send in
-          await send(.loginSuccess(id: info.idToken, info.provider))
+      case let .loginServer(userInfo):
+        return .run { [info = userInfo] send in
+          do {
+            let loginToken = try await loginAPIClient.login(info)
+            await send(.loginSuccess(
+              loginToken,
+              info.provider
+            ))
+          } catch {
+            debugPrint(error)
+            await send(.setLoading(false))
+            await send(.loginFailure(error))
+          }
         }
         
       case let .loginSuccess(id, socialLoginType):
         return .run { [id = id, socialLoginType = socialLoginType.rawValue] send in
-          keychainClient.setUserID(id)
+          keychainClient.setAccessToken(id.accessToken)
+          keychainClient.setRefreshToken(id.refreshToken)
           keychainClient.setSocialLoginType(socialLoginType)
           await send(.setLoading(false))
         }

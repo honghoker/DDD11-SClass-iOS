@@ -11,6 +11,7 @@ class APIService<API: BaseAPI>: Requestable {
   let provider = NetworkProvider<API>()
   
   func request<T: Decodable>(api: API) async throws -> T {
+    print("request: \(String(describing: api.parameters))")
     let response = try await provider.request(api)
     
     if let httpResponse = response.response, 200 ..< 500 ~= httpResponse.statusCode {

@@ -23,19 +23,33 @@ extension OnboardingAPI: BaseAPI {
   var method: Moya.Method {
     switch self {
     case .signUp:
-      return .post
+      return .patch
     }
   }
   
   var urlPath: String {
     switch self {
     case .signUp:
-      return ""
+      return "/member"
+    }
+  }
+  
+  var headers: [String : String]? {
+    switch self {
+    case .signUp(let info):
+      NetworkEnvironment.headerFieldWithToken(info.accessToken)
     }
   }
   
   var parameters: [String: Any]? {
-    return nil
+    switch self {
+    case .signUp(let info):
+      [
+        "nickname": info.nickname,
+        "role": info.role,
+        "detailRole": info.detailRole
+      ]
+    }
   }
   
   var task: Task {

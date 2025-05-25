@@ -9,22 +9,25 @@ import Foundation
 
 public struct UserInfo: Equatable {
   public let socialType: SocialLoginType
-  public let userID: String
+  public let accessToken: String
   public let nickName: String
-  public let job: JobType
+  public let role: JobCategory
+  public let detailRole: JobType
   public let workExperience: Int
   
   public init(
     socialType: SocialLoginType,
-    userID: String,
+    accessToken: String,
     nickName: String,
-    job: JobType,
+    role: JobCategory,
+    detailRole: JobType,
     workExperience: Int
   ) {
     self.socialType = socialType
-    self.userID = userID
+    self.accessToken = accessToken
     self.nickName = nickName
-    self.job = job
+    self.role = role
+    self.detailRole = detailRole
     self.workExperience = workExperience
   }
 }
@@ -32,9 +35,10 @@ public struct UserInfo: Equatable {
 public extension UserInfo {
   static let mock = Self(
     socialType: .apple,
-    userID: "mockId",
+    accessToken: "mockId",
     nickName: "SClass",
-    job: .iOSDeveloper,
+    role: .developer,
+    detailRole: .iOSDeveloper,
     workExperience: 3
   )
 }

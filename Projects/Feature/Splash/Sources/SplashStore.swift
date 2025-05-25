@@ -64,14 +64,20 @@ public struct SplashStore {
   }
   
   private func requestFetchUser() -> Effect<Action> {
-    guard let userID = keychainClient.userID else {
+    guard let userID = keychainClient.accessToken else {
       return .send(.routeToLoginScreen)
     }
     
     return .run { [userID = userID] send in
       await send(.fetchUser(
         TaskResult {
-          try await myPageAPIClient.fetchUser(userID: userID)
+          let result = try await myPageAPIClient.fetchUser(userID: userID)
+          
+          if result.nickName.isEmpty {
+            throw NSError()
+          } else {
+            return result
+          }
         }
       ))
     }

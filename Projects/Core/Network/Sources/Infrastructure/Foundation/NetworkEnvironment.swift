@@ -23,4 +23,10 @@ extension NetworkEnvironment {
       "Content-Type": "application/json"
     ]
   }
+  
+  static func headerFieldWithToken(_ token: String) -> [String: String] {
+    var list = HTTPHeaderField.default
+    list["Authorization"] = "Bearer \(token)"
+    return list
+  }
 }

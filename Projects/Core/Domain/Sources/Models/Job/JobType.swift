@@ -7,6 +7,8 @@
 
 import Foundation
 
+
+
 public enum JobType: String, CaseIterable, Identifiable {
   case graphicDesigner
   case artDirector
@@ -75,7 +77,7 @@ public enum JobType: String, CaseIterable, Identifiable {
   }
   
   
-  public static let rootJobList = [("디자이너", designerJobList), ("개발자", developerJobList), ("기획자", plannerJobList)]
+  
   
   static let designerJobList: [Self] =
     [.graphicDesigner, .artDirector, .illustrator, .UIGUIDesigner, .UXDesigner, .productDesigner, .BIBXDesigner]

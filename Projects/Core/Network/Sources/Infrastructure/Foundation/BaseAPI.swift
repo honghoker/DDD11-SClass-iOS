@@ -16,6 +16,7 @@ enum OnboardingKitDomain {
   case chat
   case checklist
   case article
+  case login
 }
 
 extension OnboardingKitDomain {
@@ -23,17 +24,19 @@ extension OnboardingKitDomain {
   var url: String {
     switch self {
     case .onboarding:
-      return "/v1/onboarding"
+      return ""
     case .home:
       return "/v1/home"
     case .myPage:
-      return "/v1/my"
+      return ""
     case .chat:
       return "/v1/prompt"
     case .checklist:
       return "/v1/checklists"
     case .article:
       return ""
+    case .login:
+      return "/oauth"
     }
   }
 }

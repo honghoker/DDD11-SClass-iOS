@@ -29,8 +29,8 @@ struct OnboardingDetailJobBottomSheetView: View {
       )
       
       HStack(spacing: 8) {
-        if let selected = store.selectedCategory {
-          Text(selected)
+        if let selected = store.selectedRole {
+          Text(selected.rawValue)
             .notoSans(.headline)
             .foregroundStyle(.greyScale950)
         }
@@ -41,7 +41,7 @@ struct OnboardingDetailJobBottomSheetView: View {
       
       ScrollView {
         VStack(spacing: 20) {
-          ForEach(store.detailJobList ,id: \.self) { job in
+          ForEach(store.detailRoleList ,id: \.self) { job in
             cell(entity: job)
           }
         }
@@ -53,7 +53,7 @@ struct OnboardingDetailJobBottomSheetView: View {
       CommonButton(
         title: "선택 완료",
         style: .default,
-        isActive: store.isBottomSheetActive,
+        isActive: store.isValid,
         action: {
           store.send(.didTpConfirmDetailJobButton)
         }
@@ -79,7 +79,7 @@ struct OnboardingDetailJobBottomSheetView: View {
           Circle()
             .stroke(Color.greyScale200, lineWidth: 1)
             .frame(width: 24, height: 24)
-            .if(store.selectedJob == entity) {
+            .if(store.detailRole == entity) {
               $0.background(.primary600)
                 .clipShape(.circle)
             }

@@ -58,8 +58,8 @@ final class KakaoLogin {
         self.continuation = nil
         debugPrint("\(error)")
         return
-      } else if let token = OAuthToken?.idToken {
-        self.setSocialLoginData(idToken: token, nonce: nonce)
+      } else if let token = OAuthToken?.accessToken {
+        self.setSocialLoginData(accessToken: token, nonce: nonce)
         debugPrint("loginWithKakaoTalk() success., \(#function), \(#line)")
       } else {
         self.continuation?.resume(throwing: KakaoErrorType.invalidToken)
@@ -79,8 +79,8 @@ final class KakaoLogin {
         self.continuation = nil
         debugPrint("\(error)")
         return
-      } else if let token = OAuthToken?.idToken {
-        self.setSocialLoginData(idToken: token, nonce: nonce)
+      } else if let token = OAuthToken?.accessToken {
+        self.setSocialLoginData(accessToken: token, nonce: nonce)
         debugPrint("loginWithWeb() success., \(#function), \(#line)")
       } else {
         self.continuation?.resume(throwing: KakaoErrorType.invalidToken)
@@ -90,11 +90,11 @@ final class KakaoLogin {
     }
   }
   
-  private func setSocialLoginData(idToken: String, nonce: String) {
+  private func setSocialLoginData(accessToken: String, nonce: String) {
     UserApi.shared.me { User, Error in
       debugPrint(User)
     }
-    let info = SocialLoginInfo(idToken: idToken, nonce: nonce, provider: .kakao)
+    let info = SocialLoginInfo(idToken: accessToken, nonce: nonce, provider: .kakao)
     continuation?.resume(returning: info)
     continuation = nil
   }

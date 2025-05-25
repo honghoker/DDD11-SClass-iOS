@@ -105,7 +105,7 @@ public struct HomeStore {
         //        guard let userID = state.userInfo?.userID else {
         //          return .none
         //        }
-        let userID = state.userInfo?.userID ?? ""
+        let userID = state.userInfo?.accessToken ?? ""
         
         return .run { send in
           await send(.isLoadingChanged(isLoading: true))
