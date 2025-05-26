@@ -11,7 +11,7 @@ class APIService<API: BaseAPI>: Requestable {
   let provider = NetworkProvider<API>()
   
   func request<T: Decodable>(api: API) async throws -> T {
-    print("request: \(String(describing: api.parameters))")
+    print("request: \(String(describing: api.parameters)) \(api.urlPath)")
     let response = try await provider.request(api)
     
     if let httpResponse = response.response, 200 ... 500 ~= httpResponse.statusCode {
@@ -23,9 +23,8 @@ class APIService<API: BaseAPI>: Requestable {
         throw NetworkError.noData
       }
     } else {
-      let decodedError = try JSONDecoder().decode(ErrorResponse.self, from: response.data)
-      let error = decodedError.error
-      throw NetworkError.invalidResponse(statusCode: error.code, message: error.message)
+      let error = try JSONDecoder().decode(ErrorResponse.self, from: response.data)
+      throw NetworkError.invalidResponse(statusCode: error.status, message: error.error)
     }
   }
 }
