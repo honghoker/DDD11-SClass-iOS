@@ -10,7 +10,7 @@ import Foundation
 import Moya
 
 enum HomeAPI {
-  case fetchArticles(_ accessToken: String)
+  case fetchArticles
 }
 
 extension HomeAPI: BaseAPI {
@@ -32,7 +32,7 @@ extension HomeAPI: BaseAPI {
   
   var parameters: [String : Any]? {
     switch self {
-    case .fetchArticles(_):
+    case .fetchArticles:
       return [:]
     }
   }

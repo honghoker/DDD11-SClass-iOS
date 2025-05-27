@@ -34,13 +34,6 @@ extension OnboardingAPI: BaseAPI {
     }
   }
   
-  var headers: [String : String]? {
-    switch self {
-    case .signUp(let info):
-      NetworkEnvironment.headerFieldWithToken(info.accessToken)
-    }
-  }
-  
   var parameters: [String: Any]? {
     switch self {
     case .signUp(let info):

@@ -22,7 +22,7 @@ public struct LoginStore {
   @ObservableState
   public struct State {
     var isLoading = false
-    var user: UserInfo? = nil
+    @Shared(.userInfo) var userInfo: UserInfo?
     public init() { }
   }
   
@@ -40,10 +40,12 @@ public struct LoginStore {
     case setLoading(Bool)
     
     case routeToOnboardingScreen
+    case routeToMainScreen(UserInfo)
   }
 
   @Dependency(\.socialLogin) private var socialLogin
   @Dependency(\.loginAPIClient) private var loginAPIClient
+  @Dependency(\.myPageAPIClient) private var myPageAPIClient
   @Dependency(KeychainClient.self) var keychainClient
   
   public var body: some ReducerOf<Self> {
@@ -57,6 +59,10 @@ public struct LoginStore {
         return .send(.routeToOnboardingScreen)
         
       case .routeToOnboardingScreen:
+        return .none
+          
+      case .routeToMainScreen(let userInfo):
+        state.userInfo = userInfo
         return .none
         
       case .didTapKakaoLogin:
@@ -97,7 +103,14 @@ public struct LoginStore {
           keychainClient.setAccessToken(id.accessToken)
           keychainClient.setRefreshToken(id.refreshToken)
           keychainClient.setSocialLoginType(socialLoginType)
+            
+          let userInfo = try await myPageAPIClient.fetchUser()
           await send(.setLoading(false))
+          if userInfo.nickName.count != 0 {
+            await send(.routeToMainScreen(userInfo))
+          } else {
+            await send(.routeToOnboardingScreen)
+          }
         }
         
       case let .loginFailure(error):

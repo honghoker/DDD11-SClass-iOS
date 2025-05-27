@@ -12,7 +12,7 @@ import CoreDomain
 import ComposableArchitecture
 
 public struct HomeAPIClient: Sendable {
-  public var fetchArticles: @Sendable(_ accessToken: String) async throws -> [MainArticle]
+  public var fetchArticles: @Sendable() async throws -> [MainArticle]
 }
 
 public extension DependencyValues {
@@ -24,8 +24,8 @@ public extension DependencyValues {
 
 extension HomeAPIClient: DependencyKey {
   public static var liveValue: HomeAPIClient = .init(
-    fetchArticles: { accessToken in
-      let api = HomeAPI.fetchArticles(accessToken)
+    fetchArticles: {
+      let api = HomeAPI.fetchArticles
       let responseDTO: [MainArticleResponseDTO] = try await APIService<HomeAPI>().request(api: api)
       return responseDTO.map(\.toEntity)
     }

@@ -14,6 +14,7 @@ import Moya
 
 enum LoginAPI {
   case login(_ socialLoginInfo: SocialLoginInfo)
+  case refreshToken(_ refreshToken: String)
 }
 
 extension LoginAPI: BaseAPI {
@@ -25,6 +26,8 @@ extension LoginAPI: BaseAPI {
     switch self {
     case .login:
       return "/login"
+    case .refreshToken(_):
+      return "/reissue"
     }
   }
   
@@ -39,12 +42,19 @@ extension LoginAPI: BaseAPI {
         "socialType": userInfo.provider.rawValue,
         "token": userInfo.idToken
       ]
+      
+    case .refreshToken(let refreshToken):
+      return [
+        "refreshToken": refreshToken
+      ]
     }
   }
   
   var method: Moya.Method {
     switch self {
     case .login(_):
+      return .post
+    case .refreshToken(_):
       return .post
     }
   }

@@ -101,14 +101,10 @@ public struct HomeStore {
 //        
 //        state.isViewDidLoad = true
         
-        guard let accessToken = state.userInfo?.accessToken else {
-          return .none
-        }
-        
         return .run { send in
           await send(.isLoadingChanged(isLoading: true))
 //          async let checklistsReponse = try checklistAPIClient.getChecklists(accessToken: accessToken)
-          async let articlesReponse = try homeAPIClient.fetchArticles(accessToken)
+          async let articlesReponse = try homeAPIClient.fetchArticles()
           
           let (
 //            checklists,

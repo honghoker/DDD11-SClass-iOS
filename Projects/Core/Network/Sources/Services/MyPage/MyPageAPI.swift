@@ -12,7 +12,7 @@ import CoreDomain
 import Moya
 
 enum MyPageAPI {
-  case fetchUser(_ token: String)
+  case fetchUser
 }
 
 extension MyPageAPI: BaseAPI {
@@ -30,17 +30,10 @@ extension MyPageAPI: BaseAPI {
   var error: [Int : NetworkError]? {
     return nil
   }
-    
-  var headers: [String : String]? {
-    switch self {
-    case .fetchUser(let token):
-      NetworkEnvironment.headerFieldWithToken(token)
-    }
-  }
   
   var parameters: [String : Any]? {
     switch self {
-    case .fetchUser(_):
+    case .fetchUser:
       return [:]
     }
   }

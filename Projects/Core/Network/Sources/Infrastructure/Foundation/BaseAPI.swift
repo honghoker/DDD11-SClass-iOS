@@ -30,7 +30,7 @@ extension OnboardingKitDomain {
     case .myPage:
       return ""
     case .chat:
-      return "/v1/prompt"
+      return "/prompt"
     case .checklist:
       return "/checklists"
     case .article:
@@ -59,13 +59,14 @@ extension BaseAPI {
   }
   
   var validationType: ValidationType {
-    return .successCodes
+    return .customCodes(Array(200...403))
   }
   
   var headers: [String: String]? {
-    switch self {
-    default:
-      return NetworkEnvironment.HTTPHeaderField.default
+    if let accessToken = KeychainClient.liveValue.accessToken {
+      NetworkEnvironment.headerFieldWithToken(accessToken)
+    } else {
+      NetworkEnvironment.HTTPHeaderField.default
     }
   }
   

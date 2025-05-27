@@ -10,6 +10,7 @@ import Foundation
 import CoreCommon
 import CoreDomain
 import CoreNetwork
+import Shared
 
 import ComposableArchitecture
 
@@ -49,32 +50,32 @@ public struct SplashStore {
       case .fetchUser(.success(let userInfo)):
         state.userInfo = userInfo
         return .send(.routeToMainTabScreen)
-      case .fetchUser(.failure):
-        return .send(.routeToOnboardingScreen)
+      case .fetchUser(.failure(let error)):
+        if error is CommonError {
+          return .send(.routeToOnboardingScreen)
+        } else {
+          return .send(.routeToLoginScreen)
+        }
       }
     }
   }
   
   private func handleRouting(_ info: UserInfo?) -> Effect<Action> {
-    if keychainClient.isSignIn {
+    if keychainClient.isSignIn { // accessToken이 키체인이 있는 경우 api 호출
       return requestFetchUser()
-    } else {
+    } else { // accessToken이 키체인이 없는 경우 로그인으로 이동
       return .send(.routeToLoginScreen)
     } 
   }
   
   private func requestFetchUser() -> Effect<Action> {
-    guard let userID = keychainClient.accessToken else {
-      return .send(.routeToLoginScreen)
-    }
-    
-    return .run { [userID = userID] send in
+    return .run { send in
       await send(.fetchUser(
         TaskResult {
-          let result = try await myPageAPIClient.fetchUser(userID: userID)
+          let result = try await myPageAPIClient.fetchUser()
           
-          if result.nickName.isEmpty {
-            throw NSError()
+          if result.nickName.isEmpty { // 유저 정보가 없는 경우 온보딩으로 이동
+            throw CommonError.needOnboarding
           } else {
             return result
           }
