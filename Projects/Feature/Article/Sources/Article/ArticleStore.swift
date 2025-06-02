@@ -128,7 +128,7 @@ public struct ArticleStore {
 
     // MARK: - Delegate Actions(parent)
 
-    case onNaviagteToSearchArticle
+    case onNaviagteToArticleSearchInput
   }
 
   // MARK: - Dependencies
@@ -266,7 +266,7 @@ public struct ArticleStore {
         return .none
 
       case .didTapSearchButton:
-        return .send(.onNaviagteToSearchArticle)
+        return .send(.onNaviagteToArticleSearchInput)
 
       case .didTapSortButton(let globalFrame):
         if state.sortContextMenu.isPresented {

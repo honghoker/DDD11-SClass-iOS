@@ -57,4 +57,6 @@ public extension Image {
   static let copyLink: Self = ImageAsset.copyLink.swiftUIImage
   static let search: Self = ImageAsset.search.swiftUIImage
   static let order: Self = ImageAsset.order.swiftUIImage
+  static let diagonalCross: Self = ImageAsset.diagonalCross.swiftUIImage
+  static let diagonalCrossCircle: Self = ImageAsset.diagonalCrossCircle.swiftUIImage
 }

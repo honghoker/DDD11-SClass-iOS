@@ -22,8 +22,8 @@ public struct ArticleRootView: View {
       ArticleView(store: store.scope(state: \.article, action: \.article))
     } destination: { store in
       switch store.case {
-      case .searchArticle(let store):
-        SearchArticleView(store: store)
+      case .articleSearchInput(let store):
+        ArticleSearchInputView(store: store)
           .navigationBarBackButtonHidden()
       }
     }
