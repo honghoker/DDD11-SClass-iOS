@@ -18,6 +18,7 @@ public struct ArticleRootStore {
     var path = StackState<Path.State>()
     var article: ArticleStore.State = .init()
     var articleSearchInput: ArticleSearchInputStore.State?
+    var articleSearchResults: ArticleSearchResultsStore.State?
 
     public init() {}
   }
@@ -27,11 +28,13 @@ public struct ArticleRootStore {
     case path(StackActionOf<Path>)
     case article(ArticleStore.Action)
     case articleSearchInput(ArticleSearchInputStore.Action)
+    case articleSearchResults(ArticleSearchResultsStore.Action)
   }
 
   @Reducer
   public enum Path {
     case articleSearchInput(ArticleSearchInputStore)
+    case articleSearchResults(ArticleSearchResultsStore)
   }
 
   public var body: some ReducerOf<Self> {
@@ -55,11 +58,8 @@ public struct ArticleRootStore {
           return .none
         }
 
-      case .articleSearchInput(let action):
-        switch action {
-        default:
-          return .none
-        }
+      default:
+        return .none
       }
     }
     .forEach(\.path, action: \.path)
@@ -79,7 +79,11 @@ public struct ArticleRootStore {
       return .none
 
     case .element(id: _, action: .articleSearchInput(.onSearchSubmit(let searchTerm))):
-      // TODO: - 아티클 검색 결과 View로 이동
+      state.path.append(.articleSearchResults(.init(searchTerms: searchTerm)))
+      return .none
+
+    case .element(id: _, action: .articleSearchResults(.didTapBackButton)):
+      state.path.removeLast()
       return .none
 
     default:

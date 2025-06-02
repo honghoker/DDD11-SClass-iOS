@@ -25,6 +25,10 @@ public struct ArticleRootView: View {
       case .articleSearchInput(let store):
         ArticleSearchInputView(store: store)
           .navigationBarBackButtonHidden()
+
+      case .articleSearchResults(let store):
+        ArticleSearchResultsView(store: store)
+          .navigationBarBackButtonHidden()
       }
     }
   }
