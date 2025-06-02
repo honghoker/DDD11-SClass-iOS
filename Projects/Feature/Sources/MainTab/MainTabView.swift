@@ -30,6 +30,7 @@ public struct MainTabView: View {
         )
       }
     }
+    .ignoresSafeArea(.keyboard, edges: .bottom)
   }
 }
 
