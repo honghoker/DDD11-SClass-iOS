@@ -86,6 +86,7 @@ public struct ArticleStore {
     var selectedShareArticleId: Int? = nil
 
     var sortContextMenu: ContextMenuState = .init()
+    var sortType: ArticleSortType = .latest
 
     var isShareSheetPresented: Bool = false
     @ObservationStateIgnored
@@ -119,8 +120,12 @@ public struct ArticleStore {
     case didTapSearchButton
     case didTapSortButton(globalFrame: CGRect)
     case didTapLatestSortButton
-    case didTapPopularitySortButton
+    case didTapPopularSortButton
     case didTapSubcategoryButton(ArticleSubcategory)
+
+    // MARK: - Async Action
+
+    case fetchArticles
 
     // MARK: - Internal Actions
 
@@ -139,13 +144,22 @@ public struct ArticleStore {
     Reduce { state, action in
       switch action {
       case .onAppear:
+        return .send(.fetchArticles)
+
+      case .fetchArticles:
+        let request: ArticleSearchRequest = .init(
+          category: state.selectedCategory,
+          subcategory: state.selectedSubcategory,
+          sortBy: state.sortType
+        )
+
         return .run { send in
           do {
             try await withDependencies {
               // FIXME: - API 연동 후 코드 제거
               $0.articleAPIClient = .testValue
             } operation: {
-              let articles = try await articleAPIClient.fetchArticles()
+              let articles = try await articleAPIClient.fetchArticles(request)
               await send(.onCompleteFetchArticles(.success(articles)))
             }
           } catch {
@@ -184,10 +198,7 @@ public struct ArticleStore {
         state.selectedCategory = category
         state.selectedSubcategory = subcategory
         state.articleHeaderTitle = state.subcategorySheet.description
-
-        return .run { send in
-          // TODO: - 선택한 직무와 세부직무 기준으로 아티클 API 호출
-        }
+        return .send(.fetchArticles)
 
       case .presentSubcategorySheet(let category):
         let previousSubcategory: ArticleSubcategory?
@@ -277,14 +288,19 @@ public struct ArticleStore {
         return .none
 
       case .didTapLatestSortButton:
-        state.articles.sort(by: { $0.postDate > $1.postDate })
+        state.sortType = .latest
         state.sortContextMenu.dismiss()
-        return .none
+        return .send(.fetchArticles)
 
-      case .didTapPopularitySortButton:
-        state.articles.sort(by: { $0.views > $1.views })
+      case .didTapPopularSortButton:
+        state.sortType = .popular
         state.sortContextMenu.dismiss()
-        return .none
+        let request: ArticleSearchRequest = .init(
+          category: state.selectedCategory,
+          subcategory: state.selectedSubcategory,
+          sortBy: state.sortType
+        )
+        return .send(.fetchArticles)
 
       default:
         return .none

@@ -91,14 +91,14 @@ public struct ArticleSearchResultsStore {
       switch action {
 
       case .onAppear:
-        return .run { send in
+        return .run { [searchTerms = state.searchTerms] send in
           do {
             try await withDependencies {
               // FIXME: - API 연동 후 코드 제거
               $0.articleAPIClient = .testValue
             } operation: {
-              // TODO: - 검색어 추가(SearchDTO)
-              let articles = try await articleAPIClient.fetchArticles()
+              let request: ArticleSearchRequest = .init(title: searchTerms)
+              let articles = try await articleAPIClient.fetchArticles(request)
               await send(.onCompleteFetchArticles(.success(articles)))
             }
           } catch {

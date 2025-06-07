@@ -9,9 +9,7 @@ import Foundation
 
 import CoreDomain
 
-public struct ArticlesResponseDTO: Decodable {
-  let articles: [ArticleResponseDTO]
-}
+typealias ArticlesResponseDTO = [ArticleResponseDTO]
 
 public struct ArticleResponseDTO: Decodable {
   public let id: Int

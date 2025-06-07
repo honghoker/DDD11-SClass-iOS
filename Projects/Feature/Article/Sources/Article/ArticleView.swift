@@ -76,7 +76,7 @@ public struct ArticleView: View {
           icon: nil,
           title: "인기순",
           action: {
-            store.send(.didTapPopularitySortButton)
+            store.send(.didTapPopularSortButton)
           }
         )
       ],

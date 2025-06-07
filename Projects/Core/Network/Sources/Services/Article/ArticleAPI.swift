@@ -10,7 +10,7 @@ import Foundation
 import Moya
 
 enum ArticleAPI {
-  case fetchArticles
+  case fetchArticles(_ dto: ArticleSearchRequestDTO)
 }
 
 extension ArticleAPI: BaseAPI {
@@ -31,8 +31,8 @@ extension ArticleAPI: BaseAPI {
 
   var parameters: [String : Any]? {
     switch self {
-    case .fetchArticles:
-      return nil
+    case .fetchArticles(let dto):
+      return ["searchDTO": dto]
     }
   }
 

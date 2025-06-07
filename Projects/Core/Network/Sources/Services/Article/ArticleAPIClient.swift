@@ -13,7 +13,7 @@ import ComposableArchitecture
 
 public struct ArticleAPIClient: Sendable {
   @DependencyEndpoint
-  public var fetchArticles: @Sendable () async throws -> [Article]
+  public var fetchArticles: @Sendable (_ request: ArticleSearchRequest) async throws -> [Article]
 }
 
 public extension DependencyValues {
@@ -25,15 +25,22 @@ public extension DependencyValues {
 
 extension ArticleAPIClient: DependencyKey {
   public static var liveValue: ArticleAPIClient = .init(
-    fetchArticles: {
-      let api = ArticleAPI.fetchArticles
+    fetchArticles: { reqeust in
+      let api = ArticleAPI.fetchArticles(
+        .init(
+          category: reqeust.category?.rawValue,
+          subcategory: reqeust.subcategory?.rawValue,
+          title: reqeust.title,
+          sortBy: reqeust.sortBy?.rawValue
+        )
+      )
       let responseDTO: ArticlesResponseDTO = try await APIService<ArticleAPI>().request(api: api)
-      return responseDTO.articles.map(\.toEntity)
+      return responseDTO.map(\.toEntity)
     }
   )
   
   public static var testValue: ArticleAPIClient = .init(
-    fetchArticles: {
+    fetchArticles: { _ in
       return Article.mockArticles
     }
   )
