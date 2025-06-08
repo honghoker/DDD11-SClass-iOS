@@ -38,6 +38,8 @@ public struct ArticleSearchResultsStore {
   @ObservableState
   public struct State {
     let searchTerms: String
+    var isFetching: Bool = true
+
     var articles: IdentifiedArrayOf<Article> = []
 
     var selectedArticle: Article? = nil
@@ -77,12 +79,13 @@ public struct ArticleSearchResultsStore {
 
     // MARK: - Internal Actions
 
-    case onCompleteFetchArticles(Result<[Article], Never>)
+    case onCompleteFetchArticles(Result<[Article], Error>)
   }
 
   // MARK: - Dependencies
 
   @Dependency(ArticleAPIClient.self) private var articleAPIClient
+  @Dependency(\.continuousClock) private var clock
 
   public var body: some ReducerOf<Self> {
     BindingReducer()
@@ -92,18 +95,14 @@ public struct ArticleSearchResultsStore {
 
       case .onAppear:
         return .run { [searchTerms = state.searchTerms] send in
-          do {
-            try await withDependencies {
-              // FIXME: - API 연동 후 코드 제거
-              $0.articleAPIClient = .testValue
-            } operation: {
-              let request: ArticleSearchRequest = .init(title: searchTerms)
-              let articles = try await articleAPIClient.fetchArticles(request)
-              await send(.onCompleteFetchArticles(.success(articles)))
+          let request: ArticleSearchRequest = .init(title: searchTerms)
+
+          try? await clock.sleep(for: .seconds(0.5))
+          await send(.onCompleteFetchArticles(
+            Result {
+              try await articleAPIClient.fetchArticles(request)
             }
-          } catch {
-            debugPrint("@@@@@ fetch Article Error: \(error)")
-          }
+          ))
         }
 
       case .binding:
@@ -173,7 +172,10 @@ public struct ArticleSearchResultsStore {
         switch result {
         case .success(let articles):
           state.articles = .init(uniqueElements: articles)
+        case .failure(let error):
+          debugPrint("Article Search Error: \(error)")
         }
+        state.isFetching = false
         return .none
       }
     }

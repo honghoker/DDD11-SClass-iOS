@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+import CoreCommon
 import SharedDesignSystem
 import SharedUtils
 
@@ -23,11 +24,7 @@ struct ArticleSearchResultsView: View {
   var body: some View {
     VStack(alignment: .leading, spacing: 16) {
       navigationBar
-      if store.articles.isEmpty {
-        articleEmptyView
-      } else {
-        articleList
-      }
+      contentView
     }
     .contextMenu(
       isPresented: store.shareContextMenu.isPresented,
@@ -68,7 +65,25 @@ struct ArticleSearchResultsView: View {
       }
     }
   }
-  
+
+  @ViewBuilder
+  private var contentView: some View {
+    if store.isFetching {
+      skeletonView
+    } else if store.articles.isEmpty {
+      articleEmptyView
+    } else {
+      articleList
+    }
+  }
+
+  private var skeletonView: some View {
+    GeometryReader { geometry in
+      SkeletonArticleListView(width: geometry.size.width)
+        .padding(.horizontal, 16)
+    }
+  }
+
   private var navigationBar: some View {
     HStack(spacing: .zero) {
       Button(action: {
