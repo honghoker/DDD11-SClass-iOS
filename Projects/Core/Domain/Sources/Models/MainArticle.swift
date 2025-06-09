@@ -8,7 +8,7 @@
 import Foundation
 
 public struct MainArticle: Identifiable, Equatable {
-  public var id: String { url + title }
+  public let id: String
   
   public let category: String
   public let title: String
@@ -31,5 +31,6 @@ public struct MainArticle: Identifiable, Equatable {
     self.postDate = postDate
     self.thumbnailURL = thumbnailURL
     self.url = url
+    self.id = url + title
   }
 }
