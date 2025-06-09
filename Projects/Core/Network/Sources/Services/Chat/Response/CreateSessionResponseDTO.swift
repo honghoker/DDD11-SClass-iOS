@@ -9,33 +9,22 @@ import Foundation
 import CoreDomain
 
 public struct CreateSessionResponseDTO: Decodable {
-  let sessionId: String
+  let id: String
   let createdAt: String
-  let userId: String
-  let messages: [MessageResponseDTO]
 
   
-  public init(sessionId: String, createdAt: String, userId: String, messages: [MessageResponseDTO]) {
-    self.sessionId = sessionId
+  public init(id: String, createdAt: String) {
+    self.id = id
     self.createdAt = createdAt
-    self.userId = userId
-    self.messages = messages
   }
-  
-  enum CodingKeys : String, CodingKey{
-    case userId = "user_id"
-    case sessionId = "session_id"
-    case createdAt = "created_at"
-    case messages
- }
   
 }
 extension CreateSessionResponseDTO {
   var toEntity: ChatSession {
     .init(
-      sessionId: self.sessionId,
+      sessionId: self.id,
       createdAt: self.createdAt,
-      messages: self.messages.map { $0.toEntity }
+      messages: []
     )
   }
 }

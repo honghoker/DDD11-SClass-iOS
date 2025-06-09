@@ -19,12 +19,6 @@ public struct MessageResponseDTO: Decodable {
     self.timestamp = timestamp
   }
   
-  enum CodingKeys : String, CodingKey{
-    case messageText = "message_text"
-    case isUser = "is_user"
-    case timestamp = "timestamp"
- }
-  
 }
 
 extension MessageResponseDTO {

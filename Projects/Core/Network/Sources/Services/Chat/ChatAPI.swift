@@ -39,9 +39,9 @@ extension ChatAPI: BaseAPI {
     case .createSession:
       return "/session"
     case .sendMessage( _, let sessionId):
-      return "/\(sessionId)/messages/"
+      return "/\(sessionId)/messages"
     case .getMessage(let sessionId):
-      return "/\(sessionId)/messages/"
+      return "/\(sessionId)/messages"
       
     }
   }
@@ -49,9 +49,7 @@ extension ChatAPI: BaseAPI {
   var parameters: [String: Any]? {
     switch self {
     case .createSession(let id):
-      return [
-        "userId": id
-      ]
+        return [:]
     case .sendMessage(let dto, _):
       return [
         "message": dto.message
