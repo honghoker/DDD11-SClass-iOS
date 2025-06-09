@@ -14,7 +14,7 @@ import Moya
 
 @DependencyClient
 public struct MyPageAPIClient {
-  public var fetchUser: @Sendable(_ userID: String) async throws -> UserInfo
+  public var fetchUser: @Sendable() async throws -> UserInfo
 }
 
 public extension DependencyValues {
@@ -26,8 +26,8 @@ public extension DependencyValues {
 
 extension MyPageAPIClient: DependencyKey {
   public static var liveValue: MyPageAPIClient = .init(
-    fetchUser: { userID in
-      let api = MyPageAPI.fetchUser(userID)
+    fetchUser: {
+      let api = MyPageAPI.fetchUser
       let responseDTO: UserInfoResponseDTO = try await APIService<MyPageAPI>().request(api: api)
       return responseDTO.toDomain()
     }

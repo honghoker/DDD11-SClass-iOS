@@ -13,7 +13,7 @@ import Moya
 
 enum ChecklistAPI {
   /// 목록 조회
-  case getChecklists(userID: String)
+  case getChecklists
   /// 상세 조회
   case getChecklist(id: String)
   /// 체크리스트 프로젝트 삭제
@@ -69,13 +69,12 @@ extension ChecklistAPI: BaseAPI {
       return "/\(checklistId)/checkboxes/\(id)/completed"
     }
   }
+
   
   var parameters: [String: Any]? {
     switch self {
-    case .getChecklists(let userID):
-      return [
-        "userId": userID
-      ]
+    case .getChecklists:
+      return nil
       
     case .getChecklist:
       return nil

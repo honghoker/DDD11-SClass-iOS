@@ -28,14 +28,15 @@ extension OnboardingAPIClient: DependencyKey {
   public static var liveValue: OnboardingAPIClient = .init(
     postSignUp: { userInfo in
       let signUpRequestDTO: SignUpRequestDTO = .init(
-        userId: userInfo.userID,
+        accessToken: userInfo.accessToken,
         nickname: userInfo.nickName,
-        job: userInfo.job.rawValue,
+        role: userInfo.role.rawValue,
+        detailRole: userInfo.detailRole.rawValue,
         workExperience: userInfo.workExperience
       )
       
       let api = OnboardingAPI.signUp(signUpRequestDTO)      
-      let responseDTO: EmptyResponseDTO = try await APIService<OnboardingAPI>().request(api: api)
+      let responseDTO: String = try await APIService<OnboardingAPI>().request(api: api)
     }
   )
   

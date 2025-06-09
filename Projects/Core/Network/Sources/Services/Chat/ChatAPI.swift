@@ -19,15 +19,6 @@ enum ChatAPI {
 
 extension ChatAPI: BaseAPI {
   
-  var baseURL: URL {
-    guard let value = Bundle.main.infoDictionary?["chatBaseURL"] as? String,
-          let url = URL(string: value)
-    else {
-      fatalError("Base URL is not set in plist for this configuration.")
-    }
-    return url
-  }
-  
   var domain: OnboardingKitDomain {
     return .chat
   }
@@ -46,7 +37,7 @@ extension ChatAPI: BaseAPI {
   var urlPath: String {
     switch self {
     case .createSession:
-      return "/"
+      return "/session"
     case .sendMessage( _, let sessionId):
       return "/\(sessionId)/messages/"
     case .getMessage(let sessionId):

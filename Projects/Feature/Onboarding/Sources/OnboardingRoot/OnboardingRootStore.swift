@@ -22,7 +22,8 @@ public struct OnboardingRootStore {
     @Shared(.userInfo) var userInfo: UserInfo?
     var path: StackState<Path.State> = .init()
     var nickname: String?
-    var selectedJob: JobType?
+    var role: JobCategory?
+    var detailRole: JobType?
     var workExperience: Int?
     public init() { }
   }
@@ -94,8 +95,9 @@ public struct OnboardingRootStore {
       state.path.removeLast()
       return .none
       
-    case .element(id: _, action: .job(.navigateToNextPage(let selectedJob))):
-      state.selectedJob = selectedJob
+    case .element(id: _, action: .job(.navigateToNextPage(role: let selectedRole, detailRole: let detailRole))):
+      state.role = selectedRole
+      state.detailRole = detailRole
       state.path.append(.workExperience(OnboardingWorkExperienceStore.State()))
       return .none
       
@@ -120,9 +122,10 @@ public struct OnboardingRootStore {
     // TODO: 요청 시 로딩 화면 이동
     
     guard let nickname = state.nickname,
-          let job = state.selectedJob,
+          let role = state.role,
+          let detailRole = state.detailRole,
           let workExperience = state.workExperience,
-          let userID = keychainClient.userID,
+          let accessToken = keychainClient.accessToken,
           let socialLoginType = keychainClient.socialLoginType
     else {
       return .none
@@ -130,16 +133,17 @@ public struct OnboardingRootStore {
     
     let userInfo: UserInfo = .init(
       socialType: socialLoginType,
-      userID: userID,
+      accessToken: accessToken,
       nickName: nickname,
-      job: job,
+      role: role,
+      detailRole: detailRole,
       workExperience: workExperience
     )
     
     return .run { [userInfo = userInfo] send in
       do {
         try await onboardingAPIClient.postSignUp(userInfo)
-        keychainClient.setUserID(userID)
+        keychainClient.setAccessToken(accessToken)
         await send(.onCompleteSetting(.success((userInfo))))
       } catch {
         // TODO: 회원가입 API 에러 처리

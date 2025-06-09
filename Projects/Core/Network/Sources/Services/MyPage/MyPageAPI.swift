@@ -12,7 +12,7 @@ import CoreDomain
 import Moya
 
 enum MyPageAPI {
-  case fetchUser(_ userID: String)
+  case fetchUser
 }
 
 extension MyPageAPI: BaseAPI {
@@ -23,7 +23,7 @@ extension MyPageAPI: BaseAPI {
   var urlPath: String {
     switch self {
     case .fetchUser:
-      return ""
+      return "/member/me"
     }
   }
   
@@ -33,10 +33,8 @@ extension MyPageAPI: BaseAPI {
   
   var parameters: [String : Any]? {
     switch self {
-    case .fetchUser(let userID):
-      return [
-        "userId": userID
-      ]
+    case .fetchUser:
+      return [:]
     }
   }
   

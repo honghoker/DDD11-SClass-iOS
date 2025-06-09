@@ -46,11 +46,11 @@ public struct RootStore {
         state = .mainTab(.init(.home))
         return .none
           
-      case .splash(.routeToOnboardingScreen), .login(.routeToOnboardingScreen), .login(.loginSuccess(_,_)):
+      case .splash(.routeToOnboardingScreen), .login(.routeToOnboardingScreen):
         state = .onboarding(OnboardingRootStore.State())
         return .none
     
-      case .onboarding(.onSuccessSignUp):
+      case .onboarding(.onSuccessSignUp), .login(.routeToMainScreen):
         state = .mainTab(.init(.home))
         return .none
       

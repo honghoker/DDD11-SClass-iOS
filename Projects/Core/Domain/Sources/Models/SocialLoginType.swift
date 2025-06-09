@@ -8,6 +8,6 @@
 import Foundation
 
 public enum SocialLoginType: String {
-  case kakao = "Kakao"
-  case apple = "Apple"
+  case kakao = "kakao"
+  case apple = "apple"
 }

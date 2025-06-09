@@ -14,4 +14,6 @@ enum NetworkError: Error {
   case invalidResponse(statusCode: Int, message: String)
   case noData
   case decodingError(Error)
+  case tokenRefreshFailed
+  case unknownError
 }

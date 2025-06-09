@@ -16,6 +16,7 @@ enum OnboardingKitDomain {
   case chat
   case checklist
   case article
+  case login
 }
 
 extension OnboardingKitDomain {
@@ -23,17 +24,19 @@ extension OnboardingKitDomain {
   var url: String {
     switch self {
     case .onboarding:
-      return "/v1/onboarding"
+      return ""
     case .home:
-      return "/v1/home"
+      return "/main"
     case .myPage:
-      return "/v1/my"
+      return ""
     case .chat:
-      return "/v1/prompt"
+      return "/prompt"
     case .checklist:
-      return "/v1/checklists"
+      return "/checklists"
     case .article:
       return ""
+    case .login:
+      return "/oauth"
     }
   }
 }
@@ -56,13 +59,14 @@ extension BaseAPI {
   }
   
   var validationType: ValidationType {
-    return .successCodes
+    return .customCodes(Array(200...403))
   }
   
   var headers: [String: String]? {
-    switch self {
-    default:
-      return NetworkEnvironment.HTTPHeaderField.default
+    if let accessToken = KeychainClient.liveValue.accessToken {
+      NetworkEnvironment.headerFieldWithToken(accessToken)
+    } else {
+      NetworkEnvironment.HTTPHeaderField.default
     }
   }
   

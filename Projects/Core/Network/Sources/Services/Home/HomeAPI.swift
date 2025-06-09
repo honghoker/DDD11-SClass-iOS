@@ -10,7 +10,7 @@ import Foundation
 import Moya
 
 enum HomeAPI {
-  case fetchArticles(_ userID: String)
+  case fetchArticles
 }
 
 extension HomeAPI: BaseAPI {
@@ -25,16 +25,15 @@ extension HomeAPI: BaseAPI {
     }
   }
   
+  
   var error: [Int : NetworkError]? {
     return nil
   }
   
   var parameters: [String : Any]? {
     switch self {
-    case .fetchArticles(let userID):
-      return [
-        "userId": userID
-      ]
+    case .fetchArticles:
+      return [:]
     }
   }
   

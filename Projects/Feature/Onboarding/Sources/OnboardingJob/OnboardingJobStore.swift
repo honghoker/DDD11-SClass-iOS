@@ -17,30 +17,26 @@ public struct OnboardingJobStore {
   
   @ObservableState
   public struct State {
-    var selectedCategory: String? = nil
-    var detailJobList: [JobType] = []
     
     var isValid: Bool {
-      selectedCategory != nil && confirmDetailJob != nil
+      selectedRole != nil && detailRole != nil
     }
     
     var showModal: Bool = false
-    var selectedJob: JobType?
-    var confirmDetailJob: JobType?
-    
-    var isBottomSheetActive: Bool {
-      selectedJob != nil && selectedJob != confirmDetailJob
-    }
+    var selectedRole: JobCategory?
+    var detailRoleList: [JobType] = []
+    var detailRole: JobType?
+  
     
     public init() { }
   }
   
   public enum Action: BindableAction {
     case binding(BindingAction<State>)
-    case didTapJobButton(String, [JobType])
+    case didTapJobButton(JobCategory, [JobType])
     case didTapBackButton
     case didTapNextButton
-    case navigateToNextPage(selectedJob: JobType)
+    case navigateToNextPage(role: JobCategory, detailRole: JobType)
     case navigateToPreviousPage
     
     
@@ -54,34 +50,34 @@ public struct OnboardingJobStore {
     Reduce { state, action in
       switch action {
       case .didTapJobButton(let jobType, let detailJobList):
-        state.selectedCategory = jobType
-        state.detailJobList = detailJobList
+        state.selectedRole = jobType
+        state.detailRoleList = detailJobList
         state.showModal = true
         return .none
       case .didTapNextButton:
-        guard let selectedJob = state.confirmDetailJob else {
+        guard let role = state.selectedRole,
+          let detailRole = state.detailRole else {
           return .none
         }
-        return .send(.navigateToNextPage(selectedJob: selectedJob))
+        return .send(.navigateToNextPage(role: role, detailRole: detailRole))
       case .didTapBackButton:
         return .send(.navigateToPreviousPage)
       case .didTapDismissButton:
-        if state.selectedJob == nil {
-          state.selectedCategory = nil
+        if state.selectedRole == nil {
+          state.selectedRole = nil
         } else {
-          if state.confirmDetailJob == nil {
-            state.selectedCategory = nil
+          if state.detailRole == nil {
+            state.selectedRole = nil
           }
-          state.selectedJob = state.confirmDetailJob
         }
         state.showModal = false
         return .none
       case .didTpConfirmDetailJobButton:
-        state.confirmDetailJob = state.selectedJob
+//        state.detailRole = state.selectedJob
         state.showModal = false
         return .none
       case .didTapDetailJob(let job):
-        state.selectedJob = job
+        state.detailRole = job
         return .none
       default:
         return .none

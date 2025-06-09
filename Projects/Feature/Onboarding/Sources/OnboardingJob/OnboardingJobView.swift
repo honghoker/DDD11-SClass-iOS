@@ -45,10 +45,10 @@ struct OnboardingJobView: View {
       .padding(.top, 81)
       
       HStack(spacing: 10) {
-        ForEach(JobType.rootJobList, id: \.0) { job in
+        ForEach(JobCategory.rootJobList, id: \.0) { job in
           Chip(
-            title: job.0,
-            style: job.0 == store.selectedCategory ? .blue : .default,
+            title: job.0.rawValue,
+            style: job.0 == store.selectedRole  ? .blue : .default,
             onTap: {
               store.send(.didTapJobButton(job.0, job.1))
             }

@@ -13,7 +13,8 @@ import ComposableArchitecture
 import KeychainAccess
 
 private enum KeychainKey {
-  static let userID = "userID"
+  static let accessToken = "accessToken"
+  static let refreshToken = "refreshToken"
   static let socialLoginType = "socialLoginType"
 }
 
@@ -38,12 +39,20 @@ extension KeychainClient {
 }
 
 extension KeychainClient {
-  public var userID: String? {
-    return getString(for: KeychainKey.userID)
+  public var accessToken: String? {
+    return getString(for: KeychainKey.accessToken)
   }
   
-  public func setUserID(_ udid: String) {
-    setString(udid, for: KeychainKey.userID)
+  public func setAccessToken(_ accessToken: String) {
+    setString(accessToken, for: KeychainKey.accessToken)
+  }
+  
+  public var refreshToken: String? {
+    return getString(for: KeychainKey.refreshToken)
+  }
+  
+  public func setRefreshToken(_ refreshToken: String) {
+    setString(refreshToken, for: KeychainKey.refreshToken)
   }
   
   public var socialLoginType: SocialLoginType? {
@@ -57,11 +66,11 @@ extension KeychainClient {
   }
   
   public var isSignIn: Bool {
-    return getString(for: KeychainKey.userID) != nil && socialLoginType != nil
+    return getString(for: KeychainKey.accessToken) != nil && socialLoginType != nil
   }
   
   public func signOut() {
-    removeString(for: KeychainKey.userID)
+    removeString(for: KeychainKey.accessToken)
     removeString(for: KeychainKey.socialLoginType)
   }
 }

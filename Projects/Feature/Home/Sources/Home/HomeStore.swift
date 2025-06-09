@@ -95,34 +95,27 @@ public struct HomeStore {
         return .none
         
       case .onAppear:
-        guard !state.isViewDidLoad else {
-          return .none
-        }
-        
-        state.isViewDidLoad = true
-        
-        // TODO: - API 연동 후 수정
-        //        guard let userID = state.userInfo?.userID else {
-        //          return .none
-        //        }
-        let userID = state.userInfo?.userID ?? ""
+//        guard !state.isViewDidLoad else {
+//          return .none
+//        }
+//        
+//        state.isViewDidLoad = true
         
         return .run { send in
           await send(.isLoadingChanged(isLoading: true))
-          //          async let checklistsReponse = try checklistAPIClient.getChecklists(userID: userID)
-          //          async let articlesReponse = try homeAPIClient.fetchArticles(userID)
+//          async let checklistsReponse = try checklistAPIClient.getChecklists(accessToken: accessToken)
+          async let articlesReponse = try homeAPIClient.fetchArticles()
           
           let (
-            checklists
-          //            articles
+//            checklists,
+            articles
           ) = try await (
-            [Checklist.mock1, Checklist.mock2]
-            //            checklistsReponse,
-            //            articlesReponse
+//             checklistsReponse,
+             articlesReponse
           )
           
-          await send(.setCards(checklists))
-          //          await send(.setArticles(articles))
+//          await send(.setCards(checklists))
+          await send(.setArticles(articles))
           await send(.isLoadingChanged(isLoading: false))
         } catch: { error, send in
           print(error)
