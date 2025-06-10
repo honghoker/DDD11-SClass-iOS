@@ -70,6 +70,7 @@ public struct ArticleStore {
 
   @ObservableState
   public struct State {
+    var isFetching: Bool = true
     let categories: [ArticleCategory] = ArticleCategory.allCases
     var articleHeaderTitle: String = ArticleCategory.all.headerTitle
     var articles: IdentifiedArrayOf<Article> = []
@@ -118,9 +119,8 @@ public struct ArticleStore {
     case didTapArticle(article: Article)
     case didTapArticleExitButton
     case didTapSearchButton
-    case didTapSortButton(globalFrame: CGRect)
-    case didTapLatestSortButton
-    case didTapPopularSortButton
+    case didTapSortPopupButton(globalFrame: CGRect)
+    case didTapSortButton(ArticleSortType)
     case didTapSubcategoryButton(ArticleSubcategory)
 
     // MARK: - Async Action
@@ -129,7 +129,7 @@ public struct ArticleStore {
 
     // MARK: - Internal Actions
 
-    case onCompleteFetchArticles(Result<[Article], Never>)
+    case onCompleteFetchArticles(Result<[Article], Error>)
 
     // MARK: - Delegate Actions(parent)
 
@@ -154,24 +154,21 @@ public struct ArticleStore {
         )
 
         return .run { send in
-          do {
-            try await withDependencies {
-              // FIXME: - API 연동 후 코드 제거
-              $0.articleAPIClient = .testValue
-            } operation: {
-              let articles = try await articleAPIClient.fetchArticles(request)
-              await send(.onCompleteFetchArticles(.success(articles)))
+          await send(.onCompleteFetchArticles(
+            Result {
+              try await articleAPIClient.fetchArticles(request: request)
             }
-          } catch {
-            debugPrint("@@@@@ fetch Article Error: \(error)")
-          }
+          ))
         }
 
       case .onCompleteFetchArticles(let result):
         switch result {
         case .success(let articles):
           state.articles = .init(uniqueElements: articles)
+        case .failure(let error):
+          debugPrint("Article Search Error: \(error)")
         }
+        state.isFetching = false
         return .none
 
       case .didTapCategoryButton(let category):
@@ -279,7 +276,7 @@ public struct ArticleStore {
       case .didTapSearchButton:
         return .send(.onNaviagteToArticleSearchInput)
 
-      case .didTapSortButton(let globalFrame):
+      case .didTapSortPopupButton(let globalFrame):
         if state.sortContextMenu.isPresented {
           state.sortContextMenu.dismiss()
         } else {
@@ -287,19 +284,12 @@ public struct ArticleStore {
         }
         return .none
 
-      case .didTapLatestSortButton:
-        state.sortType = .latest
+      case .didTapSortButton(let sortType):
         state.sortContextMenu.dismiss()
-        return .send(.fetchArticles)
-
-      case .didTapPopularSortButton:
-        state.sortType = .popular
-        state.sortContextMenu.dismiss()
-        let request: ArticleSearchRequest = .init(
-          category: state.selectedCategory,
-          subcategory: state.selectedSubcategory,
-          sortBy: state.sortType
-        )
+        guard state.sortType != sortType else {
+          return .none
+        }
+        state.sortType = sortType
         return .send(.fetchArticles)
 
       default:

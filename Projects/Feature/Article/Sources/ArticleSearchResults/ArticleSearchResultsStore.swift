@@ -100,7 +100,7 @@ public struct ArticleSearchResultsStore {
           try? await clock.sleep(for: .seconds(0.5))
           await send(.onCompleteFetchArticles(
             Result {
-              try await articleAPIClient.fetchArticles(request)
+              try await articleAPIClient.fetchArticles(request: request)
             }
           ))
         }

@@ -31,11 +31,7 @@ public struct ArticleView: View {
         }
       )
 
-      VStack(alignment: .leading, spacing: 14) {
-        categoryButtons
-
-        articleList
-      }
+      contentView
     }
     .contextMenu(
       isPresented: store.shareContextMenu.isPresented,
@@ -69,14 +65,14 @@ public struct ArticleView: View {
           icon: nil,
           title: "최신순",
           action: {
-            store.send(.didTapLatestSortButton)
+            store.send(.didTapSortButton(.latest))
           }
         ),
         .init(
           icon: nil,
           title: "인기순",
           action: {
-            store.send(.didTapPopularSortButton)
+            store.send(.didTapSortButton(.popular))
           }
         )
       ],
@@ -126,6 +122,29 @@ public struct ArticleView: View {
     }
   }
 
+  private var contentView: some View {
+    VStack(alignment: .leading, spacing: 14) {
+      categoryButtons
+
+      if store.isFetching {
+        skeletonView
+      } else {
+        articleList
+      }
+    }
+  }
+
+  private var skeletonView: some View {
+    GeometryReader { geometry in
+      VStack(alignment: .leading, spacing: 18) {
+        SkeletonRectangleView(width: 138, height: 24)
+        SkeletonArticleListView(width: geometry.size.width)
+      }
+      .padding(.top, 22)
+      .padding(.horizontal, 16)
+    }
+  }
+
   private var categoryButtons: some View {
     HStack(spacing: 6) {
       ForEach(store.categories, id: \.self) { category in
@@ -150,11 +169,11 @@ public struct ArticleView: View {
     List {
       VStack(spacing: .zero) {
         ArticleSubNavigationBar(
-          title: "\(store.articleHeaderTitle) 아티클",
+          title: "\(store.articleTitleForHeader) 아티클",
           showOrderButton: store.selectedCategory != .all,
           isPresented: store.sortContextMenu.isPresented,
           onOpenPopup: { globalFrame in
-            store.send(.didTapSortButton(globalFrame: globalFrame))
+            store.send(.didTapSortPopupButton(globalFrame: globalFrame))
           }
         )
 
@@ -173,7 +192,7 @@ public struct ArticleView: View {
             platform: article.source,
             postDate: article.postDate.formatted(using: .shortHyphenForm),
             title: article.title,
-            description: article.title,
+            description: article.summary,
             hashtags: article.hashtags,
             isPopupOpen: store.selectedShareArticleId == article.id,
             onOpenPopup: { globalFrame in
