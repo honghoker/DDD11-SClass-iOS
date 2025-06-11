@@ -16,6 +16,10 @@ enum ChecklistAPI {
   case getChecklists
   /// 상세 조회
   case getChecklist(id: String)
+    
+  case getDraftCheckList(id: String)
+  /// 체크리스트 생성
+  case createChecklist(Checklist)
   /// 체크리스트 프로젝트 삭제
   case deleteProject(checklistId: String)
   /// 체크리스트 다중 항목 삭제
@@ -37,6 +41,10 @@ extension ChecklistAPI: BaseAPI {
       return .get
     case .getChecklist:
       return .get
+    case .getDraftCheckList:
+      return .get
+    case .createChecklist:
+        return .post
     case .deleteProject:
       return .delete
     case .deleteChecklist:
@@ -54,19 +62,25 @@ extension ChecklistAPI: BaseAPI {
       return ""
       
     case .getChecklist(let id):
-      return "/\(id)/checkboxes"
+      return "/\(id)"
       
+    case .getDraftCheckList(id: let id):
+        return "/drafts/\(id)"
+        
+    case .createChecklist:
+        return "/compose"
+        
     case .deleteProject(let checklistId):
       return "/\(checklistId)"
     
     case .deleteChecklist(let checklistId, _):
-      return "/\(checklistId)/checkboxes"
+      return "/\(checklistId)/items"
     
     case .changeKeyword(let checklistId, _):
       return "/\(checklistId)"
     
     case .complete(let checklistId, let id, _):
-      return "/\(checklistId)/checkboxes/\(id)/completed"
+      return "/\(checklistId)/items/\(id)/complete"
     }
   }
 
@@ -78,6 +92,15 @@ extension ChecklistAPI: BaseAPI {
       
     case .getChecklist:
       return nil
+        
+    case .getDraftCheckList:
+      return nil
+        
+    case .createChecklist(let checklist):
+        return [
+            "title": checklist.title ?? "",
+            "items": checklist.checkBoxList.map { $0.label }
+        ]
       
     case .deleteProject(let checklistId):
       return [

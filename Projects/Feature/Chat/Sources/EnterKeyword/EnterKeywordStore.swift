@@ -47,11 +47,11 @@ public struct EnterKeywordStore {
       case .binding:
         return .none
       case .didTapSaveButton:
-        let checklistID = state.checklist.id
-        let keyword = state.text
-        return .run { send in
+        var newChecklist = state.checklist
+        newChecklist.title = state.text
+          return .run { [newChecklist = newChecklist] send in
           do {
-            try await checklistAPIClient.changeKeyword(checklistId: checklistID, newKeyword: keyword)
+            _ = try await checklistAPIClient.createChecklist(checklist: newChecklist)
             await send(.onCompleteTapSaveButton)
           } catch {
             print(error.localizedDescription)

@@ -55,7 +55,7 @@ public struct CreateChecklistStore {
         let checklistID = state.checklist.id
         return .run { send in
           do {
-            let checklist = try await checklistAPIClient.getChecklist(checklistID)
+              let checklist = try await checklistAPIClient.getDraftChecklist(id: checklistID)
             await send(.onCompleteGetChecklist(.success(checklist)))
           } catch {
             await send(.onCompleteGetChecklist(.failure(error)))
@@ -75,20 +75,9 @@ public struct CreateChecklistStore {
         }
         return .none
       case .didTapSaveButton:
-        let checklistId = state.checklist.id
-        let deleteCheckBoxList = state.checklist.checkBoxList.filter { !state.selectedChecklist.contains($0)
-        }.map { $0.id }
         let selectCheckBoxList = state.selectedChecklist
         return .run { send in
-          do {
-            _ = try await checklistAPIClient.deleteChecklist(
-              checklistId: checklistId,
-              checkBoxList: deleteCheckBoxList
-            )
             await send(.onCompleteSaveButton(selectCheckBoxList))
-          } catch {
-            print(error.localizedDescription)
-          }
         }
       case .onCompleteSaveButton(let list):
         state.checklist.checkBoxList = list
@@ -96,6 +85,11 @@ public struct CreateChecklistStore {
         
       case .didTapBackButton:
         return .send(.pop)
+        
+      case .didTapReCreateButton:
+        state.selectedChecklist = []
+        return .none
+        
       default:
         return .none
       }

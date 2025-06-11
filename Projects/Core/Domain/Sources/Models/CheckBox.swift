@@ -30,6 +30,17 @@ public struct CheckBox: Decodable, Identifiable, Equatable, Hashable {
     self.createdAt = createdAt
     self.id = id
   }
+
+  public init(label: String) {
+    self.init(
+      checklistId: "",
+      label: label,
+      isCompleted: false,
+      isMain: false,
+      createdAt: "",
+      id: UUID().uuidString
+    )
+  }
   
   enum CodingKeys: String, CodingKey {
     case checklistId
