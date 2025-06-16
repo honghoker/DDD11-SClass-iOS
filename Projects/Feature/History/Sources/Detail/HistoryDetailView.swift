@@ -45,6 +45,9 @@ struct HistoryDetailView: View {
       
     }
     .frame(maxWidth: .infinity)
+    .onAppear {
+      store.send(.onAppear)
+    }
     .historyAlert(
       isPresented: .init(
         get: { store.modal == .delete },
@@ -131,12 +134,33 @@ struct HistoryDetailView: View {
     .listRowSpacing(12)
   }
   
+  @ViewBuilder
   private var articeContent: some View {
-    GeometryReader { geometry in
-      VStack {
-        SkeletonArticleListView(width: geometry.size.width - 32)
+    ScrollView {
+      if store.isLoading {
+        GeometryReader { geometry in
+          VStack {
+            SkeletonArticleListView(width: geometry.size.width - 32)
+          }
+          .padding(16)
+        }
+      } else {
+        VStack(spacing: 16) {
+          ForEach(store.article) { article in
+            MainArticleCellView(
+              thumbnail: { ThumbnailImage(urlString: article.thumbnailURL) },
+              title: article.title,
+              category: article.category,
+              platform: article.platform,
+              postDate: article.postDate.formatted(using: .shortForm),
+              url: article.url,
+              onTap: {
+                store.send(.didTapArticle(article))
+              }
+            )
+          }
+        }
       }
-      .padding(16)
     }
   }
 }

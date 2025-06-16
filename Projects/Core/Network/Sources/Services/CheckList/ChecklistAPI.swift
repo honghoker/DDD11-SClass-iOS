@@ -15,7 +15,7 @@ enum ChecklistAPI {
   /// 목록 조회
   case getChecklists
   /// 상세 조회
-  case getChecklist(id: String)
+  case getChecklistItemList(id: String)
     
   case getDraftCheckList(id: String)
   /// 체크리스트 생성
@@ -39,7 +39,7 @@ extension ChecklistAPI: BaseAPI {
     switch self {
     case .getChecklists:
       return .get
-    case .getChecklist:
+    case .getChecklistItemList:
       return .get
     case .getDraftCheckList:
       return .get
@@ -61,8 +61,8 @@ extension ChecklistAPI: BaseAPI {
     case .getChecklists:
       return ""
       
-    case .getChecklist(let id):
-      return "/\(id)"
+    case .getChecklistItemList(let id):
+      return "/\(id)/items"
       
     case .getDraftCheckList(id: let id):
         return "/drafts/\(id)"
@@ -90,7 +90,7 @@ extension ChecklistAPI: BaseAPI {
     case .getChecklists:
       return nil
       
-    case .getChecklist:
+    case .getChecklistItemList:
       return nil
         
     case .getDraftCheckList:

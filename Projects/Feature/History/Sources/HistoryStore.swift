@@ -9,6 +9,7 @@ import Foundation
 import ComposableArchitecture
 
 import CoreDomain
+import CoreNetwork
 
 @Reducer
 public struct HistoryStore {
@@ -33,6 +34,7 @@ public struct HistoryStore {
     case binding(BindingAction<State>)
     case path(StackActionOf<Path>)
     case onAppear
+    case onAppearFinish([Checklist])
     
     case didTapChecklistMenu(Checklist)
     case didTapChecklist(Checklist)
@@ -65,6 +67,9 @@ public struct HistoryStore {
     case delete
     case editTitle
   }
+    
+    
+  @Dependency(ChecklistAPIClient.self) var checklistAPIClient
   
   public var body: some ReducerOf<Self> {
     BindingReducer()
@@ -79,16 +84,17 @@ public struct HistoryStore {
         return .none
         
       case .onAppear:
-        state.checkList = [
-          .mock1,
-          .mock2,
-          .init(id: UUID().uuidString, title: "요청/문의", checkBoxList: []),
-          .init(id: UUID().uuidString, title: "보고/컴펌", checkBoxList: []),
-          .init(id: UUID().uuidString, title: "협업", checkBoxList: []),
-          .init(id: UUID().uuidString, title: "커뮤니케이션", checkBoxList: []),
-          .init(id: UUID().uuidString, title: "인터렉션 디자인", checkBoxList: []),
-          .init(id: UUID().uuidString, title: "예시용 체크리스트", checkBoxList: []),
-        ]
+        return .run { send in
+          do {
+            let checklist = try await checklistAPIClient.getChecklists()
+            return await send(.onAppearFinish(checklist))
+          } catch {
+            return await send(.onAppearFinish([]))
+          }
+        }
+        
+      case .onAppearFinish(let checklist):
+        state.checkList = checklist
         return .none
         
       case .didTapChecklist(let selected):

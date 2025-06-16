@@ -8,6 +8,7 @@
 import Foundation
 
 import CoreDomain
+import CoreNetwork
 
 import ComposableArchitecture
 
@@ -26,8 +27,8 @@ public struct HistoryDetailStore {
     var isActive: Bool {
       newTitle != selected?.label
     }
-    
     var isLoading = true
+    
     public init(checklist: Checklist) {
       self.checkList = checklist
       self.article = []
@@ -38,6 +39,7 @@ public struct HistoryDetailStore {
   public enum Action: BindableAction {
     case binding(BindingAction<State>)
     case onAppear
+    case onAppearFinish([CheckBox], [MainArticle])
     
     case didTapChangeCurrentTab(TabItem)
     
@@ -59,6 +61,7 @@ public struct HistoryDetailStore {
     
     // MARK: - Navigation
     case didTapBackButton
+    case didTapArticle(MainArticle)
   }
   
   public enum ModalType: Identifiable {
@@ -66,6 +69,10 @@ public struct HistoryDetailStore {
     case delete
     case editTitle
   }
+  
+  
+ @Dependency(ChecklistAPIClient.self) var checklistAPIClient
+ @Dependency(HomeAPIClient.self) var homeAPIClient
   
   public var body: some ReducerOf<Self> {
     BindingReducer()
@@ -76,6 +83,24 @@ public struct HistoryDetailStore {
         return .none
         
       case .onAppear:
+        let id = state.checkList.id
+        return .run { send in
+          do {
+            async let checkBoxListResponse = try  checklistAPIClient.getChecklistItemList(id: id)
+            async let articleListResponse = try homeAPIClient.fetchArticles()
+            
+            let (checkBoxList, articleList) = try await ( checkBoxListResponse, articleListResponse
+            )
+            return await send(.onAppearFinish(checkBoxList, articleList))
+          } catch {
+            return await send(.onAppearFinish([], []))
+          }
+        }
+        
+      case .onAppearFinish(let list, let articleList):
+        state.checkList.checkBoxList = list
+        state.article = articleList
+        state.isLoading = false
         return .none
         
       case .didTapChangeCurrentTab(let newTab):
@@ -138,6 +163,8 @@ public struct HistoryDetailStore {
       case .didTapBackButton:
         return .none
         
+      case .didTapArticle(let article):
+        return .none
       }
     }
   }

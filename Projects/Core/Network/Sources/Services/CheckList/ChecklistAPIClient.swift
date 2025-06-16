@@ -17,7 +17,7 @@ import Moya
 @DependencyClient
 public struct ChecklistAPIClient: Sendable {
   public var getChecklists: @Sendable() async throws -> [Checklist]
-  public var getChecklist: @Sendable(_ id: String) async throws -> Checklist
+  public var getChecklistItemList: @Sendable(_ id: String) async throws -> [CheckBox]
     
   public var getDraftChecklist: @Sendable(_ id: String) async throws -> Checklist
   public var createChecklist: @Sendable(_ checklist: Checklist) async throws -> Checklist
@@ -39,13 +39,13 @@ extension ChecklistAPIClient: DependencyKey {
   public static var liveValue: ChecklistAPIClient = .init(
     getChecklists: {
       let api = ChecklistAPI.getChecklists
-      let responseDTO: ChecklistsResponseDTO = try await APIService<ChecklistAPI>().request(api: api)
-      return responseDTO.checklists.map { $0.toEntity }
+      let responseDTO: [ChecklistResponseDTO] = try await APIService<ChecklistAPI>().request(api: api)
+      return responseDTO.map { $0.toEntity }
     },
-    getChecklist: { id in
-      let api = ChecklistAPI.getChecklist(id: id)
-      let responseDTO: ChecklistResponseDTO = try await APIService<ChecklistAPI>().request(api: api)
-      return responseDTO.toEntity
+    getChecklistItemList: { id in
+      let api = ChecklistAPI.getChecklistItemList(id: id)
+      let responseDTO: [ChecklistItemDTO] = try await APIService<ChecklistAPI>().request(api: api)
+      return responseDTO.map { $0.toEntity }
     },
     getDraftChecklist: { id in
         let api = ChecklistAPI.getDraftCheckList(id: id)
