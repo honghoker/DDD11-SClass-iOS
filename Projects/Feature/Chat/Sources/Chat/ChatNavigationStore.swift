@@ -12,7 +12,7 @@ import SharedDesignSystem
 
 import ComposableArchitecture
 
-public extension ChatNavigationStore {
+extension ChatNavigationStore {
   @Reducer
   public enum ChatPath {
     case createChecklist(CreateChecklistStore)
@@ -71,8 +71,9 @@ public struct ChatNavigationStore {
         state.path.removeLast()
         return .none
         
-      case .chat(.onCloseView):
+      case .chat(.onCloseView), .enterKeyword(.onCloseView):
         state.chat = ChatStore.State()
+        state.path.removeAll()
         return .none
         
       case .chat(.onCompleteCreateChecklist(let id)):

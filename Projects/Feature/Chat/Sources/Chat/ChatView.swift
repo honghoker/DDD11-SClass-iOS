@@ -34,8 +34,7 @@ public struct ChatView: View {
           }),
           centerTitle: "새 업무 체크리스트"
         )
-        content()
-          .padding(16)
+        content
       }
     } destination: { store in
       switch store.case {
@@ -61,6 +60,7 @@ public struct ChatView: View {
         isOpacity = false
       }
     }
+    .isLoading(!store.isSendable)
     .historyAlert(
       isPresented: $store.isPresented,
       title: "채팅에서 나가기",
@@ -78,7 +78,7 @@ public struct ChatView: View {
   }
   
   @ViewBuilder
-  func content() -> some View {
+  private var content: some View {
     VStack {
       ZStack {
         placeholderView
@@ -87,6 +87,7 @@ public struct ChatView: View {
         }
       }
       .frame(maxWidth: .infinity)
+      .padding(16)
       inputView
     }
   }
@@ -139,6 +140,7 @@ public struct ChatView: View {
             }
           }
         }
+        .safeAreaPadding(.horizontal, 16)
       }
       
       ChatInputView(
@@ -146,9 +148,11 @@ public struct ChatView: View {
         action: {
           store.send(.didTapSendButton(.none))
         },
-        isFocused: $isFocused
+        isFocused: $isFocused,
+        isSendable: store.isSendable
       )
       .focused($isFocused)
+      .padding(16)
     }
   }
 }

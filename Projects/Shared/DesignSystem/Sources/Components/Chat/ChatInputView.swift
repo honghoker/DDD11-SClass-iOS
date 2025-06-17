@@ -11,6 +11,7 @@ public struct ChatInputView<T: Hashable>: View {
   
   private let isFocused: FocusState<T>.Binding
   private let focusValue: T
+  private let isSendable: Bool
   
   @Binding private var text: String
   private let action: () -> ()
@@ -20,12 +21,14 @@ public struct ChatInputView<T: Hashable>: View {
     text: Binding<String>,
     action: @escaping () -> Void,
     isFocused: FocusState<T>.Binding,
-    focusValue: T = true
+    focusValue: T = true,
+    isSendable: Bool
   ) {
     self._text = text
     self.action = action
     self.isFocused = isFocused
     self.focusValue = focusValue
+    self.isSendable = isSendable
   }
   
   public var body: some View {
@@ -57,7 +60,7 @@ public struct ChatInputView<T: Hashable>: View {
         }
       }
       .frame(width: 24)
-      .disabled(text.isEmpty)
+      .disabled(text.isEmpty || !isSendable)
     }
   }
 }

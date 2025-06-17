@@ -19,6 +19,7 @@ public struct ChatStore {
   @ObservableState
   public struct State {
     var chatMessage = ""
+    var isSendable = true
     var chatList: [MessageEntity] = []
     var isPresented: Bool = false
     
@@ -85,19 +86,21 @@ public struct ChatStore {
         
       case .didTapSendButton(let exampleMessage):
         return sendMessage(state: &state, newMessage: exampleMessage ?? state.chatMessage)
+          
       case .onCompleteSend(.success(let chatResponse)):
+        state.isSendable = true
         if let url = chatResponse.text.range(
-          of: "https?://[a-zA-Z0-9./_-]+",
+          of: "/checklists/drafts/[a-zA-Z0-9-]+",
           options: .regularExpression
         ) {
             let path = chatResponse.text[url].components(separatedBy: "/")
-            if path.count == 7  {
+            if path.count == 4  {
                 state.chatList.append(
                     .init(
                         title: "체크리스트 생성 완료",
                         content: "탭을 하여 체크리스트를 확인해보세요",
                         type: .info,
-                        path: path[5]
+                        path: path.last ?? ""
                     )
                 )
             }
@@ -121,6 +124,7 @@ public struct ChatStore {
         }
         return .none
       case .onCompleteSend(.failure):
+        state.isSendable = true
         return .none
         
       case .didTapCreateChecklistButton(let message):
@@ -147,6 +151,7 @@ public struct ChatStore {
   }
   
   private func sendMessage(state: inout State, newMessage: String) -> Effect<Action> {
+    state.isSendable = false
     state.chatList.append(
       .init(
         title: newMessage,

@@ -40,7 +40,9 @@ extension KeychainClient {
 
 extension KeychainClient {
   public var accessToken: String? {
-    return getString(for: KeychainKey.accessToken)
+    let token = getString(for: KeychainKey.accessToken)
+    debugPrint(token ?? "")
+    return token
   }
   
   public func setAccessToken(_ accessToken: String) {

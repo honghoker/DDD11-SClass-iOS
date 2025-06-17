@@ -18,6 +18,10 @@ import Moya
 public struct ChecklistAPIClient: Sendable {
   public var getChecklists: @Sendable() async throws -> [Checklist]
   public var getChecklist: @Sendable(_ id: String) async throws -> Checklist
+    
+  public var getDraftChecklist: @Sendable(_ id: String) async throws -> Checklist
+  public var createChecklist: @Sendable(_ checklist: Checklist) async throws -> Checklist
+
   public var deleteProject: @Sendable(_ checklistId: String) async throws -> Void
   public var deleteChecklist: @Sendable(_ checklistId: String, _ checkBoxList: [String]) async throws -> [String]
   public var changeKeyword: @Sendable(_ checklistId: String, _ newKeyword: String) async throws -> Void
@@ -42,6 +46,22 @@ extension ChecklistAPIClient: DependencyKey {
       let api = ChecklistAPI.getChecklist(id: id)
       let responseDTO: ChecklistResponseDTO = try await APIService<ChecklistAPI>().request(api: api)
       return responseDTO.toEntity
+    },
+    getDraftChecklist: { id in
+        let api = ChecklistAPI.getDraftCheckList(id: id)
+        let responseDTO: [String] = try await APIService<ChecklistAPI>().request(api: api)
+        return Checklist(
+          id: UUID().uuidString,
+          title: nil,
+          checkBoxList: responseDTO.map { CheckBox(label: $0) }
+        )
+    },
+    createChecklist: { checklist in
+        let api = ChecklistAPI.createChecklist(checklist)
+        let responseDTO: CreateChecklistResponseDTO  = try await APIService<ChecklistAPI>().request(api: api)
+        var newCheckList = responseDTO.toEntity
+        newCheckList.checkBoxList = checklist.checkBoxList
+        return newCheckList
     },
     deleteProject: { checklistId in
       let api = ChecklistAPI.deleteProject(checklistId: checklistId)
