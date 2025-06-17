@@ -123,10 +123,14 @@ public struct HistoryStore {
            let index = state.checkList.firstIndex(of: selected)
         else { return .none }
         return .run { send in
-          try? await checklistAPIClient.deleteProject(
-            checklistId: selected.id
-          )
-          await send(.didTapDeleteServer(index))
+          do {
+            try await checklistAPIClient.deleteProject(
+              checklistId: selected.id
+            )
+            await send(.didTapDeleteServer(index))
+          } catch {
+            debugPrint(error.localizedDescription)
+          }
         }
         
       case .didTapDeleteServer(let index):
@@ -140,11 +144,15 @@ public struct HistoryStore {
            let index = state.checkList.firstIndex(of: selected)
         else { return .none }
         return .run { [newKeyword = state.newTitle] send in
-          try? await checklistAPIClient.changeKeyword(
-            checklistId: selected.id,
-            newKeyword: newKeyword
-          )
-          await send(.didTapEditTitleServer(index))
+          do {
+            try await checklistAPIClient.changeKeyword(
+              checklistId: selected.id,
+              newKeyword: newKeyword
+            )
+            await send(.didTapEditTitleServer(index))
+          } catch {
+            debugPrint(error.localizedDescription)
+          }
         }
         
       case .didTapEditTitleServer(let index):

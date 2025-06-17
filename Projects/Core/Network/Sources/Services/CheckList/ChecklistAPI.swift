@@ -26,6 +26,8 @@ enum ChecklistAPI {
   case deleteChecklist(checklistId: String, checkBoxList: [String])
   /// 체크리스트 프로젝트 제목 변경
   case changeKeyword(checklistId: String, newKeyword: String)
+  /// 체크리스트 체크박스 제목 변경
+  case changeItemKeyword(checklistId: String, checkBoxId: String, newKeyword: String)
   /// 완료 상태 변경
   case complete(checklistId: String, id: String, completed: Int)
 }
@@ -50,6 +52,8 @@ extension ChecklistAPI: BaseAPI {
     case .deleteChecklist:
       return .delete
     case .changeKeyword:
+      return .put
+    case .changeItemKeyword:
       return .put
     case .complete:
       return .patch
@@ -78,6 +82,9 @@ extension ChecklistAPI: BaseAPI {
     
     case .changeKeyword(let checklistId, _):
       return "/\(checklistId)/title"
+      
+    case .changeItemKeyword(let checklistId, let checkBoxId, _):
+      return "/\(checklistId)/items/\(checkBoxId)"
     
     case .complete(let checklistId, let id, _):
       return "/\(checklistId)/items/\(id)/complete"
@@ -117,12 +124,13 @@ extension ChecklistAPI: BaseAPI {
         "title": keyword
       ]
       
-    case .complete(let checklistId, let id, let completed):
+    case .changeItemKeyword(checklistId: _, checkBoxId: _, newKeyword: let keyword):
       return [
-        "checklistId": checklistId,
-        "id": id,
-        "completed": completed
+        "title": keyword
       ]
+  
+    case .complete:
+      return [:]
     }
   }
 

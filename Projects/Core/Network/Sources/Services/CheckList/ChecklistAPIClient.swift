@@ -25,6 +25,7 @@ public struct ChecklistAPIClient: Sendable {
   public var deleteProject: @Sendable(_ checklistId: String) async throws -> Void
   public var deleteChecklist: @Sendable(_ checklistId: String, _ checkBoxList: [String]) async throws -> [String]
   public var changeKeyword: @Sendable(_ checklistId: String, _ newKeyword: String) async throws -> Void
+  public var changeItemKeyword: @Sendable(_ checklistId: String, _ checkBoxId: String,_ newKeyword: String) async throws -> Void
   public var complete: @Sendable(_ checklistId: String, _ id: String, _ completed: Bool) async throws -> Void
 }
 
@@ -76,9 +77,13 @@ extension ChecklistAPIClient: DependencyKey {
       let api = ChecklistAPI.changeKeyword(checklistId: checklistId, newKeyword: title)
       let responseDTO: EmptyResponseDTO = try await APIService<ChecklistAPI>().request(api: api)
     },
+    changeItemKeyword: { checklistId, checkBoxId, title in
+      let api = ChecklistAPI.changeItemKeyword(checklistId: checklistId, checkBoxId: checkBoxId, newKeyword: title)
+      let responseDTO: EmptyResponseDTO = try await APIService<ChecklistAPI>().request(api: api)
+    },
     complete: { checklistId, id, completed in
       let api = ChecklistAPI.complete(checklistId: checklistId, id: id, completed: completed ? 1 : 0)
-      let responseDTO: EmptyResponseDTO = try await APIService<ChecklistAPI>().request(api: api)
+      let responseDTO: String = try await APIService<ChecklistAPI>().request(api: api)
     }
   )
   

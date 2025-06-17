@@ -45,6 +45,7 @@ public struct HistoryDetailStore {
     
     // MARK: - 체크박스 완료
     case didTapChecklistComplete(CheckBox)
+    case didTapChecklistCompleteServer(Int)
     
     // MARK: - bottomsheet 처리
     case didTapDismiss
@@ -52,11 +53,13 @@ public struct HistoryDetailStore {
     // MARK: - 체크박스 삭제 처리
     case didTapDelete(CheckBox)
     case didTapDeleteConfirm
+    case didTapDeleteServer(Int)
     case didTapDeleteCancel
     
     // MARK: - 체크박스 타이틀 변경 처리
     case didTapEditTitle(CheckBox)
     case didTapEditTitleConfirm
+    case didTapEditTitleServer(Int)
     case didTapEditTitleCancel
     
     // MARK: - Navigation
@@ -113,15 +116,22 @@ public struct HistoryDetailStore {
         else {
           return .none
         }
-        
-        state.checkList.checkBoxList[index].isCompleted.toggle()
+        state.isLoading = true
+        let checklistId = state.checkList.id
+        let updateState = !state.checkList.checkBoxList[index].isCompleted
         return .run { send in
           do {
-//            try await checklistAPIClient.complete()
+            try await checklistAPIClient.complete(checklistId, index.description, updateState)
+            await send(.didTapChecklistCompleteServer(index))
           } catch {
-            
+            debugPrint(error.localizedDescription)
           }
         }
+        
+      case .didTapChecklistCompleteServer(let index):
+        state.checkList.checkBoxList[index].isCompleted.toggle()
+        state.isLoading = false
+        return .none
         
       case .didTapEditTitle(let selected):
         state.selected = selected
@@ -135,11 +145,26 @@ public struct HistoryDetailStore {
         return .none
         
       case .didTapDeleteConfirm:
-        if let selected = state.selected,
-           let index = state.checkList.checkBoxList.firstIndex(of: selected) {
-          state.checkList.checkBoxList.remove(at: index)
+        guard let selected = state.selected,
+           let index = state.checkList.checkBoxList.firstIndex(of: selected)
+        else { return .none }
+        state.isLoading = true
+        return .run { [checkList = state.checkList ]send in
+          do {
+            _ = try await checklistAPIClient.deleteChecklist(
+              checkList.id,
+              [selected.id]
+            )
+            await send(.didTapDeleteServer(index))
+          } catch {
+            debugPrint(error.localizedDescription)
+          }
         }
+        
+      case .didTapDeleteServer(let index):
+        state.checkList.checkBoxList.remove(at: index)
         state.selected = nil
+        state.isLoading = false
         return .none
         
       case .didTapDeleteCancel:
@@ -149,11 +174,28 @@ public struct HistoryDetailStore {
         
       case .didTapEditTitleConfirm:
         state.modal = nil
-        if let selected = state.selected,
-           let index = state.checkList.checkBoxList.firstIndex(of: selected) {
-          state.checkList.checkBoxList[index].label = state.newTitle
+        guard let selected = state.selected,
+           let index = state.checkList.checkBoxList.firstIndex(of: selected)
+        else { return .none }
+        state.isLoading = true
+         
+        return .run { [title = state.newTitle] send in
+          do {
+            try await checklistAPIClient.changeItemKeyword(
+              selected.checklistId,
+              selected.id,
+              title
+            )
+            await send(.didTapEditTitleServer(index))
+          } catch {
+            debugPrint(error.localizedDescription)
+          }
         }
+        
+      case .didTapEditTitleServer(let index):
+        state.checkList.checkBoxList[index].label = state.newTitle
         state.selected = nil
+        state.isLoading = false
         return .none
         
       case .didTapEditTitleCancel:
@@ -169,7 +211,7 @@ public struct HistoryDetailStore {
       case .didTapBackButton:
         return .none
         
-      case .didTapArticle(let article):
+      case .didTapArticle(_):
         return .none
       }
     }
