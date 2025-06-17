@@ -115,7 +115,13 @@ public struct HistoryDetailStore {
         }
         
         state.checkList.checkBoxList[index].isCompleted.toggle()
-        return .none
+        return .run { send in
+          do {
+//            try await checklistAPIClient.complete()
+          } catch {
+            
+          }
+        }
         
       case .didTapEditTitle(let selected):
         state.selected = selected

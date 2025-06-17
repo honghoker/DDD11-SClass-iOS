@@ -47,10 +47,12 @@ public struct HistoryStore {
     // alert 처리
     case didTapDeleteConfirm
     case didTapDeleteCancel
+    case didTapDeleteServer(Int)
     
     // 제목변경 처리
     case didTapEditTitleConfirm
     case didTapEditTitleCancel
+    case didTapEditTitleServer(Int)
     
     
     case historyDetail(HistoryDetailStore.Action)
@@ -117,19 +119,36 @@ public struct HistoryStore {
         return .none
         
       case .didTapDeleteConfirm:
-        if let selected = state.selected,
-           let index = state.checkList.firstIndex(of: selected) {
-          state.checkList.remove(at: index)
+        guard let selected = state.selected,
+           let index = state.checkList.firstIndex(of: selected)
+        else { return .none }
+        return .run { send in
+          try? await checklistAPIClient.deleteProject(
+            checklistId: selected.id
+          )
+          await send(.didTapDeleteServer(index))
         }
+        
+      case .didTapDeleteServer(let index):
+        state.checkList.remove(at: index)
         state.selected = nil
         return .none
         
       case .didTapEditTitleConfirm:
         state.modal = nil
-        if let selected = state.selected,
-           let index = state.checkList.firstIndex(of: selected) {
-          state.checkList[index].title = state.newTitle
+        guard let selected = state.selected,
+           let index = state.checkList.firstIndex(of: selected)
+        else { return .none }
+        return .run { [newKeyword = state.newTitle] send in
+          try? await checklistAPIClient.changeKeyword(
+            checklistId: selected.id,
+            newKeyword: newKeyword
+          )
+          await send(.didTapEditTitleServer(index))
         }
+        
+      case .didTapEditTitleServer(let index):
+        state.checkList[index].title = state.newTitle
         state.selected = nil
         return .none
         

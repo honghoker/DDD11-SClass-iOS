@@ -50,7 +50,7 @@ extension ChecklistAPI: BaseAPI {
     case .deleteChecklist:
       return .delete
     case .changeKeyword:
-      return .patch
+      return .put
     case .complete:
       return .patch
     }
@@ -77,7 +77,7 @@ extension ChecklistAPI: BaseAPI {
       return "/\(checklistId)/items"
     
     case .changeKeyword(let checklistId, _):
-      return "/\(checklistId)"
+      return "/\(checklistId)/title"
     
     case .complete(let checklistId, let id, _):
       return "/\(checklistId)/items/\(id)/complete"
