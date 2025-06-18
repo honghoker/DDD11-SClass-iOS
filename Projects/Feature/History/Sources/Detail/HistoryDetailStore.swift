@@ -121,7 +121,11 @@ public struct HistoryDetailStore {
         let updateState = !state.checkList.checkBoxList[index].isCompleted
         return .run { send in
           do {
-            try await checklistAPIClient.complete(checklistId, index.description, updateState)
+            try await checklistAPIClient.complete(
+                checklistId,
+                checkBox.id,
+                updateState
+            )
             await send(.didTapChecklistCompleteServer(index))
           } catch {
             debugPrint(error.localizedDescription)
@@ -151,9 +155,9 @@ public struct HistoryDetailStore {
         state.isLoading = true
         return .run { [checkList = state.checkList ]send in
           do {
-            _ = try await checklistAPIClient.deleteChecklist(
+            try await checklistAPIClient.deleteChecklist(
               checkList.id,
-              [selected.id]
+              selected.id
             )
             await send(.didTapDeleteServer(index))
           } catch {

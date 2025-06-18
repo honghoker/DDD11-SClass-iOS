@@ -23,7 +23,7 @@ enum ChecklistAPI {
   /// 체크리스트 프로젝트 삭제
   case deleteProject(checklistId: String)
   /// 체크리스트 다중 항목 삭제
-  case deleteChecklist(checklistId: String, checkBoxList: [String])
+  case deleteChecklist(checklistId: String, checkBoxId: String)
   /// 체크리스트 프로젝트 제목 변경
   case changeKeyword(checklistId: String, newKeyword: String)
   /// 체크리스트 체크박스 제목 변경
@@ -77,8 +77,8 @@ extension ChecklistAPI: BaseAPI {
     case .deleteProject(let checklistId):
       return "/\(checklistId)"
     
-    case .deleteChecklist(let checklistId, _):
-      return "/\(checklistId)/items"
+    case .deleteChecklist(let checklistId, let checkBoxId):
+      return "/\(checklistId)/items/\(checkBoxId)"
     
     case .changeKeyword(let checklistId, _):
       return "/\(checklistId)/title"

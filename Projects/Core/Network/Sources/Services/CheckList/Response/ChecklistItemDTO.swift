@@ -12,7 +12,7 @@ import CoreDomain
 public struct ChecklistItemDTO: Decodable {
   let id: Int
   let checklistId: Int
-  let content: String
+  let content: String?
   let completed: Bool
   let createdTime: String
   let updatedTime: String
@@ -32,7 +32,7 @@ extension ChecklistItemDTO {
   var toEntity: CheckBox {
     .init(
       checklistId: self.checklistId.description,
-      label: self.content,
+      label: self.content ?? "",
       isCompleted: self.completed,
       isMain: true, // TODO: 수정
       createdAt: self.createdTime,
