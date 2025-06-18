@@ -54,6 +54,8 @@ extension ChecklistAPIClient: DependencyKey {
         return Checklist(
           id: UUID().uuidString,
           title: nil,
+          createdAt: "",
+          updatedAt: "",
           checkBoxList: responseDTO.map { CheckBox(label: $0) }
         )
     },
