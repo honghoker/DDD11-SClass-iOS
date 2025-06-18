@@ -126,7 +126,7 @@ extension ChecklistAPI: BaseAPI {
       
     case .changeItemKeyword(checklistId: _, checkBoxId: _, newKeyword: let keyword):
       return [
-        "title": keyword
+        "content": keyword
       ]
   
     case .complete:
