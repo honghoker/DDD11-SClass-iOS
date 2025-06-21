@@ -28,6 +28,11 @@ final class NetworkProvider<API: BaseAPI>: Requestable {
   private let provider: MoyaProvider<API>
   
   init(plugins: [PluginType] = []) {
+#if DEBUG
+    var plugins = plugins
+    plugins.append(PrettyNetworkLoggerPlugin())
+#endif
+
     let session = MoyaProvider<API>.defaultAlamofireSession()
     session.sessionConfiguration.timeoutIntervalForRequest = 30
     

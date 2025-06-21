@@ -30,16 +30,14 @@ class APIService<API: BaseAPI>: Requestable {
   }
   
   private func performRequest<T: Decodable>(api: API) async throws -> T {
-    debugPrint("request: \(String(describing: api.parameters)) \(api.path)")
     let response = try await provider.request(api)
     
     if let httpResponse = response.response, 200 ... 400 ~= httpResponse.statusCode {
       let decodedResponse = try JSONDecoder().decode(CommonResponse<T>.self, from: response.data)
-      debugPrint("response: \(decodedResponse)")
-      guard let responseData = decodedResponse.data
-      else { throw NetworkError.noData }
+      guard let responseData = decodedResponse.data else {
+        throw NetworkError.noData
+      }
       return responseData
-      
     } else if response.statusCode == 403 { // TODO: 에러 response가 협의한 것과 다르게 와서 임시 처리
       throw NetworkError.invalidResponse(statusCode: 403, message: "access token 만료")
     } else {
