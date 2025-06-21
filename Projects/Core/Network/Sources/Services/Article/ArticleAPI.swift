@@ -7,6 +7,8 @@
 
 import Foundation
 
+import SharedUtils
+
 import Moya
 
 enum ArticleAPI {
@@ -32,7 +34,7 @@ extension ArticleAPI: BaseAPI {
   var parameters: [String : Any]? {
     switch self {
     case .fetchArticles(let dto):
-      return ["searchDTO": dto]
+      return dto.asDictionary()
     }
   }
 

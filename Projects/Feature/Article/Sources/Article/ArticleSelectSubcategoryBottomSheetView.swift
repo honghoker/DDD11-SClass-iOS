@@ -89,7 +89,7 @@ struct ArticleSelectSubcategoryBottomSheetView: View {
           Button(action: {
             onSelect(item)
           }) {
-            Text(item.rawValue)
+            Text(item.title)
               .notoSans(.subhead_3)
               .foregroundStyle(selectedSubcategory == item ? .primary700 : .greyScale700)
           }

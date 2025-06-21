@@ -8,19 +8,19 @@
 import Foundation
 
 public struct ArticleSearchRequestDTO: Encodable {
-  let category: String?
-  let subcategory: String?
+  let categoryId: Int?
+  let subcategoryId: Int?
   let title: String?
   let sortBy: String?
 
   init(
-    category: String?,
-    subcategory: String?,
+    categoryId: Int?,
+    subcategoryId: Int?,
     title: String?,
     sortBy: String?
   ) {
-    self.category = category
-    self.subcategory = subcategory
+    self.categoryId = categoryId
+    self.subcategoryId = subcategoryId
     self.title = title
     self.sortBy = sortBy
   }

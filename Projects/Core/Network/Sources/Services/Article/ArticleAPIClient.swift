@@ -28,8 +28,8 @@ extension ArticleAPIClient: DependencyKey {
     fetchArticles: { reqeust in
       let api = ArticleAPI.fetchArticles(
         .init(
-          category: reqeust.category?.rawValue,
-          subcategory: reqeust.subcategory?.rawValue,
+          categoryId: reqeust.category?.id,
+          subcategoryId: reqeust.subcategory?.id,
           title: reqeust.title,
           sortBy: reqeust.sortBy?.rawValue
         )

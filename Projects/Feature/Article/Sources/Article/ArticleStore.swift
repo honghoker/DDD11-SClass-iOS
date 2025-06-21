@@ -42,14 +42,14 @@ public struct ArticleStore {
     var subcategory: ArticleSubcategory? = nil
     var description: String {
       guard let subcategory else {
-        return category?.title ?? ArticleCategory.all.headerTitle
+        return category?.title ?? ArticleCategory.all.titleForHeader
       }
 
       if let category, subcategory == .all {
-        return category.headerTitle
+        return category.titleForHeader
       }
 
-      return subcategory.rawValue
+      return subcategory.title
     }
 
     public mutating func present(
@@ -72,7 +72,7 @@ public struct ArticleStore {
   public struct State {
     var isFetching: Bool = true
     let categories: [ArticleCategory] = ArticleCategory.allCases
-    var articleHeaderTitle: String = ArticleCategory.all.headerTitle
+    var articleTitleForHeader: String = ArticleCategory.all.titleForHeader
     var articles: IdentifiedArrayOf<Article> = []
 
     var selectedCategory: ArticleCategory = .all
@@ -147,6 +147,8 @@ public struct ArticleStore {
         return .send(.fetchArticles)
 
       case .fetchArticles:
+        state.isFetching = true
+
         let request: ArticleSearchRequest = .init(
           category: state.selectedCategory,
           subcategory: state.selectedSubcategory,
@@ -173,10 +175,15 @@ public struct ArticleStore {
 
       case .didTapCategoryButton(let category):
         if category == .all {
+          guard state.selectedCategory != .all else {
+            return .none
+          }
+
           state.selectedCategory = category
           state.selectedSubcategory = nil
-          state.articleHeaderTitle = category.headerTitle
-          return .none
+          state.articleTitleForHeader = category.titleForHeader
+          state.sortType = .latest
+          return .send(.fetchArticles)
         }
 
         return .send(.presentSubcategorySheet(category))
@@ -194,7 +201,7 @@ public struct ArticleStore {
 
         state.selectedCategory = category
         state.selectedSubcategory = subcategory
-        state.articleHeaderTitle = state.subcategorySheet.description
+        state.articleTitleForHeader = state.subcategorySheet.description
         return .send(.fetchArticles)
 
       case .presentSubcategorySheet(let category):

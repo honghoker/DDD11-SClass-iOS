@@ -24,7 +24,7 @@ extension ArticleCategory {
     }
   }
 
-  var headerTitle: String {
+  var titleForHeader: String {
     switch self {
     case .all:
       return "🔥 인기"
