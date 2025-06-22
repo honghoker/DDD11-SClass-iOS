@@ -18,7 +18,7 @@ public struct ArticleSearchInputStore {
   @ObservableState
   public struct State {
     var searchTerm: String = ""
-    @Shared(.searchTerms) public var recentSearchTerms: [String] = ["WEB UI", "ID", "TEST"]
+    @Shared(.searchTerms) public var recentSearchTerms: [String] = []
 
     public init() {}
   }
@@ -38,6 +38,7 @@ public struct ArticleSearchInputStore {
     case didSubmit
     case didTapClearSearchTerm
     case didTapRecentSearchTerm(String)
+    case didChangeSearchTerm
     case didTapRemoveRecentSearchTermButton(String)
     case didTapClearRecentSearchTermButton
 
@@ -52,6 +53,8 @@ public struct ArticleSearchInputStore {
 
     case onSearchSubmit(String)
   }
+
+  @Dependency(\.continuousClock) private var clock
 
   public var body: some ReducerOf<Self> {
     BindingReducer()
@@ -68,6 +71,10 @@ public struct ArticleSearchInputStore {
         return .none
 
       case .didSubmit:
+        guard !state.searchTerm.isEmpty else {
+          return .none
+        }
+
         return .send(.submit(state.searchTerm))
 
       case .didTapClearSearchTerm:
@@ -79,9 +86,20 @@ public struct ArticleSearchInputStore {
 
       case .submit(let searchTerm):
         return .merge(
-          .send(.addRecentSearchTerm(searchTerm)),
+          .run { send in
+            try? await clock.sleep(for: .seconds(0.5))
+            await send(.addRecentSearchTerm(searchTerm))
+          },
           .send(.onSearchSubmit(searchTerm))
         )
+
+      case .didChangeSearchTerm:
+        let searchTerm = state.searchTerm.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard state.searchTerm != searchTerm else {
+          return .none
+        }
+        state.searchTerm = searchTerm
+        return .none
 
       case .didTapRemoveRecentSearchTermButton(let searchTerm):
         return .send(.removeRecentSearchTerm(searchTerm))
@@ -95,20 +113,25 @@ public struct ArticleSearchInputStore {
           return .none
         }
 
+        var searchTerms = state.recentSearchTerms
         // 기존 검색어가 있다면 제거
-        state.recentSearchTerms.removeAll { $0 == trimmedTerm }
-        
+        searchTerms.removeAll { $0 == trimmedTerm }
         // 맨 앞에 추가
-        state.recentSearchTerms.insert(trimmedTerm, at: 0)
+        searchTerms.insert(trimmedTerm, at: 0)
+        state.recentSearchTerms = searchTerms
 
         return .none
-        
+
       case .removeRecentSearchTerm(let searchTerm):
-        state.recentSearchTerms.removeAll { $0 == searchTerm }
+        var searchTerms = state.recentSearchTerms
+        searchTerms.removeAll { $0 == searchTerm }
+        state.recentSearchTerms = searchTerms
         return .none
         
       case .clearAllRecentSearchTerms:
-        state.recentSearchTerms.removeAll()
+        var searchTerms = state.recentSearchTerms
+        searchTerms.removeAll()
+        state.recentSearchTerms = searchTerms
         return .none
 
       default:

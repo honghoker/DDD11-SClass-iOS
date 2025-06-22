@@ -31,6 +31,9 @@ public struct ArticleSearchInputView: View {
     .onAppear {
       store.send(.onAppear)
     }
+    .onChange(of: store.searchTerm) { _, _ in
+      store.send(.didChangeSearchTerm)
+    }
   }
 
   private var navigationBar: some View {
@@ -90,38 +93,39 @@ public struct ArticleSearchInputView: View {
   }
 
   private var recentSearchTermsSection: some View {
-    VStack(alignment: .leading, spacing: 16) {
-      VStack(alignment: .leading, spacing: 20) {
-        HStack {
-          Text("최근 검색어")
-            .notoSans(.nav_title_inactive)
-            .foregroundStyle(.greyScale500)
-          
-          Spacer()
-        }
-        
-        LazyVStack {
-          ForEach(store.recentSearchTerms, id: \.self) { searchTerm in
-            recentSearchTermCell(searchTerm)
+    ScrollView {
+      VStack(alignment: .leading, spacing: 16) {
+        VStack(alignment: .leading, spacing: 20) {
+          HStack {
+            Text("최근 검색어")
+              .notoSans(.nav_title_inactive)
+              .foregroundStyle(.greyScale500)
+
+            Spacer()
+          }
+
+          LazyVStack(alignment: .leading, spacing: 16) {
+            ForEach(store.recentSearchTerms, id: \.self) { searchTerm in
+              recentSearchTermCell(searchTerm)
+            }
           }
         }
-      }
-      .padding(.horizontal, 16)
-      
-      VStack(spacing: 12) {
-        Rectangle()
-          .background(.greyScale950)
-          .frame(height: 0.5)
-        
-        HStack {
-          Spacer()
-          
-          Button(action: {
-            store.send(.didTapClearRecentSearchTermButton)
-          }) {
-            Text("전체 삭제")
-              .notoSans(.caption)
-              .foregroundStyle(.greyScale950)
+
+        VStack(spacing: 12) {
+          Rectangle()
+            .background(.greyScale950)
+            .frame(height: 0.5)
+
+          HStack {
+            Spacer()
+
+            Button(action: {
+              store.send(.didTapClearRecentSearchTermButton)
+            }) {
+              Text("전체 삭제")
+                .notoSans(.caption)
+                .foregroundStyle(.greyScale950)
+            }
           }
         }
       }

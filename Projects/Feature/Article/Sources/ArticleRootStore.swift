@@ -79,7 +79,7 @@ public struct ArticleRootStore {
       return .none
 
     case .element(id: _, action: .articleSearchInput(.onSearchSubmit(let searchTerm))):
-      state.path.append(.articleSearchResults(.init(searchTerms: searchTerm)))
+      state.path.append(.articleSearchResults(.init(searchTerm: searchTerm)))
       return .none
 
     case .element(id: _, action: .articleSearchResults(.didTapBackButton)):

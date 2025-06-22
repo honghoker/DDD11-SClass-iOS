@@ -98,7 +98,7 @@ struct ArticleSearchResultsView: View {
       
       Spacer(minLength: 65)
       
-      Text(store.searchTerms)
+      Text(store.searchTerm)
         .notoSans(.subhead_4)
         .foregroundStyle(.greyScale950)
         .lineLimit(1)

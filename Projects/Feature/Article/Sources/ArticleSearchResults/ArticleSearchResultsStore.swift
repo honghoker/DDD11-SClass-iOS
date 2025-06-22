@@ -37,7 +37,7 @@ public struct ArticleSearchResultsStore {
 
   @ObservableState
   public struct State {
-    let searchTerms: String
+    let searchTerm: String
     var isFetching: Bool = true
 
     var articles: IdentifiedArrayOf<Article> = []
@@ -52,8 +52,8 @@ public struct ArticleSearchResultsStore {
     @ObservationStateIgnored
     var shareURL: URL? = nil
 
-    public init(searchTerms: String) {
-      self.searchTerms = searchTerms
+    public init(searchTerm: String) {
+      self.searchTerm = searchTerm
     }
   }
 
@@ -94,9 +94,8 @@ public struct ArticleSearchResultsStore {
       switch action {
 
       case .onAppear:
-        return .run { [searchTerms = state.searchTerms] send in
-          let request: ArticleSearchRequest = .init(title: searchTerms)
-
+        return .run { [searchTerm = state.searchTerm] send in
+          let request: ArticleSearchRequest = .init(title: searchTerm)
           try? await clock.sleep(for: .seconds(0.5))
           await send(.onCompleteFetchArticles(
             Result {
