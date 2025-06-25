@@ -42,14 +42,14 @@ public struct ArticleStore {
     var subcategory: ArticleSubcategory? = nil
     var description: String {
       guard let subcategory else {
-        return category?.title ?? ArticleCategory.all.headerTitle
+        return category?.title ?? ArticleCategory.all.titleForHeader
       }
 
       if let category, subcategory == .all {
-        return category.headerTitle
+        return category.titleForHeader
       }
 
-      return subcategory.rawValue
+      return subcategory.title
     }
 
     public mutating func present(
@@ -70,8 +70,9 @@ public struct ArticleStore {
 
   @ObservableState
   public struct State {
+    var isFetching: Bool = true
     let categories: [ArticleCategory] = ArticleCategory.allCases
-    var articleHeaderTitle: String = ArticleCategory.all.headerTitle
+    var articleTitleForHeader: String = ArticleCategory.all.titleForHeader
     var articles: IdentifiedArrayOf<Article> = []
 
     var selectedCategory: ArticleCategory = .all
@@ -86,6 +87,7 @@ public struct ArticleStore {
     var selectedShareArticleId: Int? = nil
 
     var sortContextMenu: ContextMenuState = .init()
+    var sortType: ArticleSortType = .latest
 
     var isShareSheetPresented: Bool = false
     @ObservationStateIgnored
@@ -117,18 +119,21 @@ public struct ArticleStore {
     case didTapArticle(article: Article)
     case didTapArticleExitButton
     case didTapSearchButton
-    case didTapSortButton(globalFrame: CGRect)
-    case didTapLatestSortButton
-    case didTapPopularitySortButton
+    case didTapSortPopupButton(globalFrame: CGRect)
+    case didTapSortButton(ArticleSortType)
     case didTapSubcategoryButton(ArticleSubcategory)
+
+    // MARK: - Async Action
+
+    case fetchArticles
 
     // MARK: - Internal Actions
 
-    case onCompleteFetchArticles(Result<[Article], Never>)
+    case onCompleteFetchArticles(Result<[Article], Error>)
 
     // MARK: - Delegate Actions(parent)
 
-    case onNaviagteToSearchArticle
+    case onNaviagteToArticleSearchInput
   }
 
   // MARK: - Dependencies
@@ -139,33 +144,46 @@ public struct ArticleStore {
     Reduce { state, action in
       switch action {
       case .onAppear:
+        return .send(.fetchArticles)
+
+      case .fetchArticles:
+        state.isFetching = true
+
+        let request: ArticleSearchRequest = .init(
+          category: state.selectedCategory,
+          subcategory: state.selectedSubcategory,
+          sortBy: state.sortType
+        )
+
         return .run { send in
-          do {
-            try await withDependencies {
-              // FIXME: - API 연동 후 코드 제거
-              $0.articleAPIClient = .testValue
-            } operation: {
-              let articles = try await articleAPIClient.fetchArticles()
-              await send(.onCompleteFetchArticles(.success(articles)))
+          await send(.onCompleteFetchArticles(
+            Result {
+              try await articleAPIClient.fetchArticles(request: request)
             }
-          } catch {
-            debugPrint("@@@@@ fetch Article Error: \(error)")
-          }
+          ))
         }
 
       case .onCompleteFetchArticles(let result):
         switch result {
         case .success(let articles):
           state.articles = .init(uniqueElements: articles)
+        case .failure(let error):
+          debugPrint("Article Search Error: \(error)")
         }
+        state.isFetching = false
         return .none
 
       case .didTapCategoryButton(let category):
         if category == .all {
+          guard state.selectedCategory != .all else {
+            return .none
+          }
+
           state.selectedCategory = category
           state.selectedSubcategory = nil
-          state.articleHeaderTitle = category.headerTitle
-          return .none
+          state.articleTitleForHeader = category.titleForHeader
+          state.sortType = .latest
+          return .send(.fetchArticles)
         }
 
         return .send(.presentSubcategorySheet(category))
@@ -183,11 +201,8 @@ public struct ArticleStore {
 
         state.selectedCategory = category
         state.selectedSubcategory = subcategory
-        state.articleHeaderTitle = state.subcategorySheet.description
-
-        return .run { send in
-          // TODO: - 선택한 직무와 세부직무 기준으로 아티클 API 호출
-        }
+        state.articleTitleForHeader = state.subcategorySheet.description
+        return .send(.fetchArticles)
 
       case .presentSubcategorySheet(let category):
         let previousSubcategory: ArticleSubcategory?
@@ -266,9 +281,9 @@ public struct ArticleStore {
         return .none
 
       case .didTapSearchButton:
-        return .send(.onNaviagteToSearchArticle)
+        return .send(.onNaviagteToArticleSearchInput)
 
-      case .didTapSortButton(let globalFrame):
+      case .didTapSortPopupButton(let globalFrame):
         if state.sortContextMenu.isPresented {
           state.sortContextMenu.dismiss()
         } else {
@@ -276,15 +291,13 @@ public struct ArticleStore {
         }
         return .none
 
-      case .didTapLatestSortButton:
-        state.articles.sort(by: { $0.postDate > $1.postDate })
+      case .didTapSortButton(let sortType):
         state.sortContextMenu.dismiss()
-        return .none
-
-      case .didTapPopularitySortButton:
-        state.articles.sort(by: { $0.views > $1.views })
-        state.sortContextMenu.dismiss()
-        return .none
+        guard state.sortType != sortType else {
+          return .none
+        }
+        state.sortType = sortType
+        return .send(.fetchArticles)
 
       default:
         return .none

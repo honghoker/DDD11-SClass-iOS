@@ -14,7 +14,6 @@ struct CommonResponse<T: Decodable>: Decodable {
 }
 
 extension CommonResponse {
-  
   enum CodingKeys: String, CodingKey {
     case code
     case message

@@ -22,6 +22,32 @@ public struct Article: Identifiable, Equatable {
 
   public init(
     id: Int,
+    categoryId: Int?,
+    subcategoryId: Int?,
+    postDate: Date,
+    source: String,
+    title: String,
+    summary: String,
+    views: Int,
+    thumbnail: String,
+    url: String,
+    hashtags: [String]
+  ) {
+    self.id = id
+    self.category = .init(id: categoryId)
+    self.subcategory = .init(id: subcategoryId)
+    self.postDate = postDate
+    self.source = source
+    self.title = title
+    self.summary = summary
+    self.views = views
+    self.thumbnail = thumbnail
+    self.url = url
+    self.hashtags = hashtags
+  }
+
+  fileprivate init(
+    id: Int,
     category: ArticleCategory,
     subcategory: ArticleSubcategory,
     postDate: Date,

@@ -20,7 +20,7 @@ struct SkeletonContentView: View {
   var body: some View {
     VStack(alignment: .leading, spacing: 20) {
       SkeletonChecklistListView(width: width)
-      SkeletonArticleListView(width: width)
+      SkeletonMainArticleListView(width: width)
     }
     .padding(.horizontal, 16)
   }

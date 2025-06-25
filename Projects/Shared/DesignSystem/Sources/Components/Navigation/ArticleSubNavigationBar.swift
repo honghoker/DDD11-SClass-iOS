@@ -35,7 +35,7 @@ public struct ArticleSubNavigationBar: View {
       Spacer()
 
       if showOrderButton {
-        ArticleOrderButton(isPopupOpen: isPresented,onOpenPopup: onOpenPopup)
+        ArticleOrderButton(isPopupOpen: isPresented, onOpenPopup: onOpenPopup)
       }
     }
   }

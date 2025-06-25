@@ -140,7 +140,7 @@ struct HistoryDetailView: View {
       if store.isLoading {
         GeometryReader { geometry in
           VStack {
-            SkeletonArticleListView(width: geometry.size.width - 32)
+            SkeletonMainArticleListView(width: geometry.size.width - 32)
           }
           .padding(16)
         }
