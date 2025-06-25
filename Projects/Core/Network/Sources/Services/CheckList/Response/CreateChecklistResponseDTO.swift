@@ -22,6 +22,8 @@ extension CreateChecklistResponseDTO {
     .init(
       id: self.id.description,
       title: self.title,
+      createdAt: self.createdTime,
+      updatedAt: self.updatedTime,
       checkBoxList: []
     )
   }

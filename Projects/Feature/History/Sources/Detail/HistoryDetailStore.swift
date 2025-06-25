@@ -8,6 +8,7 @@
 import Foundation
 
 import CoreDomain
+import CoreNetwork
 
 import ComposableArchitecture
 
@@ -24,10 +25,11 @@ public struct HistoryDetailStore {
     var newTitle: String = ""
     var currentTab: TabItem = .checklist
     var isActive: Bool {
+      newTitle.count != 0 &&
       newTitle != selected?.label
     }
-    
     var isLoading = true
+    
     public init(checklist: Checklist) {
       self.checkList = checklist
       self.article = []
@@ -38,11 +40,13 @@ public struct HistoryDetailStore {
   public enum Action: BindableAction {
     case binding(BindingAction<State>)
     case onAppear
+    case onAppearFinish([CheckBox], [MainArticle])
     
     case didTapChangeCurrentTab(TabItem)
     
     // MARK: - 체크박스 완료
     case didTapChecklistComplete(CheckBox)
+    case didTapChecklistCompleteServer(Int)
     
     // MARK: - bottomsheet 처리
     case didTapDismiss
@@ -50,15 +54,18 @@ public struct HistoryDetailStore {
     // MARK: - 체크박스 삭제 처리
     case didTapDelete(CheckBox)
     case didTapDeleteConfirm
+    case didTapDeleteServer(Int)
     case didTapDeleteCancel
     
     // MARK: - 체크박스 타이틀 변경 처리
     case didTapEditTitle(CheckBox)
     case didTapEditTitleConfirm
+    case didTapEditTitleServer(Int)
     case didTapEditTitleCancel
     
     // MARK: - Navigation
     case didTapBackButton
+    case didTapArticle(MainArticle)
   }
   
   public enum ModalType: Identifiable {
@@ -66,6 +73,10 @@ public struct HistoryDetailStore {
     case delete
     case editTitle
   }
+  
+  
+ @Dependency(ChecklistAPIClient.self) var checklistAPIClient
+ @Dependency(HomeAPIClient.self) var homeAPIClient
   
   public var body: some ReducerOf<Self> {
     BindingReducer()
@@ -76,6 +87,24 @@ public struct HistoryDetailStore {
         return .none
         
       case .onAppear:
+        let id = state.checkList.id
+        return .run { send in
+          do {
+            async let checkBoxListResponse = try  checklistAPIClient.getChecklistItemList(id: id)
+            async let articleListResponse = try homeAPIClient.fetchArticles()
+            
+            let (checkBoxList, articleList) = try await ( checkBoxListResponse, articleListResponse
+            )
+            return await send(.onAppearFinish(checkBoxList, articleList))
+          } catch {
+            return await send(.onAppearFinish([], []))
+          }
+        }
+        
+      case .onAppearFinish(let list, let articleList):
+        state.checkList.checkBoxList = list
+        state.article = articleList
+        state.isLoading = false
         return .none
         
       case .didTapChangeCurrentTab(let newTab):
@@ -88,8 +117,25 @@ public struct HistoryDetailStore {
         else {
           return .none
         }
+        state.isLoading = true
+        let checklistId = state.checkList.id
+        let updateState = !state.checkList.checkBoxList[index].isCompleted
+        return .run { send in
+          do {
+            try await checklistAPIClient.complete(
+                checklistId,
+                checkBox.id,
+                updateState
+            )
+            await send(.didTapChecklistCompleteServer(index))
+          } catch {
+            debugPrint(error.localizedDescription)
+          }
+        }
         
+      case .didTapChecklistCompleteServer(let index):
         state.checkList.checkBoxList[index].isCompleted.toggle()
+        state.isLoading = false
         return .none
         
       case .didTapEditTitle(let selected):
@@ -104,11 +150,26 @@ public struct HistoryDetailStore {
         return .none
         
       case .didTapDeleteConfirm:
-        if let selected = state.selected,
-           let index = state.checkList.checkBoxList.firstIndex(of: selected) {
-          state.checkList.checkBoxList.remove(at: index)
+        guard let selected = state.selected,
+           let index = state.checkList.checkBoxList.firstIndex(of: selected)
+        else { return .none }
+        state.isLoading = true
+        return .run { [checkList = state.checkList ]send in
+          do {
+            try await checklistAPIClient.deleteChecklist(
+              checkList.id,
+              selected.id
+            )
+            await send(.didTapDeleteServer(index))
+          } catch {
+            debugPrint(error.localizedDescription)
+          }
         }
+        
+      case .didTapDeleteServer(let index):
+        state.checkList.checkBoxList.remove(at: index)
         state.selected = nil
+        state.isLoading = false
         return .none
         
       case .didTapDeleteCancel:
@@ -118,11 +179,28 @@ public struct HistoryDetailStore {
         
       case .didTapEditTitleConfirm:
         state.modal = nil
-        if let selected = state.selected,
-           let index = state.checkList.checkBoxList.firstIndex(of: selected) {
-          state.checkList.checkBoxList[index].label = state.newTitle
+        guard let selected = state.selected,
+           let index = state.checkList.checkBoxList.firstIndex(of: selected)
+        else { return .none }
+        state.isLoading = true
+         
+        return .run { [title = state.newTitle] send in
+          do {
+            try await checklistAPIClient.changeItemKeyword(
+              selected.checklistId,
+              selected.id,
+              title
+            )
+            await send(.didTapEditTitleServer(index))
+          } catch {
+            debugPrint(error.localizedDescription)
+          }
         }
+        
+      case .didTapEditTitleServer(let index):
+        state.checkList.checkBoxList[index].label = state.newTitle
         state.selected = nil
+        state.isLoading = false
         return .none
         
       case .didTapEditTitleCancel:
@@ -138,6 +216,8 @@ public struct HistoryDetailStore {
       case .didTapBackButton:
         return .none
         
+      case .didTapArticle(_):
+        return .none
       }
     }
   }

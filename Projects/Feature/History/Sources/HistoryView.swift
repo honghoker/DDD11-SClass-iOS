@@ -130,7 +130,7 @@ public struct HistoryView: View {
       
       HStack {
         Spacer()
-        Text("1 day ago") // TODO: 수정
+        Text(entity.createdAt.relativeDateString) 
           .notoSans(.caption)
           .foregroundColor((store.selected == entity ? .greyScale0 : .greyScale500))
       }

@@ -17,14 +17,15 @@ import Moya
 @DependencyClient
 public struct ChecklistAPIClient: Sendable {
   public var getChecklists: @Sendable() async throws -> [Checklist]
-  public var getChecklist: @Sendable(_ id: String) async throws -> Checklist
+  public var getChecklistItemList: @Sendable(_ id: String) async throws -> [CheckBox]
     
   public var getDraftChecklist: @Sendable(_ id: String) async throws -> Checklist
   public var createChecklist: @Sendable(_ checklist: Checklist) async throws -> Checklist
 
   public var deleteProject: @Sendable(_ checklistId: String) async throws -> Void
-  public var deleteChecklist: @Sendable(_ checklistId: String, _ checkBoxList: [String]) async throws -> [String]
+  public var deleteChecklist: @Sendable(_ checklistId: String, _ checkBoxId: String) async throws -> Void
   public var changeKeyword: @Sendable(_ checklistId: String, _ newKeyword: String) async throws -> Void
+  public var changeItemKeyword: @Sendable(_ checklistId: String, _ checkBoxId: String,_ newKeyword: String) async throws -> Void
   public var complete: @Sendable(_ checklistId: String, _ id: String, _ completed: Bool) async throws -> Void
 }
 
@@ -39,13 +40,13 @@ extension ChecklistAPIClient: DependencyKey {
   public static var liveValue: ChecklistAPIClient = .init(
     getChecklists: {
       let api = ChecklistAPI.getChecklists
-      let responseDTO: ChecklistsResponseDTO = try await APIService<ChecklistAPI>().request(api: api)
-      return responseDTO.checklists.map { $0.toEntity }
+      let responseDTO: [ChecklistResponseDTO] = try await APIService<ChecklistAPI>().request(api: api)
+      return responseDTO.map { $0.toEntity }
     },
-    getChecklist: { id in
-      let api = ChecklistAPI.getChecklist(id: id)
-      let responseDTO: ChecklistResponseDTO = try await APIService<ChecklistAPI>().request(api: api)
-      return responseDTO.toEntity
+    getChecklistItemList: { id in
+      let api = ChecklistAPI.getChecklistItemList(id: id)
+      let responseDTO: [ChecklistItemDTO] = try await APIService<ChecklistAPI>().request(api: api)
+      return responseDTO.map { $0.toEntity }
     },
     getDraftChecklist: { id in
         let api = ChecklistAPI.getDraftCheckList(id: id)
@@ -53,6 +54,8 @@ extension ChecklistAPIClient: DependencyKey {
         return Checklist(
           id: UUID().uuidString,
           title: nil,
+          createdAt: "",
+          updatedAt: "",
           checkBoxList: responseDTO.map { CheckBox(label: $0) }
         )
     },
@@ -68,17 +71,20 @@ extension ChecklistAPIClient: DependencyKey {
       let responseDTO: EmptyResponseDTO = try await APIService<ChecklistAPI>().request(api: api)
     },
     deleteChecklist: { checklistId, checkBox in
-      let api = ChecklistAPI.deleteChecklist(checklistId: checklistId, checkBoxList: checkBox)
-      let responseDTO: DeleteChecklistResponseDTO = try await APIService<ChecklistAPI>().request(api: api)
-      return responseDTO.deletedIds
+      let api = ChecklistAPI.deleteChecklist(checklistId: checklistId, checkBoxId: checkBox)
+      let responseDTO: EmptyResponseDTO = try await APIService<ChecklistAPI>().request(api: api)
     },
     changeKeyword: { checklistId, title in
       let api = ChecklistAPI.changeKeyword(checklistId: checklistId, newKeyword: title)
       let responseDTO: EmptyResponseDTO = try await APIService<ChecklistAPI>().request(api: api)
     },
+    changeItemKeyword: { checklistId, checkBoxId, title in
+      let api = ChecklistAPI.changeItemKeyword(checklistId: checklistId, checkBoxId: checkBoxId, newKeyword: title)
+      let responseDTO: EmptyResponseDTO = try await APIService<ChecklistAPI>().request(api: api)
+    },
     complete: { checklistId, id, completed in
       let api = ChecklistAPI.complete(checklistId: checklistId, id: id, completed: completed ? 1 : 0)
-      let responseDTO: EmptyResponseDTO = try await APIService<ChecklistAPI>().request(api: api)
+      let responseDTO: String = try await APIService<ChecklistAPI>().request(api: api)
     }
   )
   

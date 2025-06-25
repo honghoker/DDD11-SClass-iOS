@@ -10,27 +10,20 @@ import Foundation
 import CoreDomain
 
 public struct ChecklistItemDTO: Decodable {
-  let checklistId: String
-  let label: String
-  let isCompleted: Int
-  let isMain: Int
-  let createdAt: String
-  let id: String
+  let id: Int
+  let checklistId: Int
+  let content: String?
+  let completed: Bool
+  let createdTime: String
+  let updatedTime: String
   
-  public init(
-    checklistId: String,
-    label: String,
-    isCompleted: Int,
-    isMain: Int,
-    createdAt: String,
-    id: String
-  ) {
-    self.checklistId = checklistId
-    self.label = label
-    self.isCompleted = isCompleted
-    self.isMain = isMain
-    self.createdAt = createdAt
+  public init(id: Int, checklistId: Int, content: String, completed: Bool, createdTime: String, updatedTime: String) {
     self.id = id
+    self.checklistId = checklistId
+    self.content = content
+    self.completed = completed
+    self.createdTime = createdTime
+    self.updatedTime = updatedTime
   }
 }
 
@@ -38,12 +31,12 @@ public struct ChecklistItemDTO: Decodable {
 extension ChecklistItemDTO {
   var toEntity: CheckBox {
     .init(
-      checklistId: self.checklistId,
-      label: self.label,
-      isCompleted: self.isCompleted == 1,
-      isMain: self.isMain == 1,
-      createdAt: self.createdAt,
-      id: self.id
+      checklistId: self.checklistId.description,
+      label: self.content ?? "",
+      isCompleted: self.completed,
+      isMain: true, // TODO: 수정
+      createdAt: self.createdTime,
+      id: self.id.description
     )
   }
 }

@@ -48,7 +48,7 @@ extension ChatAPI: BaseAPI {
   
   var parameters: [String: Any]? {
     switch self {
-    case .createSession(let id):
+    case .createSession(_):
         return [:]
     case .sendMessage(let dto, _):
       return [

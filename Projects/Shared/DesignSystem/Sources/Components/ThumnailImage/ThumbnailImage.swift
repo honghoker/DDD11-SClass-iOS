@@ -1,8 +1,8 @@
 //
 //  ThumbnailImage.swift
-//  FeatureHome
+//  SharedDesignSystem
 //
-//  Created by 홍은표 on 9/14/24.
+//  Created by 현수빈 on 6/16/25.
 //
 
 import SwiftUI
@@ -11,14 +11,14 @@ import SharedThirdPartyLib
 
 import Kingfisher
 
-struct ThumbnailImage: View {
+public struct ThumbnailImage: View {
   private let urlString: String?
   
-  init(urlString: String?) {
+  public init(urlString: String?) {
     self.urlString = urlString
   }
   
-  var body: some View {
+  public var body: some View {
     Group {
       if let urlString, let url = URL(string: urlString) {
         KFImage(url)

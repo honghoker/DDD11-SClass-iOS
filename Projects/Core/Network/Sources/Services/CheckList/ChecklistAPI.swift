@@ -15,7 +15,7 @@ enum ChecklistAPI {
   /// 목록 조회
   case getChecklists
   /// 상세 조회
-  case getChecklist(id: String)
+  case getChecklistItemList(id: String)
     
   case getDraftCheckList(id: String)
   /// 체크리스트 생성
@@ -23,9 +23,11 @@ enum ChecklistAPI {
   /// 체크리스트 프로젝트 삭제
   case deleteProject(checklistId: String)
   /// 체크리스트 다중 항목 삭제
-  case deleteChecklist(checklistId: String, checkBoxList: [String])
+  case deleteChecklist(checklistId: String, checkBoxId: String)
   /// 체크리스트 프로젝트 제목 변경
   case changeKeyword(checklistId: String, newKeyword: String)
+  /// 체크리스트 체크박스 제목 변경
+  case changeItemKeyword(checklistId: String, checkBoxId: String, newKeyword: String)
   /// 완료 상태 변경
   case complete(checklistId: String, id: String, completed: Int)
 }
@@ -39,7 +41,7 @@ extension ChecklistAPI: BaseAPI {
     switch self {
     case .getChecklists:
       return .get
-    case .getChecklist:
+    case .getChecklistItemList:
       return .get
     case .getDraftCheckList:
       return .get
@@ -50,7 +52,9 @@ extension ChecklistAPI: BaseAPI {
     case .deleteChecklist:
       return .delete
     case .changeKeyword:
-      return .patch
+      return .put
+    case .changeItemKeyword:
+      return .put
     case .complete:
       return .patch
     }
@@ -61,8 +65,8 @@ extension ChecklistAPI: BaseAPI {
     case .getChecklists:
       return ""
       
-    case .getChecklist(let id):
-      return "/\(id)"
+    case .getChecklistItemList(let id):
+      return "/\(id)/items"
       
     case .getDraftCheckList(id: let id):
         return "/drafts/\(id)"
@@ -73,11 +77,14 @@ extension ChecklistAPI: BaseAPI {
     case .deleteProject(let checklistId):
       return "/\(checklistId)"
     
-    case .deleteChecklist(let checklistId, _):
-      return "/\(checklistId)/items"
+    case .deleteChecklist(let checklistId, let checkBoxId):
+      return "/\(checklistId)/items/\(checkBoxId)"
     
     case .changeKeyword(let checklistId, _):
-      return "/\(checklistId)"
+      return "/\(checklistId)/title"
+      
+    case .changeItemKeyword(let checklistId, let checkBoxId, _):
+      return "/\(checklistId)/items/\(checkBoxId)"
     
     case .complete(let checklistId, let id, _):
       return "/\(checklistId)/items/\(id)/complete"
@@ -90,7 +97,7 @@ extension ChecklistAPI: BaseAPI {
     case .getChecklists:
       return nil
       
-    case .getChecklist:
+    case .getChecklistItemList:
       return nil
         
     case .getDraftCheckList:
@@ -117,12 +124,13 @@ extension ChecklistAPI: BaseAPI {
         "title": keyword
       ]
       
-    case .complete(let checklistId, let id, let completed):
+    case .changeItemKeyword(checklistId: _, checkBoxId: _, newKeyword: let keyword):
       return [
-        "checklistId": checklistId,
-        "id": id,
-        "completed": completed
+        "content": keyword
       ]
+  
+    case .complete:
+      return [:]
     }
   }
 

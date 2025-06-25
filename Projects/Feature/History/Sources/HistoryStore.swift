@@ -9,6 +9,7 @@ import Foundation
 import ComposableArchitecture
 
 import CoreDomain
+import CoreNetwork
 
 @Reducer
 public struct HistoryStore {
@@ -33,6 +34,7 @@ public struct HistoryStore {
     case binding(BindingAction<State>)
     case path(StackActionOf<Path>)
     case onAppear
+    case onAppearFinish([Checklist])
     
     case didTapChecklistMenu(Checklist)
     case didTapChecklist(Checklist)
@@ -45,10 +47,12 @@ public struct HistoryStore {
     // alert 처리
     case didTapDeleteConfirm
     case didTapDeleteCancel
+    case didTapDeleteServer(Int)
     
     // 제목변경 처리
     case didTapEditTitleConfirm
     case didTapEditTitleCancel
+    case didTapEditTitleServer(Int)
     
     
     case historyDetail(HistoryDetailStore.Action)
@@ -65,6 +69,9 @@ public struct HistoryStore {
     case delete
     case editTitle
   }
+    
+    
+  @Dependency(ChecklistAPIClient.self) var checklistAPIClient
   
   public var body: some ReducerOf<Self> {
     BindingReducer()
@@ -79,16 +86,17 @@ public struct HistoryStore {
         return .none
         
       case .onAppear:
-        state.checkList = [
-          .mock1,
-          .mock2,
-          .init(id: UUID().uuidString, title: "요청/문의", checkBoxList: []),
-          .init(id: UUID().uuidString, title: "보고/컴펌", checkBoxList: []),
-          .init(id: UUID().uuidString, title: "협업", checkBoxList: []),
-          .init(id: UUID().uuidString, title: "커뮤니케이션", checkBoxList: []),
-          .init(id: UUID().uuidString, title: "인터렉션 디자인", checkBoxList: []),
-          .init(id: UUID().uuidString, title: "예시용 체크리스트", checkBoxList: []),
-        ]
+        return .run { send in
+          do {
+            let checklist = try await checklistAPIClient.getChecklists()
+            return await send(.onAppearFinish(checklist))
+          } catch {
+            return await send(.onAppearFinish([]))
+          }
+        }
+        
+      case .onAppearFinish(let checklist):
+        state.checkList = checklist
         return .none
         
       case .didTapChecklist(let selected):
@@ -111,19 +119,44 @@ public struct HistoryStore {
         return .none
         
       case .didTapDeleteConfirm:
-        if let selected = state.selected,
-           let index = state.checkList.firstIndex(of: selected) {
-          state.checkList.remove(at: index)
+        guard let selected = state.selected,
+           let index = state.checkList.firstIndex(of: selected)
+        else { return .none }
+        return .run { send in
+          do {
+            try await checklistAPIClient.deleteProject(
+              checklistId: selected.id
+            )
+            await send(.didTapDeleteServer(index))
+          } catch {
+            debugPrint(error.localizedDescription)
+          }
         }
+        
+      case .didTapDeleteServer(let index):
+        state.checkList.remove(at: index)
         state.selected = nil
         return .none
         
       case .didTapEditTitleConfirm:
         state.modal = nil
-        if let selected = state.selected,
-           let index = state.checkList.firstIndex(of: selected) {
-          state.checkList[index].title = state.newTitle
+        guard let selected = state.selected,
+           let index = state.checkList.firstIndex(of: selected)
+        else { return .none }
+        return .run { [newKeyword = state.newTitle] send in
+          do {
+            try await checklistAPIClient.changeKeyword(
+              checklistId: selected.id,
+              newKeyword: newKeyword
+            )
+            await send(.didTapEditTitleServer(index))
+          } catch {
+            debugPrint(error.localizedDescription)
+          }
         }
+        
+      case .didTapEditTitleServer(let index):
+        state.checkList[index].title = state.newTitle
         state.selected = nil
         return .none
         

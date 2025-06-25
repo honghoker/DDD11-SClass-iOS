@@ -30,7 +30,7 @@ class APIService<API: BaseAPI>: Requestable {
   }
   
   private func performRequest<T: Decodable>(api: API) async throws -> T {
-    debugPrint("request: \(String(describing: api.parameters)) \(api.urlPath)")
+    debugPrint("request: \(String(describing: api.parameters)) \(api.path)")
     let response = try await provider.request(api)
     
     if let httpResponse = response.response, 200 ... 400 ~= httpResponse.statusCode {
