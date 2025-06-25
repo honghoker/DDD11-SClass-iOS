@@ -37,7 +37,7 @@ struct HistoryDetailView: View {
         case .checklist:
           checklistContent
         case .article:
-          articeContent
+          articleContent
         }
       }
       .padding(.top, 24)
@@ -135,7 +135,7 @@ struct HistoryDetailView: View {
   }
   
   @ViewBuilder
-  private var articeContent: some View {
+  private var articleContent: some View {
     ScrollView {
       if store.isLoading {
         GeometryReader { geometry in

@@ -25,6 +25,7 @@ public struct HistoryDetailStore {
     var newTitle: String = ""
     var currentTab: TabItem = .checklist
     var isActive: Bool {
+      newTitle.count != 0 &&
       newTitle != selected?.label
     }
     var isLoading = true
