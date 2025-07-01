@@ -25,7 +25,7 @@ public extension DependencyValues {
 
 extension ArticleAPIClient: DependencyKey {
   public static var liveValue: ArticleAPIClient = .init(
-    fetchArticles: { reqeust in
+    _fetchArticles: { reqeust in
       let api = ArticleAPI.fetchArticles(
         .init(
           categoryId: reqeust.category?.id,
@@ -40,7 +40,7 @@ extension ArticleAPIClient: DependencyKey {
   )
   
   public static var testValue: ArticleAPIClient = .init(
-    fetchArticles: { _ in
+    _fetchArticles: { _ in
       return Article.mockArticles
     }
   )
