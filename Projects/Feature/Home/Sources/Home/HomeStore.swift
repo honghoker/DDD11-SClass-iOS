@@ -61,6 +61,7 @@ public struct HomeStore {
     case updateSelectedCardAfterDelay(index: Int)
     case completeCheckBox(checkBox: CheckBox)
     case deleteCheckBox(checkBox: CheckBox)
+    case onCompleteDeleteCard(Result<Card, Error>)
 
     // MARK: - Navigation
 
@@ -248,16 +249,26 @@ public struct HomeStore {
       case .onDeleteCheckBox(let checkBox):
         return .send(.deleteCheckBox(checkBox: checkBox))
 
-      case .onDeleteCard(let card):
-        state.cards.remove(card)
+      case .onCompleteDeleteCard(let result):
+        switch result {
+        case .success(let card):
+          state.cards.remove(card)
+          return .send(.setSelectedCard(card: state.cards.first))
 
-        return .merge(
-          // TODO: 업무 폴더 삭제, API 연동 후 테스트
-          .run { send in
-            _ = try await checklistAPIClient.deleteProject(checklistId: card.id)
-          },
-          .send(.setSelectedCard(card: state.cards.first))
-        )
+        case .failure(let error):
+          debugPrint(error.localizedDescription)
+          return .none
+        }
+
+      case .onDeleteCard(let card):
+        return .run { send in
+          do {
+            try await checklistAPIClient.deleteProject(checklistId: card.id)
+            await send(.onCompleteDeleteCard(.success(card)))
+          } catch {
+            await send(.onCompleteDeleteCard(.failure(error)))
+          }
+        }
 
       default:
         return .none
