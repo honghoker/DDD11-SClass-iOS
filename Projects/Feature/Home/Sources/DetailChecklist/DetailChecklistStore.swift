@@ -55,9 +55,9 @@ public struct DetailChecklistStore {
   }
   
   // MARK: - Dependencies
-  
-  @Dependency(ChecklistAPIClient.self) var checklistAPIClient
-  
+
+  @Dependency(ChecklistAPIClient.self) private var checklistAPIClient
+
   public var body: some ReducerOf<Self> {
     BindingReducer()
     Reduce { state, action in
@@ -106,19 +106,15 @@ public struct DetailChecklistStore {
         
       case .deleteCheckBox(let checkBox):
         state.willDeleteCheckBox = nil
-        // TODO: - API 연동 후 수정
-        return .send(.completeResponse(.success(checkBox)))
-        //        return .run { [cardID = state.card.id, checklistID = checkBox.checklistId] send in
-        //          do {
-        //            _ = try await checklistAPIClient.deleteChecklist(
-        //              checklistId: cardID,
-        //              checkBoxList: [checklistID]
-        //            )
-        //            await send(.completeResponse(.success(checkBox)))
-        //          } catch {
-        //            await send(.completeResponse(.failure(error)))
-        //          }
-        //        }
+        return .run { [checklistId = state.card.id, checkBoxId = checkBox.id] send in
+          do {
+            try await checklistAPIClient.deleteChecklist(checklistId, checkBoxId)
+            await send(.completeResponse(.success(checkBox)))
+          } catch {
+            debugPrint(error.localizedDescription)
+            await send(.completeResponse(.failure(error)))
+          }
+        }
         
       case .completeResponse(.success(let checkBox)):
         if let index = state.card.checkBoxList.firstIndex(where: { $0 == checkBox }) {

@@ -114,11 +114,9 @@ extension ChecklistAPI: BaseAPI {
         "checklistId": checklistId
       ]
       
-    case .deleteChecklist(_, let list):
-      return [
-        "checkboxIds": list
-      ]
-      
+    case .deleteChecklist:
+      return nil
+
     case .changeKeyword(_, let keyword):
       return [
         "title": keyword

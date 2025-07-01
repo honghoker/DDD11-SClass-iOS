@@ -154,7 +154,7 @@ public struct HistoryDetailStore {
            let index = state.checkList.checkBoxList.firstIndex(of: selected)
         else { return .none }
         state.isLoading = true
-        return .run { [checkList = state.checkList ]send in
+        return .run { [checkList = state.checkList] send in
           do {
             try await checklistAPIClient.deleteChecklist(
               checkList.id,
