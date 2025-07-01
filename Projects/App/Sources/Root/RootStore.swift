@@ -42,6 +42,7 @@ public struct RootStore {
       case .splash(.routeToLoginScreen):
         state = .login(LoginStore.State())
         return .none
+
       case .splash(.routeToMainTabScreen):
         state = .mainTab(.init(.home))
         return .none

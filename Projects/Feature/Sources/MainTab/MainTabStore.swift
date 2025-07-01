@@ -16,11 +16,11 @@ public struct MainTabStore {
   public struct State {
     public var selectedTab: MainTabItem
     
-    public var home: HomeRootStore.State = .init()
-    public var history: HistoryStore.State = .init()
+    public var home: HomeRootStore.State?
+    public var history: HistoryStore.State?
     public var chat: ChatNavigationStore.State = .init()
-    public var article: ArticleRootStore.State = .init()
-    public var myPage: MyPageRootStore.State = .init()
+    public var article: ArticleRootStore.State?
+    public var myPage: MyPageRootStore.State?
     
     public var isSelectedChat = false
     
@@ -30,6 +30,7 @@ public struct MainTabStore {
   }
   
   public enum Action: BindableAction {
+    case onAppear
     case binding(BindingAction<State>)
     case selectTab(MainTabItem)
     case home(HomeRootStore.Action)
@@ -41,32 +42,14 @@ public struct MainTabStore {
   }
   
   public var body: some ReducerOf<Self> {
-    
-    Scope(state: \.chat, action: \.chat) {
-      ChatNavigationStore()
-    }
-    
-    Scope(state: \.home, action: \.home) {
-      HomeRootStore()
-    }
-    
-    Scope(state: \.history, action: \.history) {
-      HistoryStore()
-    }
-    
-    Scope(state: \.article, action: \.article) {
-      ArticleRootStore()
-    }
-    
-    Scope(state: \.myPage, action: \.myPage) {
-      MyPageRootStore()
-    }
-    
     Reduce { state, action in
       switch action {
+      case .onAppear:
+        return changeSelectedTab(state: &state, tab: state.selectedTab)
+
       case .binding:
         return .none
-        
+
       case .selectTab(let tab):
         return changeSelectedTab(state: &state, tab: tab)
         
@@ -81,7 +64,7 @@ public struct MainTabStore {
         
       case .article:
         return .none
-        
+
       case .myPage(.navigateToLoginPage):
         return .send(.routeToLoginPage)
         
@@ -105,13 +88,40 @@ public struct MainTabStore {
         return .none
       }
     }
+    .ifLet(\.home, action: \.home) {
+      HomeRootStore()
+    }
+    .ifLet(\.history, action: \.history) {
+      HistoryStore()
+    }
+    .ifLet(\.article, action: \.article) {
+      ArticleRootStore()
+    }
+    .ifLet(\.myPage, action: \.myPage) {
+      MyPageRootStore()
+    }
+
+    Scope(state: \.chat, action: \.chat) {
+      ChatNavigationStore()
+    }
   }
   
   private func changeSelectedTab(state: inout State, tab: MainTabItem) -> Effect<Action> {
-    if tab == .chat {
+
+    switch tab {
+    case .home:
+      if state.home == nil { state.home = .init() }
+    case .history:
+      if state.history == nil { state.history = .init() }
+    case .chat:
       state.isSelectedChat = true
       return .none
+    case .article:
+      if state.article == nil { state.article = .init() }
+    case .myPage:
+      if state.myPage == nil { state.myPage = .init() }
     }
+
     state.selectedTab = tab
     return .none
   }

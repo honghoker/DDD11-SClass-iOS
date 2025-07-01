@@ -13,11 +13,11 @@ import ComposableArchitecture
 
 public struct MainTabView: View {
   @Bindable var store: StoreOf<MainTabStore>
-  
+
   public init(store: StoreOf<MainTabStore>) {
     self.store = store
   }
-  
+
   public var body: some View {
     ZStack {
       VStack(spacing: .zero) {
@@ -31,39 +31,55 @@ public struct MainTabView: View {
       }
     }
     .ignoresSafeArea(.keyboard, edges: .bottom)
+    .onAppear {
+      store.send(.onAppear)
+    }
   }
 }
 
 private struct TabView: View {
   @Bindable private var store: StoreOf<MainTabStore>
-  
+
   fileprivate init(store: StoreOf<MainTabStore>) {
     self.store = store
   }
-  
+
   fileprivate var body: some View {
-    switch store.selectedTab {
-    case .home:
-      HomeRootView(store: store.scope(state: \.home, action: \.home))
-    case .history:
-      HistoryView(store: store.scope(state: \.history, action: \.history))
-    case .chat:
-      EmptyView()
-    case .article:
-      ArticleRootView(store: store.scope(state: \.article, action: \.article))
-    case .myPage:
-      MyPageRootView(store: store.scope(state: \.myPage, action: \.myPage))
+    ZStack {
+      if let homeStore = store.scope(state: \.home, action: \.home) {
+        HomeRootView(store: homeStore)
+          .opacity(store.selectedTab == .home ? 1 : 0)
+          .allowsHitTesting(store.selectedTab == .home)
+      }
+
+      if let historyStore = store.scope(state: \.history, action: \.history) {
+        HistoryView(store: historyStore)
+          .opacity(store.selectedTab == .history ? 1 : 0)
+          .allowsHitTesting(store.selectedTab == .history)
+      }
+
+      if let articleStore = store.scope(state: \.article, action: \.article) {
+        ArticleRootView(store: articleStore)
+          .opacity(store.selectedTab == .article ? 1 : 0)
+          .allowsHitTesting(store.selectedTab == .article)
+      }
+
+      if let myPageStore = store.scope(state: \.myPage, action: \.myPage) {
+        MyPageRootView(store: myPageStore)
+          .opacity(store.selectedTab == .myPage ? 1 : 0)
+          .allowsHitTesting(store.selectedTab == .myPage)
+      }
     }
   }
 }
 
 private struct TabBarView: View {
   @Bindable private var store: StoreOf<MainTabStore>
-  
+
   fileprivate init(store: StoreOf<MainTabStore>) {
     self.store = store
   }
-  
+
   fileprivate var body: some View {
     ZStack {
       HStack(alignment: .bottom, spacing: 30) {
@@ -94,7 +110,7 @@ private struct TabBarView: View {
 private struct TabItem: View {
   @Bindable private var store: StoreOf<MainTabStore>
   private let type: MainTabItem
-  
+
   fileprivate init(
     store: StoreOf<MainTabStore>,
     type: MainTabItem
@@ -102,7 +118,7 @@ private struct TabItem: View {
     self.store = store
     self.type = type
   }
-  
+
   fileprivate var body: some View {
     TabBarItemView(
       image: type.image,
@@ -117,11 +133,11 @@ private struct TabItem: View {
 
 private struct CircleTabItem: View {
   @Bindable private var store: StoreOf<MainTabStore>
-  
+
   fileprivate init(store: StoreOf<MainTabStore>) {
     self.store = store
   }
-  
+
   fileprivate var body: some View {
     TabBarItemCircleView(image: MainTabItem.chat.image)
       .onTap {
