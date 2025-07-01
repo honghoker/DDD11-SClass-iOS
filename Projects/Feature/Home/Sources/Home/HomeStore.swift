@@ -193,7 +193,7 @@ public struct HomeStore {
           checkBoxList: checklist.checkBoxList
         )
 
-        state.cards.insert(card, at: 0)
+        state.cards.append(card)
         return .none
 
       case .updateSelectedCardAfterDelay(let index):
