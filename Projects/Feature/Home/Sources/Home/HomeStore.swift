@@ -219,13 +219,13 @@ public struct HomeStore {
             await send(.updateSelectedCardAfterDelay(index: selectedCardIndex))
           }.animation(.easeIn),
           .run { send in
-            _ = try await checklistAPIClient.complete(
-              checklistId: checkBox.checklistId,
-              id: checkBox.id,
-              completed: checkBox.isCompleted
+            try await checklistAPIClient.complete(
+              checkBox.checklistId,
+              checkBox.id,
+              checkBox.isCompleted
             )
           } catch: { error, send in
-            
+            debugPrint("Failed to update checkbox completion: \(error.localizedDescription)")
           }
         )
 
