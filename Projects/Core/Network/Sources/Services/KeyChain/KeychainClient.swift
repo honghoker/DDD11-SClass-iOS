@@ -84,8 +84,8 @@ extension KeychainClient: DependencyKey {
     }
     
     let keychain = Keychain(
-      service: "com.DDD.OnboardingKit",
-      accessGroup: "\(appIdentifierPrefix)group.com.DDD.OnboardingKit"
+      service: "com.DDD.onboarding-kit",
+      accessGroup: "\(appIdentifierPrefix)group.com.DDD.onboarding-kit"
     )
     
     return Self(
