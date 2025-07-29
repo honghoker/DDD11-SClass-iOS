@@ -16,20 +16,23 @@ import ComposableArchitecture
 
 struct HomeView: View {
   @Bindable private var store: StoreOf<HomeStore>
-  
+
   init(store: StoreOf<HomeStore>) {
     self.store = store
   }
-  
+
   var body: some View {
     GeometryReader { geometry in
       backgroundView(size: geometry.size)
-      
+
       ScrollView {
         VStack(alignment: .leading, spacing: 16) {
           HeaderView(store: store)
           content(size: geometry.size)
         }
+      }
+      .refreshable {
+        store.send(.onRefresh)
       }
     }
     .onAppear {
@@ -45,19 +48,19 @@ struct HomeView: View {
       )
     }
   }
-  
+
   private func backgroundView(size: CGSize) -> some View {
     Image.homeBackground
       .resizable()
       .scaledToFill()
       .frame(width: size.width, height: size.height)
   }
-  
+
   @ViewBuilder
   private func content(size: CGSize) -> some View {
     VStack(spacing: .zero) {
       Spacer().frame(height: 14)
-      
+
       if store.isLoading {
         SkeletonContentView(width: size.width)
       } else {
@@ -65,7 +68,7 @@ struct HomeView: View {
           if let selectedCard = store.selectedCard {
             checklistList(selectedCard: selectedCard)
           }
-          
+
           articleList
         }
       }
@@ -81,7 +84,7 @@ struct HomeView: View {
       )
     )
   }
-  
+
   @ViewBuilder
   private func checklistList(selectedCard: Card) -> some View {
     VStack(spacing: 16) {
@@ -91,7 +94,7 @@ struct HomeView: View {
           store.send(.didTapNavigateToDetailChecklist(card: selectedCard))
         }
       )
-      
+
       Group {
         if store.displayedCheckBoxes.isEmpty {
           checklistCompleteView
@@ -110,7 +113,7 @@ struct HomeView: View {
       .padding(.horizontal, 16)
     }
   }
-  
+
   private var checklistCompleteView: some View {
     HStack(spacing: .zero) {
       Text("체크리스트를 모두 완료했어요.")
@@ -127,14 +130,14 @@ struct HomeView: View {
     .clipShape(RoundedRectangle(cornerRadius: 4))
     .shadow(color: .greyScale950.opacity(0.05), radius: 5, x: 0, y: 4)
   }
-  
+
   private var articleList: some View {
     VStack(spacing: 16) {
       ListSection(
         title: "관련 아티클",
         onTap: {}
       )
-      
+
       ForEach(store.articles) { article in
         MainArticleCellView(
           thumbnail: { ThumbnailImage(urlString: article.thumbnailURL) },

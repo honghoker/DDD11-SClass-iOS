@@ -109,6 +109,7 @@ public struct ArticleStore {
 
     // MARK: - User Actions
 
+    case onRefresh
     case didTapCategoryButton(ArticleCategory)
     case didCloseSubcategorySheet
     case didTapMenuButton(articleId: Int, globalFrame: CGRect)
@@ -144,6 +145,9 @@ public struct ArticleStore {
     Reduce { state, action in
       switch action {
       case .onAppear:
+        return .send(.fetchArticles)
+
+      case .onRefresh:
         return .send(.fetchArticles)
 
       case .fetchArticles:

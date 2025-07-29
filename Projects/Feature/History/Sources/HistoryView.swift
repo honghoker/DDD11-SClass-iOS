@@ -83,6 +83,9 @@ public struct HistoryView: View {
       }
       .padding(.horizontal, 16)
     }
+    .refreshable {
+      store.send(.onRefresh)
+    }
   }
   
   private var emptyView: some View {

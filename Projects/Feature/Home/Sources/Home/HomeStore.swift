@@ -44,6 +44,7 @@ public struct HomeStore {
 
     // MARK: - User Actions
 
+    case onRefresh
     case didTapAppendFolderButton
     case didTapArticle(MainArticle)
     case didTapArticleExitButton
@@ -53,6 +54,7 @@ public struct HomeStore {
 
     // MARK: - Internal Actions
 
+    case fetchData
     case setChecklistCards([Checklist])
     case setArticles([MainArticle])
     case setSelectedCard(card: Card?)
@@ -95,7 +97,34 @@ public struct HomeStore {
         return .none
 
       case .onAppear:
+        return .send(.fetchData)
 
+      case .onRefresh:
+        return .send(.fetchData)
+
+      case .didTapAppendFolderButton:
+        return .send(.onPresentChat)
+
+      case .didTapProjectFolder(let card):
+        state.selectedCard = card
+        state.displayedCheckBoxes = calculateDisplayedCheckBoxes(for: card)
+        return .none
+
+      case .didTapChecklistCompleteButton(let checkBox):
+        return .send(.completeCheckBox(checkBox: checkBox))
+
+      case .didTapArticle(let article):
+        state.selectedArticle = article
+        return .none
+
+      case .didTapArticleExitButton:
+        state.selectedArticle = .none
+        return .none
+
+      case .didTapNavigateToDetailChecklist(let card):
+        return .send(.onNaviagteToDetailChecklist(card: card))
+
+      case .fetchData:
         return .run { send in
           await send(.isLoadingChanged(isLoading: true))
 
@@ -139,27 +168,6 @@ public struct HomeStore {
           await send(.isLoadingChanged(isLoading: false))
         }
 
-      case .didTapAppendFolderButton:
-        return .send(.onPresentChat)
-
-      case .didTapProjectFolder(let card):
-        state.selectedCard = card
-        state.displayedCheckBoxes = calculateDisplayedCheckBoxes(for: card)
-        return .none
-
-      case .didTapChecklistCompleteButton(let checkBox):
-        return .send(.completeCheckBox(checkBox: checkBox))
-
-      case .didTapArticle(let article):
-        state.selectedArticle = article
-        return .none
-
-      case .didTapArticleExitButton:
-        state.selectedArticle = .none
-        return .none
-
-      case .didTapNavigateToDetailChecklist(let card):
-        return .send(.onNaviagteToDetailChecklist(card: card))
 
       case .setChecklistCards(let checklists):
         let cards: [Card] = checklists.map {
@@ -208,12 +216,12 @@ public struct HomeStore {
         else {
           return .none
         }
-        
+
         state.cards[selectedCardIndex].checkBoxList[checkBoxIndex].isCompleted.toggle()
         state.cards[selectedCardIndex].calculatePercent()
         state.selectedCard = state.cards[selectedCardIndex]
         state.displayedCheckBoxes[id: checkBox.id]?.isCompleted.toggle()
-        
+
         return .merge(
           .run { send in
             try await self.clock.sleep(for: .seconds(0.5))

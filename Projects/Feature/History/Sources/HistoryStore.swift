@@ -31,11 +31,19 @@ public struct HistoryStore {
   }
   
   public enum Action: BindableAction {
+
+    // MARK: - Life Cycle
+
+    case onAppear
+
+    // MARK: - View
+
     case binding(BindingAction<State>)
     case path(StackActionOf<Path>)
-    case onAppear
-    case onAppearFinish([Checklist])
-    
+
+    // MARK: - User Actions
+
+    case onRefresh
     case didTapChecklistMenu(Checklist)
     case didTapChecklist(Checklist)
     
@@ -53,8 +61,14 @@ public struct HistoryStore {
     case didTapEditTitleConfirm
     case didTapEditTitleCancel
     case didTapEditTitleServer(Int)
-    
-    
+
+    // MARK: - Internal Actions
+
+    case fetchChecklists
+    case onAppearFinish([Checklist])
+
+    // MARK: - Navigation
+
     case historyDetail(HistoryDetailStore.Action)
   }
   
@@ -69,8 +83,7 @@ public struct HistoryStore {
     case delete
     case editTitle
   }
-    
-    
+
   @Dependency(ChecklistAPIClient.self) var checklistAPIClient
   
   public var body: some ReducerOf<Self> {
@@ -86,6 +99,12 @@ public struct HistoryStore {
         return .none
         
       case .onAppear:
+        return .send(.fetchChecklists)
+
+      case .onRefresh:
+        return .send(.fetchChecklists)
+
+      case .fetchChecklists:
         return .run { send in
           do {
             let checklist = try await checklistAPIClient.getChecklists()
@@ -94,7 +113,7 @@ public struct HistoryStore {
             return await send(.onAppearFinish([]))
           }
         }
-        
+
       case .onAppearFinish(let checklist):
         state.checkList = checklist
         return .none

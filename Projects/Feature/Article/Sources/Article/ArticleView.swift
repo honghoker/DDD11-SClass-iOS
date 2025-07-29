@@ -209,5 +209,8 @@ public struct ArticleView: View {
     }
     .listStyle(.plain)
     .listRowSpacing(20)
+    .refreshable {
+      store.send(.onAppear)
+    }
   }
 }
