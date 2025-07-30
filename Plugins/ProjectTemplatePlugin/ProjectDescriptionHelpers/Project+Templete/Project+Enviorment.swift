@@ -14,9 +14,9 @@ public extension Project {
     public static let appDevName = "OnboardingKit-Dev"
     public static let deploymentTarget : ProjectDescription.DeploymentTargets = .iOS("17.0")
     public static let deploymentDestination: ProjectDescription.Destinations = [.iPhone]
-    public static let organizationTeamId = "2YJXRFH75A"
-    public static let bundlePrefix = "com.DDD.OnboardingKit"
+    public static let organizationTeamId = "H89XC7VZRC"
+    public static let bundlePrefix = "com.DDD.onboarding-kit"
     public static let appVersion = "0.1.0"
-    public static let mainBundleId = "com.DDD.OnboardingKit"
+    public static let mainBundleId = "com.DDD.onboarding-kit"
   }
 }

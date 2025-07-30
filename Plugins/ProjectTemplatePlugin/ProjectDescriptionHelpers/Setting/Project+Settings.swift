@@ -40,7 +40,7 @@ extension Settings {
       .setCodeSignIdentity()
       .setCodeSignStyle()
       .setVersioningSystem()
-      .setProvisioningProfileSpecifier("match AppStore com.DDD.OnboardingKit")
+      .setProvisioningProfileSpecifier("match AppStore com.DDD.onboarding-kit")
       .setDevelopmentTeam(Project.Environment.organizationTeamId)
       .setSkipInstall(true)
       .setDebugInformationFormat(),
@@ -50,7 +50,7 @@ extension Settings {
         settings: commonSettings(
           appName: Project.Environment.appDevName,
           displayName: Project.Environment.appDevName,
-          provisioningProfile: "match Development com.DDD.OnboardingKit"
+          provisioningProfile: "match Development com.DDD.onboarding-kit"
         ),
         xcconfig: "Resources/Config.xcconfig"
       ),
@@ -59,7 +59,7 @@ extension Settings {
         settings: commonSettings(
           appName: Project.Environment.appDemoName,
           displayName: Project.Environment.appDemoName,
-          provisioningProfile: "match AppStore com.DDD.OnboardingKit"
+          provisioningProfile: "match AppStore com.DDD.onboarding-kit"
         ),
         xcconfig: "Resources/Config.xcconfig"
       ),
@@ -68,7 +68,7 @@ extension Settings {
         settings: commonSettings(
           appName: Project.Environment.appName,
           displayName: Project.Environment.appName,
-          provisioningProfile: "match AppStore com.DDD.OnboardingKit"
+          provisioningProfile: "match AppStore com.DDD.onboarding-kit"
         ),
         xcconfig: "Resources/Config.xcconfig"
       )
