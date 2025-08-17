@@ -13,6 +13,7 @@ import ComposableArchitecture
 
 public struct HomeAPIClient: Sendable {
   public var fetchArticles: @Sendable() async throws -> [MainArticle]
+  public var fetchChecklistsStatus: @Sendable() async throws -> [MainChecklistsStatus]
 }
 
 public extension DependencyValues {
@@ -27,6 +28,11 @@ extension HomeAPIClient: DependencyKey {
     fetchArticles: {
       let api = HomeAPI.fetchArticles
       let responseDTO: [MainArticleResponseDTO] = try await APIService<HomeAPI>().request(api: api)
+      return responseDTO.map(\.toEntity)
+    },
+    fetchChecklistsStatus: {
+      let api = HomeAPI.fetchChecklistsStatus
+      let responseDTO: [MainChecklistsStatusResponseDTO] = try await APIService<HomeAPI>().request(api: api)
       return responseDTO.map(\.toEntity)
     }
   )

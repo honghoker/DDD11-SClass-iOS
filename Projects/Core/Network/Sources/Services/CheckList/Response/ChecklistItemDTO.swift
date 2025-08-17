@@ -34,7 +34,6 @@ extension ChecklistItemDTO {
       checklistId: self.checklistId.description,
       label: self.content ?? "",
       isCompleted: self.completed,
-      isMain: true, // TODO: 수정
       createdAt: self.createdTime,
       id: self.id.description
     )

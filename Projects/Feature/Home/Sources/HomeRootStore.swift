@@ -69,7 +69,7 @@ public struct HomeRootStore {
         }
         
       case .onAppendChecklist(let checklist):
-        return .send(.home(.onAppendChecklist(checklist: checklist)))
+        return .send(.home(.onAppendNewChecklist(checklist: checklist)))
         
       case .navigateToDetailChecklist(let card):
         state.path.append(.detailChecklist(.init(card: card)))

@@ -43,7 +43,7 @@ struct HomeView: View {
         title: article.title,
         url: article.url,
         didTapClose: {
-          store.send(.didTapArticleExitButton)
+          store.send(.didTapArticleWebViewCloseButton)
         }
       )
     }
@@ -61,7 +61,7 @@ struct HomeView: View {
     VStack(spacing: .zero) {
       Spacer().frame(height: 14)
 
-      if store.isLoading {
+      if store.isFetching {
         SkeletonContentView(width: size.width)
       } else {
         VStack(spacing: 20) {

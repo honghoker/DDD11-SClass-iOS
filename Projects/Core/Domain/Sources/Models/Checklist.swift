@@ -11,10 +11,16 @@ public struct Checklist: Equatable {
   public let id: String
   public var title: String?
   public let createdAt: String
-  public let updatedAt: String
+  public let updatedAt: String?
   public var checkBoxList: [CheckBox]
   
-  public init(id: String, title: String?, createdAt: String, updatedAt: String, checkBoxList: [CheckBox]) {
+  public init(
+    id: String,
+    title: String?,
+    createdAt: String,
+    updatedAt: String?,
+    checkBoxList: [CheckBox]
+  ) {
     self.id = id
     self.title = title
     self.createdAt = createdAt

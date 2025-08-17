@@ -18,7 +18,7 @@ struct HeaderView: View {
 
   var body: some View {
     Group {
-      if store.isLoading {
+      if store.isFetching {
         SkeletonHeaderView()
       } else if store.cards.isEmpty {
         emptyView
@@ -89,9 +89,9 @@ struct HeaderView: View {
             HomeCardView(
               title: card.title,
               isSelected: store.selectedCard == card,
-              progress: card.percent,
+              progress: card.progress,
               onTap: {
-                store.send(.didTapProjectFolder(card: card))
+                store.send(.didTapChecklistCard(card: card))
               }
             )
           }

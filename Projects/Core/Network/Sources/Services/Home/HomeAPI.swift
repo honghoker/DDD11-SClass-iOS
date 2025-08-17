@@ -11,6 +11,7 @@ import Moya
 
 enum HomeAPI {
   case fetchArticles
+  case fetchChecklistsStatus
 }
 
 extension HomeAPI: BaseAPI {
@@ -22,9 +23,10 @@ extension HomeAPI: BaseAPI {
     switch self {
     case .fetchArticles:
       return "/articles"
+    case .fetchChecklistsStatus:
+      return "/checklists/status"
     }
   }
-  
   
   var error: [Int : NetworkError]? {
     return nil
@@ -34,12 +36,16 @@ extension HomeAPI: BaseAPI {
     switch self {
     case .fetchArticles:
       return [:]
+    case .fetchChecklistsStatus:
+      return [:]
     }
   }
   
   var method: Moya.Method {
     switch self {
     case .fetchArticles:
+      return .get
+    case .fetchChecklistsStatus:
       return .get
     }
   }

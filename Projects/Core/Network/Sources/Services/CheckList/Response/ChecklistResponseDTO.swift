@@ -15,7 +15,6 @@ public struct ChecklistResponseDTO: Decodable {
   let title: String?
   let createdTime: String
   let updatedTime: String
-  
 }
 
 extension ChecklistResponseDTO {
