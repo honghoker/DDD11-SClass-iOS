@@ -26,22 +26,34 @@ struct SkeletonContentView: View {
   }
 }
 
-private struct SkeletonChecklistListView: View {
+public struct SkeletonChecklistListView: View {
   private let width: CGFloat
   
   init(width: CGFloat) {
     self.width = width
   }
   
-  var body: some View {
+  public var body: some View {
     VStack(alignment: .leading, spacing: 12) {
       SkeletonRectangleView(width: 88, height: 24)
         .padding(.vertical, 12)
       
-      VStack(alignment: .leading, spacing: 12) {
-        ForEach(0..<3) { _ in
-          SkeletonRoundedView(width: width, height: 48, radius: 4)
-        }
+      SkeletonChecklistItemsListView(width: width)
+    }
+  }
+}
+
+private struct SkeletonChecklistItemsListView: View {
+  private let width: CGFloat
+
+  init(width: CGFloat) {
+    self.width = width
+  }
+
+  var body: some View {
+    VStack(alignment: .leading, spacing: 12) {
+      ForEach(0..<3) { _ in
+        SkeletonRoundedView(width: width, height: 48, radius: 4)
       }
     }
   }

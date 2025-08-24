@@ -86,7 +86,7 @@ struct HeaderView: View {
       ScrollView(.horizontal, showsIndicators: false) {
         HStack(spacing: 8) {
           ForEach(store.cards) { card in
-            HomeCardView(
+            CardView(
               title: card.title,
               isSelected: store.selectedCard == card,
               progress: card.progress,

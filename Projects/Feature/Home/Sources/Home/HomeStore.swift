@@ -20,6 +20,7 @@ public struct HomeStore {
     @Shared(.userInfo) var userInfo: UserInfo?
     var isViewDidLoaded = false
     var isFetching: Bool = true
+    var isFetchingChecklistItems: Bool = false
 
     var cards: IdentifiedArrayOf<Card> = []
     var articles: IdentifiedArrayOf<MainArticle> = []
@@ -55,6 +56,7 @@ public struct HomeStore {
     // MARK: - Internal Actions
 
     case isFetchingChanged(isFetching: Bool)
+    case isFetchingChecklistItemsChanged(isFetching: Bool)
 
     /// Checklist
     case setChecklistCards([Card])
@@ -144,15 +146,9 @@ public struct HomeStore {
             async let checklistsStatusResponse = try homeAPIClient.fetchChecklistsStatus()
             async let articlesResponse = try homeAPIClient.fetchArticles()
 
-            let (
-              checklistsStatus,
-              articles
-            ) = try await (
-              checklistsStatusResponse,
-              articlesResponse
-            )
+            let (checklistsStatus, articles) = try await (checklistsStatusResponse, articlesResponse)
 
-            let cards: [Card] = checklistsStatus.map(\.toCard)
+            let cards = checklistsStatus.map(\.toCard)
 
             await send(.setChecklistCards(cards))
             await send(.setArticles(articles))
@@ -163,12 +159,15 @@ public struct HomeStore {
           await send(.isFetchingChanged(isFetching: false))
         }
 
-
       case .setChecklistCards(let cards):
         state.cards = .init(uniqueElements: cards)
 
         // 첫 번째 카드를 선택된 카드로 설정
-        return .send(.selectChecklist(card: state.cards.first))
+        if let card = state.cards.first {
+          return .send(.selectChecklist(card: card))
+        }
+
+        return .none
 
       case .setArticles(let articles):
         state.articles = .init(uniqueElements: Array(articles.prefix(3)))
@@ -176,17 +175,18 @@ public struct HomeStore {
 
       case .selectChecklist(let card):
         state.selectedCard = card
-        state.displayedCheckBoxes = card?.fetchDisplayedCheckBoxes() ?? []
 
         if let card, card.checkBoxList.isEmpty {
           return .send(.fetchSelectedChecklistItems(id: card.id))
         }
 
+        state.displayedCheckBoxes = card?.fetchDisplayedCheckBoxes() ?? []
         return .none
 
       case .fetchSelectedChecklistItems(let id):
         return .run { send in
           do {
+            await send(.isFetchingChecklistItemsChanged(isFetching: true))
             let checkboxes = try await checklistAPIClient.getChecklistItemList(id: id)
             await send(.onCompleteFetchSelectedChecklistItems(.success(checkboxes)))
           } catch {
@@ -196,6 +196,10 @@ public struct HomeStore {
 
       case .isFetchingChanged(let isFetching):
         state.isFetching = isFetching
+        return .none
+
+      case .isFetchingChecklistItemsChanged(let isFetching):
+        state.isFetchingChecklistItems = isFetching
         return .none
 
       case .onAppendNewChecklist(let checklist):
@@ -279,21 +283,18 @@ public struct HomeStore {
       case .onCompleteFetchSelectedChecklistItems(let result):
         switch result {
         case .success(let checkBoxes):
-          if
-            let selected = state.selectedCard,
-            let idx = state.cards.firstIndex(where: { $0.id == selected.id })
-          {
-        state.cards[idx].checkBoxList = checkBoxes
-        state.cards[idx].calculateProgress()
-        state.selectedCard = state.cards[idx]
-        state.displayedCheckBoxes = state.cards[idx].fetchDisplayedCheckBoxes()
+          if let selected = state.selectedCard, let idx = state.cards.firstIndex(of: selected) {
+            state.cards[idx].checkBoxList = checkBoxes
+            state.cards[idx].calculateProgress()
+            state.selectedCard = state.cards[idx]
+            state.displayedCheckBoxes = state.cards[idx].fetchDisplayedCheckBoxes()
           }
-          return .none
 
         case .failure(let error):
-          debugPrint("onCompleteFetchSelctedChecklistItems failed:", error.localizedDescription)
-          return .none
+          debugPrint("onCompleteFetchSelectedChecklistItems failed:", error.localizedDescription)
         }
+
+        return .send(.isFetchingChecklistItemsChanged(isFetching: false))
 
       default:
         return .none
@@ -314,7 +315,6 @@ fileprivate extension MainChecklistsStatus {
     )
   }
 }
-
 
 fileprivate extension Card {
   func fetchDisplayedCheckBoxes() -> IdentifiedArrayOf<CheckBox> {
