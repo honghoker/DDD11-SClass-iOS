@@ -66,7 +66,7 @@ struct HeaderView: View {
   private var folderList: some View {
     VStack(alignment: .leading, spacing: 16) {
       Button(action: {
-        // TODO: 프로젝트 관리 페이지 이동
+        store.send(.didTapNaviagteToWorkFolder)
       }) {
         HStack(spacing: 4) {
           Text("나의 업무 폴더")

@@ -55,7 +55,10 @@ public struct MainTabStore {
         
       case .home(.onPresentChat):
         return changeSelectedTab(state: &state, tab: .chat)
-        
+
+      case .home(.home(.onRouteToHistoryScreen)):
+        return changeSelectedTab(state: &state, tab: .history)
+
       case .home:
         return .none
         

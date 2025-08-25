@@ -47,6 +47,7 @@ public struct HomeStore {
 
     case onRefresh
     case didTapAppendFolderButton
+    case didTapNaviagteToWorkFolder
     case didTapArticle(MainArticle)
     case didTapArticleWebViewCloseButton
     case didTapChecklistCard(card: Card)
@@ -83,6 +84,7 @@ public struct HomeStore {
     // MARK: - Delegate Actions(parent)
 
     case onNaviagteToDetailChecklist(card: Card)
+    case onRouteToHistoryScreen
 
     // MARK: - Scope Actions(child)
 
@@ -117,6 +119,9 @@ public struct HomeStore {
 
       case .onRefresh:
         return .send(.fetchData)
+
+      case .didTapNaviagteToWorkFolder:
+        return .send(.onRouteToHistoryScreen)
 
       case .didTapAppendFolderButton:
         return .send(.onPresentChat)

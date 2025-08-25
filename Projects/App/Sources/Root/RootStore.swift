@@ -58,7 +58,7 @@ public struct RootStore {
       case .mainTab(.routeToLoginPage):
         state = .login(.init())
         return .none
-    
+
       case let .onOpenURL(url):
         socialLogin.handleKakaoUrl(url)
         return .none
