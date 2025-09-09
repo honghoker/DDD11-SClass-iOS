@@ -73,7 +73,8 @@ public struct AccountManagementStore {
     
     case sheet(PresentationAction<ConfirmationSheetStore.Action>)
   }
-  
+
+  @Dependency(OauthAPIClient.self) var oauthAPIClient
   @Dependency(KeychainClient.self) var keychainClient
   
   public var body: some ReducerOf<Self> {
@@ -106,11 +107,20 @@ public struct AccountManagementStore {
         return .run { send in
           switch presentedSheet {
           case .signOut:
-            // TODO: - 로그아웃 API 호출
-            debugPrint("로그아웃 API 호출")
+            do {
+              try await oauthAPIClient.logout()
+            } catch {
+              debugPrint("Failed logout: \(error)")
+              return
+            }
+
           case .withdraw:
-            // TODO: - 회원탈퇴 API 호출
-            debugPrint("회원탈퇴 API 호출")
+            do {
+              try await oauthAPIClient.withdraw()
+            } catch {
+              debugPrint("Failed withdraw: \(error)")
+              return
+            }
           }
           
           keychainClient.signOut()

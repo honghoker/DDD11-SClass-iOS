@@ -18,8 +18,8 @@ actor AuthService {
     else { throw NetworkError.tokenRefreshFailed }
     
     
-    let api = LoginAPI.refreshToken(refreshToken)
-    let response = try await NetworkProvider<LoginAPI>().request(api)
+    let api = OauthAPI.refreshToken(refreshToken)
+    let response = try await NetworkProvider<OauthAPI>().request(api)
     
     let decoded = try JSONDecoder().decode(CommonResponse<TokenInfo>.self, from: response.data)
     guard let newToken = decoded.data

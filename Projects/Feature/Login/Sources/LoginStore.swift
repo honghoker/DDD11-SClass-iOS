@@ -44,7 +44,7 @@ public struct LoginStore {
   }
 
   @Dependency(\.socialLogin) private var socialLogin
-  @Dependency(\.loginAPIClient) private var loginAPIClient
+  @Dependency(\.oauthAPIClient) private var oauthAPIClient
   @Dependency(\.myPageAPIClient) private var myPageAPIClient
   @Dependency(KeychainClient.self) var keychainClient
   
@@ -86,7 +86,7 @@ public struct LoginStore {
       case let .loginServer(userInfo):
         return .run { [info = userInfo] send in
           do {
-            let loginToken = try await loginAPIClient.login(info)
+            let loginToken = try await oauthAPIClient.login(info)
             await send(.loginSuccess(
               loginToken,
               info.provider

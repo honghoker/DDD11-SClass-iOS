@@ -1,5 +1,5 @@
 //
-//  LoginAPI.swift
+//  OauthAPI.swift
 //  CoreNetwork
 //
 //  Created by 현수빈 on 5/14/25.
@@ -12,12 +12,14 @@ import CoreDomain
 
 import Moya
 
-enum LoginAPI {
+enum OauthAPI {
   case login(_ socialLoginInfo: SocialLoginInfo)
   case refreshToken(_ refreshToken: String)
+  case logout
+  case withdraw
 }
 
-extension LoginAPI: BaseAPI {
+extension OauthAPI: BaseAPI {
   var domain: OnboardingKitDomain {
     return .login
   }
@@ -26,36 +28,47 @@ extension LoginAPI: BaseAPI {
     switch self {
     case .login:
       return "/login"
-    case .refreshToken(_):
+    case .refreshToken:
       return "/reissue"
+    case .logout:
+      return "/logout"
+    case .withdraw:
+      return "/withdraw"
     }
   }
   
-  var error: [Int : NetworkError]? {
+  var error: [Int: NetworkError]? {
     return nil
   }
   
-  var parameters: [String : Any]? {
+  var parameters: [String: Any]? {
     switch self {
     case .login(let userInfo):
       return [
         "socialType": userInfo.provider.rawValue,
         "token": userInfo.idToken
       ]
-      
     case .refreshToken(let refreshToken):
       return [
         "refreshToken": refreshToken
       ]
+    case .logout:
+      return nil
+    case .withdraw:
+      return nil
     }
   }
   
   var method: Moya.Method {
     switch self {
-    case .login(_):
+    case .login:
       return .post
-    case .refreshToken(_):
+    case .refreshToken:
       return .post
+    case .logout:
+      return .post
+    case .withdraw:
+      return .delete
     }
   }
 }
