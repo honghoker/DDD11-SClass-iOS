@@ -56,12 +56,12 @@ struct OnboardingCompleteView: View {
             store.send(.didTapCompleteButton)
           }
         )
-        .padding(.bottom, 50)
+        .padding(.bottom, 30)
       }
       .padding(.top, 142)
       .padding(.horizontal, 15)
     }
-    .ignoresSafeArea()
+    .ignoresSafeArea(edges: .top)
   }
 }
 

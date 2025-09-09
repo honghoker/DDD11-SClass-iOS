@@ -62,7 +62,7 @@ struct OnboardingWorkExperienceView: View {
         }
       )
       .padding(.horizontal, 15)
-      .padding(.bottom, 50)
+      .padding(.bottom, 30)
     }
   }
 }
