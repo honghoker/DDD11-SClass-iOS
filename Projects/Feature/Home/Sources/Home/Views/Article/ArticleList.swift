@@ -20,12 +20,15 @@ struct ArticleList: View {
 
   var body: some View {
     VStack(spacing: 16) {
-      ListSection(
-        title: "관련 아티클",
-        onTap: {
-          // TODO: - 관련 아티클로 이동
-        }
-      )
+      HStack(spacing: 8) {
+        Text("인기 아티클")
+          .notoSans(.subhead_4)
+          .foregroundStyle(.greyScale950)
+
+        Spacer()
+      }
+      .padding(.vertical, 12)
+      .padding(.horizontal, 16)
 
       ForEach(store.articles) { article in
         MainArticleCellView(
